@@ -205,21 +205,49 @@ form.addEventListener("submit", async (event) => {
   button.textContent = "Checking account…";
   say("Verifying your login details…");
   const values = new FormData(form);
+
   try {
-    const credential = await signInWithEmailAndPassword(auth, values.get("email"), values.get("password"));
-    const profile = await getDoc(doc(db, "users", credential.user.uid));
+    // Keep Authentication and Firestore checks separate so the real failure is clear.
+    const credential = await signInWithEmailAndPassword(
+      auth,
+      String(values.get("email") || "").trim(),
+      String(values.get("password") || "")
+    );
+
+    let profile;
+    try {
+      profile = await getDoc(doc(db, "users", credential.user.uid));
+    } catch (profileError) {
+      console.error("Firebase sign-in succeeded, but the admin role document could not be read:", profileError);
+      await signOut(auth);
+      const code = profileError.code || "unknown";
+      const detail = code === "permission-denied"
+        ? "Firestore rules are blocking access to your own admin profile. Please check that the latest Firestore rules are published."
+        : "Firebase Authentication accepted your login, but Firestore could not verify your admin profile.";
+      say(detail + " (Error: " + code + ")", "error");
+      return;
+    }
+
     const role = profile.exists() ? profile.data().role : null;
     if (role !== "super_admin" && role !== "staff_admin") {
       await signOut(auth);
-      say("Login succeeded, but this account has not been assigned an admin role. Ask the Super Admin to authorise it.", "warning");
+      say("Login succeeded, but no valid admin role was found for this account. Check that users/" + credential.user.uid + " has role = super_admin.", "warning");
       return;
     }
     showDashboard(credential.user, role);
   } catch (error) {
-    const friendly = error.code === "auth/invalid-credential" ? "Email or password is incorrect." :
-      error.code === "auth/too-many-requests" ? "Too many attempts. Please wait and try again." :
-      "Could not sign in. Please check your connection and Firebase Authentication settings.";
-    say(friendly, "error");
+    console.error("Firebase Authentication sign-in failed:", error);
+    const code = error.code || "unknown";
+    const messages = {
+      "auth/invalid-credential": "Email or password is incorrect.",
+      "auth/too-many-requests": "Too many attempts. Please wait and try again.",
+      "auth/network-request-failed": "The browser could not reach Firebase. Check your internet connection or browser network blocking.",
+      "auth/unauthorized-domain": "This website address is not authorised in Firebase. Add al-naseem-d40c8.web.app under Authentication → Settings → Authorized domains.",
+      "auth/operation-not-allowed": "Email/Password sign-in is disabled. Enable it in Firebase Authentication → Sign-in method.",
+      "auth/invalid-api-key": "Firebase API key is invalid or restricted. Check the Web App configuration and API key restrictions.",
+      "auth/configuration-not-found": "Firebase Authentication is not configured for this project. Open Firebase Authentication and complete its setup."
+    };
+    say((messages[code] || "Firebase returned an unexpected login error. Check the exact error code below.") + " (Error: " + code + ")", "error");
   } finally {
     button.disabled = false;
     button.textContent = "Sign in securely";
@@ -235,7 +263,7 @@ if (auth && db) {
       if (role === "super_admin" || role === "staff_admin") showDashboard(user, role);
       else await signOut(auth);
     } catch {
-      say("Could not verify your admin permissions. Please sign in again.", "error");
+      console.error("Could not read the signed-in user admin profile:", error);\n      say("Could not verify your admin permissions. Firestore error: " + (error.code || "unknown") + ". Please check the published Firestore rules.", "error");
       await signOut(auth);
     }
   });
