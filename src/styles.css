@@ -717,3 +717,90 @@ section{scroll-margin-top:100px}
  .site-footer .footer-brand{align-items:flex-start}
  .site-footer .footer-brand img{width:48px!important;height:48px!important;min-width:48px!important;min-height:48px!important;max-width:48px!important;max-height:48px!important;flex-basis:48px!important}
 }
+
+
+/* Refined image-led palette: richer emerald, warm ivory and readable antique gold */
+:root{
+  --forest:#123d32!important;
+  --deep:#082a23!important;
+  --gold:#c59b5c!important;
+  --sand:#f4efe5!important;
+  --muted:#596b61!important;
+  --line:#e3ddd1!important;
+  --ink:#20372e!important;
+  color:#20372e;
+  background:#fbf9f4;
+}
+body{background:#fbf9f4!important;color:#20372e!important}
+.announcement-bar{background:#082a23!important;color:#f2eee5!important}
+.announcement-bar a{color:#f0d29b!important}
+.site-header{background:rgba(251,249,244,.97)!important;border-bottom-color:#e4ddcf!important}
+.brand strong,.nav-links{color:#123d32!important}
+.nav-links>a:not(.nav-cta):hover{color:#9b7137!important}
+.nav-cta{background:#123d32!important;color:#fff!important}
+.nav-cta span{color:#f0d29b!important}
+.hero{background:#082a23!important}
+.hero-overlay{background:linear-gradient(90deg,rgba(4,25,20,.94) 0%,rgba(7,39,31,.83) 42%,rgba(7,39,31,.42) 76%,rgba(7,39,31,.22) 100%)!important}
+.hero h1,.hero-copy>p,.hero-stamp{color:#fff!important}
+.hero h1 em,.hero-eyebrow,.hero-stamp span,.hero-stamp small{color:#f0d29b!important}
+.button-gold{background:#d2ad72!important;color:#172e26!important}
+.button-white{background:#fffdf8!important;color:#123d32!important}
+.trust-strip{background:#123d32!important;border-color:#244d40!important}
+.trust-item{border-color:rgba(255,255,255,.18)!important}
+.trust-item strong{color:#fff!important}
+.trust-item small{color:#d8e2db!important}
+.trust-symbol{color:#f0d29b!important}
+.services-section{background:#f5f1e8!important}
+.section-heading h2,.guide-copy h2,.about-layout h2,.contact-intro h2{color:#123d32!important}
+.section-heading h2 em,.guide-copy h2 em,.contact-intro h2 em{color:#a77c40!important}
+.section-heading>p,.guide-copy>p,.about-layout>div:last-child>p,.contact-intro>p{color:#596b61!important}
+.service-card,.hotel-card{background:#fff!important;border:1px solid #e5ded1!important;box-shadow:0 15px 36px rgba(24,49,38,.10)!important}
+.service-photo{background:#d8d1c4!important}
+.service-label{background:rgba(8,42,35,.94)!important;color:#fff!important}
+.service-kicker,.hotel-location{color:#98713d!important}
+.service-content h3,.hotel-card h3{color:#123d32!important}
+.service-content>p,.hotel-card p{color:#596b61!important}
+.service-highlights span{color:#43594d!important}
+.service-price-row strong,.bus-prices strong{color:#123d32!important}
+.service-button,.hotel-action{background:#d2ad72!important;color:#18352b!important}
+.hotel-section{background:#eee8dc!important}
+.guide-section{background:#fbf9f4!important}
+.guide-visual{background:#123d32!important}
+.guide-photo-shade{background:linear-gradient(0deg,rgba(5,28,22,.82),rgba(5,28,22,0) 68%)!important}
+.guide-photo-label span{color:#f0d29b!important}
+.guide-step{border-color:#e3ddd1!important}
+.guide-step strong{color:#123d32!important}
+.guide-step small{color:#596b61!important}
+.about-section{background:#eee8dc!important}
+.about-layout h2{color:#123d32!important}
+.about-points span{color:#234a3b!important}
+.enquiry-section{background:#0b3027!important}
+.enquiry-copy h2{color:#fff!important}
+.enquiry-copy h2 em{color:#f0d29b!important}
+.enquiry-copy>p{color:#e0e8e2!important}
+.enquiry-highlights,.enquiry-call strong{color:#f0d29b!important}
+.enquiry-form{background:#fffdf8!important;color:#123d32!important;border:1px solid rgba(210,173,114,.35)!important}
+.form-heading strong{color:#123d32!important}
+.enquiry-form label{color:#334c40!important}
+.enquiry-form input,.enquiry-form select,.enquiry-form textarea{border-color:#d8d4c9!important;color:#20372e!important}
+.button-dark{background:#123d32!important;color:#fff!important}
+.contact-section{background:#fbf9f4!important}
+.contact-info-card{background:#f5f1e8!important;border:1px solid #e3ddd1!important;color:#20372e!important}
+.contact-info-card small,.contact-card-icon{color:#98713d!important}
+.contact-info-card strong{color:#123d32!important}
+.contact-info-card p{color:#596b61!important}
+.contact-card-link,.contact-primary{color:#8d672f!important}
+.contact-social a{color:#234a3b!important}
+.site-footer{background:#082a23!important;color:#e3e9e4!important}
+.site-footer .footer-brand strong,.site-footer .footer-nav a,.site-footer .footer-reach a{color:#e3e9e4!important}
+.site-footer .footer-nav>strong,.site-footer .footer-reach>strong,.site-footer .footer-brand small{color:#f0d29b!important}
+.site-footer .footer-bottom{border-color:rgba(255,255,255,.17)!important;color:#c6d1c9!important}
+.floating-whatsapp{background:#d2ad72!important;color:#17372d!important}
+@media(max-width:760px){
+ .hero-overlay{background:linear-gradient(90deg,rgba(4,25,20,.93),rgba(7,39,31,.72))!important}
+ .nav-links{background:#fbf9f4!important}
+ .trust-item{border-color:rgba(255,255,255,.16)!important}
+ .trust-item:nth-child(odd){border-right:1px solid rgba(255,255,255,.16)!important}
+ .trust-item:nth-child(3),.trust-item:nth-child(4){border-top:1px solid rgba(255,255,255,.16)!important}
+ .service-card{box-shadow:0 10px 26px rgba(24,49,38,.09)!important}
+}
