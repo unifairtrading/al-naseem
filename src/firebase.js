@@ -3,20 +3,19 @@ import { getAuth } from "firebase/auth";
 import { getFirestore } from "firebase/firestore";
 import { getStorage } from "firebase/storage";
 
+// Public Firebase Web App configuration (not a service-account private key).
 const firebaseConfig = {
-  apiKey: import.meta.env.VITE_FIREBASE_API_KEY,
-  authDomain: import.meta.env.VITE_FIREBASE_AUTH_DOMAIN,
-  projectId: import.meta.env.VITE_FIREBASE_PROJECT_ID,
-  storageBucket: import.meta.env.VITE_FIREBASE_STORAGE_BUCKET,
-  messagingSenderId: import.meta.env.VITE_FIREBASE_MESSAGING_SENDER_ID,
-  appId: import.meta.env.VITE_FIREBASE_APP_ID,
+  apiKey: "AIzaSyAi_ZO0D1NfnMqA0pSmHrr_75fARdKkBjI",
+  authDomain: "al-naseem-d40c8.firebaseapp.com",
+  projectId: "al-naseem-d40c8",
+  storageBucket: "al-naseem-d40c8.firebasestorage.app",
+  messagingSenderId: "889257194612",
+  appId: "1:889257194612:web:5f07cce6b3024a0a7dcd21",
+  measurementId: "G-D8J2GJNLQ4",
 };
 
-export const isFirebaseConfigured = Boolean(
-  firebaseConfig.apiKey && firebaseConfig.authDomain &&
-  firebaseConfig.projectId && firebaseConfig.appId
-);
-export const firebaseApp = isFirebaseConfigured ? initializeApp(firebaseConfig) : null;
-export const auth = firebaseApp ? getAuth(firebaseApp) : null;
-export const db = firebaseApp ? getFirestore(firebaseApp) : null;
-export const storage = firebaseApp ? getStorage(firebaseApp) : null;
+export const firebaseApp = initializeApp(firebaseConfig);
+export const isFirebaseConfigured = true;
+export const auth = getAuth(firebaseApp);
+export const db = getFirestore(firebaseApp);
+export const storage = getStorage(firebaseApp);
