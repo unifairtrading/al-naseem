@@ -17,10 +17,10 @@ const steps = [
 ];
 
 const media = {
-  kaaba: "https://img.magnific.com/premium-photo/landscape-kaaba-mecca_855932-13256.jpg?q=80&semt=ais_hybrid&w=1600",
-  air: "https://images.pexels.com/photos/36741644/pexels-photo-36741644.jpeg?auto=compress&cs=tinysrgb&w=1400",
-  bus: "https://www.karskalesiturizm.com.tr/upload/galeri/20260225170154_cfcbec72.webp",
-  hotel: "https://images.pexels.com/photos/8082564/pexels-photo-8082564.jpeg?auto=compress&cs=tinysrgb&w=1400"
+  kaaba: "https://images.unsplash.com/photo-1564769625905-50e1e1b5a968?auto=format&fit=crop&w=2000&q=85",
+  air: "https://images.unsplash.com/photo-1436491865332-7a61a109cc05?auto=format&fit=crop&w=1400&q=85",
+  bus: "https://images.unsplash.com/photo-1570125909232-eb263c188f7e?auto=format&fit=crop&w=1400&q=85",
+  hotel: "https://images.unsplash.com/photo-1566073771259-6a8506099945?auto=format&fit=crop&w=1400&q=85"
 };
 
 const escapeHtml = (value) => String(value ?? "").replace(/[&<>"']/g, (char) => ({
