@@ -1,0 +1,10 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    // Default deny. Feature-specific permissions will be added and tested
+    // before any Firebase-backed collection is opened.
+    match /{document=**} {
+      allow read, write: if false;
+    }
+  }
+}
