@@ -12,8 +12,6 @@ on:
 jobs:
   build:
     runs-on: ubuntu-latest
-    env:
-      FIREBASE_SERVICE_ACCOUNT: ${{ secrets.FIREBASE_SERVICE_ACCOUNT }}
     steps:
       - name: Check out source
         uses: actions/checkout@v4
@@ -25,17 +23,8 @@ jobs:
         run: npm install
       - name: Build website
         run: npm run build
-      - name: Attempt Firestore rules deployment
-        if: ${{ github.event_name == 'push' && env.FIREBASE_SERVICE_ACCOUNT != '' }}
-        continue-on-error: true
-        env:
-          GOOGLE_APPLICATION_CREDENTIALS: ${{ runner.temp }}/firebase-service-account.json
-          FIREBASE_SERVICE_ACCOUNT: ${{ secrets.FIREBASE_SERVICE_ACCOUNT }}
-        run: |
-          printf '%s' "$FIREBASE_SERVICE_ACCOUNT" > "$GOOGLE_APPLICATION_CREDENTIALS"
-          npx --yes firebase-tools deploy --only firestore:rules --project al-naseem-d40c8 --non-interactive
       - name: Deploy to Firebase Hosting
-        if: ${{ github.event_name == 'push' && env.FIREBASE_SERVICE_ACCOUNT != '' }}
+        if: ${{ github.event_name == 'push' }}
         uses: FirebaseExtended/action-hosting-deploy@v0
         with:
           repoToken: ${{ secrets.GITHUB_TOKEN }}
