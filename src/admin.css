@@ -1,141 +1,328 @@
-@import url('https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Playfair+Display:wght@500;600&display=swap');
-:root{font-family:'DM Sans',sans-serif;color:#20332d;--forest:#12382f;--deep:#092720;--gold:#c6a36a;--muted:#718078;--line:#e7e6df}
-*{box-sizing:border-box}body{margin:0}.admin-shell{min-height:100vh;background:linear-gradient(135deg,#092720,#1b483c);padding:26px 20px 60px;color:#20332d}.admin-top{width:min(1160px,100%);margin:0 auto 36px;display:flex;justify-content:space-between;color:#d6e0d9;font-size:10px;letter-spacing:.12em}.admin-top a{color:#e4c38c}.admin-card{width:min(520px,100%);margin:0 auto;background:#fffdfa;padding:38px;border-radius:3px;box-shadow:0 24px 70px #0003}.admin-card.dashboard-mode{width:min(1160px,100%)}.admin-mark{width:48px;height:48px;border:1px solid #c6a36a;color:#9c7740;display:grid;place-items:center;font:600 17px 'Playfair Display';margin-bottom:22px}.admin-kicker{font-size:9px;letter-spacing:.2em;color:#a17b42;font-weight:700}.admin-card>h1{font:500 37px 'Playfair Display';margin:8px 0;color:#12382f}.admin-intro{font-size:12px;color:#718078;line-height:1.7}.admin-message{font-size:11px;line-height:1.6;margin:15px 0}.admin-message:empty{display:none}.admin-message[data-type=warning],.admin-message[data-type=error]{padding:10px}.admin-message[data-type=warning]{color:#86621f;background:#fff5df}.admin-message[data-type=error]{color:#a12c2c;background:#fff0f0}.admin-form{display:grid;gap:15px;margin-top:23px}.admin-form label,.hotel-form label{display:grid;gap:7px;font-size:10px;font-weight:700;color:#33443d}.admin-form input,.hotel-form input,.hotel-form textarea,.hotel-manager textarea{width:100%;padding:12px;border:1px solid #dfe5df;border-radius:2px;font:11px 'DM Sans';background:#fff;color:#20332d}.admin-form button,.admin-logout{border:0;border-radius:2px;background:#12382f;color:white;padding:14px;font:600 11px 'DM Sans';cursor:pointer}.admin-form button:disabled{opacity:.5;cursor:not-allowed}.admin-foot{font-size:9px;color:#8b968f;line-height:1.7;margin-top:22px}.dashboard-mode .admin-foot{display:none}.dashboard-heading{display:flex;justify-content:space-between;align-items:center;border-bottom:1px solid var(--line);padding-bottom:22px}.role-pill{font-size:8px;letter-spacing:.13em;background:#f2ede3;color:#876532;padding:7px 10px}.dashboard-heading h2{font:500 29px 'Playfair Display';color:#12382f;margin:13px 0 4px}.dashboard-heading p{font-size:10px;color:#718078;margin:0}.admin-logout{padding:11px 17px}.dashboard-intro{display:grid;gap:5px;margin:23px 0}.dashboard-intro strong{font:500 19px 'Playfair Display';color:#12382f}.dashboard-intro span{font-size:10px;color:#718078;line-height:1.6}
-.hotel-manager{border:1px solid #e3e5dd;background:#fff;padding:25px;margin-top:17px}.manager-heading{display:flex;justify-content:space-between;gap:24px;align-items:center}.manager-heading h3,.coming-modules h3{font:500 25px 'Playfair Display';color:#12382f;margin:8px 0}.manager-heading p{font-size:10px;line-height:1.7;color:#718078;max-width:540px;margin:0}.switch-row{display:flex;align-items:center;gap:9px;white-space:nowrap;font-size:10px;font-weight:700;color:#33443d;cursor:pointer}.switch-row input{position:absolute;opacity:0;width:1px;height:1px}.switch-ui{width:40px;height:23px;border-radius:20px;background:#cbd0cb;position:relative;transition:.2s}.switch-ui:after{content:"";position:absolute;width:17px;height:17px;left:3px;top:3px;border-radius:50%;background:#fff;transition:.2s}.switch-row input:checked+.switch-ui{background:#2b765b}.switch-row input:checked+.switch-ui:after{transform:translateX(17px)}.switch-row input:focus-visible+.switch-ui{outline:2px solid #c6a36a;outline-offset:3px}.manager-status{display:flex;gap:8px;align-items:center;background:#f5f4ee;padding:10px 12px;margin:20px 0;font-size:9px;color:#66766e}.status-light{width:7px;height:7px;border-radius:50%;background:#b4b9b4}.status-light.is-active{background:#27875d}.field-label{display:block;font-size:10px;font-weight:700;margin:15px 0 7px}.hotel-manager textarea{resize:vertical}.hotel-manager-grid{display:grid;grid-template-columns:.9fr 1.1fr;gap:23px;margin-top:24px}.hotel-editor-panel,.hotel-list-panel{background:#faf9f5;border:1px solid #e9e8e0;padding:18px}.hotel-editor-panel h4,.hotel-list-panel h4{font:500 17px 'Playfair Display';margin:0;color:#12382f}.hotel-form{display:grid;gap:11px;margin-top:15px}.hotel-form label small{font-size:8px;font-weight:400;color:#7f8c84;line-height:1.5}.hotel-form input,.hotel-form textarea{padding:10px}.hotel-form-actions{display:flex;gap:8px;margin-top:4px}.save-hotel-button,.cancel-edit-button,.publish-button{border:0;background:#12382f;color:#fff;padding:11px 14px;font:600 9px 'DM Sans';cursor:pointer}.cancel-edit-button{background:#e9e6dd;color:#394a42}.list-heading{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-bottom:13px}.list-heading>span{font-size:8px;color:#7b877f}.empty-hotels{padding:24px 13px;background:#fff;border:1px dashed #d7d9d1;color:#879189;font-size:9px;line-height:1.7;text-align:center}.managed-hotel{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:13px;background:#fff;border:1px solid #e7e8e1;margin-bottom:8px}.managed-hotel>div:first-child{display:grid;gap:4px;min-width:0}.managed-hotel strong{font:500 14px 'Playfair Display';color:#12382f}.managed-hotel span,.managed-hotel small{font-size:8px;color:#7a877f}.managed-hotel-actions{display:flex;gap:6px}.managed-hotel-actions button{border:1px solid #dfe4dd;background:#fff;color:#355046;padding:7px 9px;font-size:8px;cursor:pointer}.managed-hotel-actions .remove-hotel{color:#a34238}.manager-footer{display:flex;justify-content:space-between;align-items:center;gap:15px;padding-top:20px;margin-top:22px;border-top:1px solid var(--line)}.manager-footer>span{font-size:9px;color:#77857c}.publish-button{background:#c6a36a;color:#17372d;padding:13px 18px}.publish-button:disabled{opacity:.6;cursor:wait}.hotel-feedback{font-size:10px;line-height:1.6;margin-top:12px}.hotel-feedback:empty{display:none}.hotel-feedback[data-type=success]{color:#24734d}.hotel-feedback[data-type=error]{color:#a33f36}.coming-modules{margin-top:34px}.coming-modules h3{font-size:21px}.admin-modules{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-top:15px}.admin-modules article{border:1px solid #e6e8e1;padding:15px;background:#fff}.admin-modules strong{font:500 14px 'Playfair Display';color:#27483b}.admin-modules span{display:block;font-size:8px;line-height:1.5;color:#7a877f;margin-top:7px}
-@media(max-width:760px){.admin-shell{padding:17px 12px 40px}.admin-top{margin-bottom:25px;font-size:8px}.admin-card{padding:25px 19px}.dashboard-heading{align-items:flex-start;gap:12px}.dashboard-heading h2{font-size:24px}.manager-heading{align-items:flex-start;flex-direction:column}.hotel-manager{padding:16px}.hotel-manager-grid{grid-template-columns:1fr}.admin-modules{grid-template-columns:1fr 1fr}.manager-footer{align-items:flex-start;flex-direction:column}.publish-button{width:100%}.switch-row{white-space:normal}.managed-hotel{align-items:flex-start}.managed-hotel-actions{flex-direction:column}}
+import { auth, db, isFirebaseConfigured } from "./firebase.js";
+import { onAuthStateChanged, signInWithEmailAndPassword, signOut } from "firebase/auth";
+import { doc, getDoc, setDoc, serverTimestamp } from "firebase/firestore";
+import "./admin.css";
 
+const root = document.querySelector("#app");
+root.innerHTML = [
+  '<main class="admin-shell"><header class="admin-top"><a href="/">← Back to public website</a><span>AL NASEEM GROUP · CONTROL PANEL</span></header>',
+  '<section class="admin-card" id="admin-card"><div class="admin-mark">AN</div><p class="admin-kicker">SECURE BUSINESS ACCESS</p><h1>Admin Portal</h1><p class="admin-intro">Sign in with your authorised Al Naseem administrator account.</p>',
+  '<div id="admin-message" class="admin-message" role="status"></div>',
+  '<form id="login-form" class="admin-form"><label>Email address<input name="email" type="email" autocomplete="username" required placeholder="Enter admin email"></label><label>Password<input name="password" type="password" autocomplete="current-password" required placeholder="Enter password"></label><button type="submit" id="login-button">Sign in securely</button></form>',
+  '<div id="admin-dashboard" hidden></div><p class="admin-foot">Your dashboard access depends on the role assigned to your Firebase account.</p></section></main>'
+].join("");
 
-/* Admin dashboard readability refinement */
-.admin-top { font-size: 11px; }
-.admin-kicker { font-size: 10px; }
-.admin-intro { font-size: 13px; }
-.admin-form label, .hotel-form label { font-size: 12px; }
-.admin-form input, .hotel-form input, .hotel-form textarea, .hotel-manager textarea { font-size: 13px; }
-.admin-foot { font-size: 11px; }
-.dashboard-heading p { font-size: 12px; }
-.dashboard-intro span { font-size: 12px; }
-.manager-heading p { font-size: 12px; }
-.switch-row { font-size: 12px; }
-.manager-status { font-size: 11px; }
-.field-label { font-size: 12px; }
-.hotel-form label small { font-size: 10px; }
-.list-heading > span { font-size: 10px; }
-.managed-hotel span, .managed-hotel small { font-size: 10px; }
-.managed-hotel-actions button { font-size: 10px; }
-.manager-footer > span { font-size: 11px; }
-.hotel-feedback { font-size: 12px; }
-.admin-modules strong { font-size: 15px; }
-.admin-modules span { font-size: 10px; }
-@media (max-width: 760px) {
-  .admin-top { font-size: 10px; }
-  .admin-intro { font-size: 13px; }
-  .dashboard-heading p { font-size: 11px; }
-  .manager-heading p { font-size: 11px; }
-  .switch-row { font-size: 11px; }
-  .admin-modules span { font-size: 10px; }
+const form = document.querySelector("#login-form");
+const message = document.querySelector("#admin-message");
+const button = document.querySelector("#login-button");
+const dashboard = document.querySelector("#admin-dashboard");
+const card = document.querySelector("#admin-card");
+const say = (text, type) => { message.textContent = text; message.dataset.type = type || "info"; };
+const escapeHtml = (value) => String(value ?? "").replace(/[&<>"']/g, (char) => ({
+  "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;"
+}[char]));
+
+let currentRole = null;
+let hotels = [];
+let editingIndex = -1;
+
+function renderHotelList() {
+  const list = document.querySelector("#hotel-list");
+  if (!list) return;
+  const count = document.querySelector("#hotel-count");
+  const navCount = document.querySelector("#nav-hotel-count");
+  const overviewCount = document.querySelector("#overview-hotel-count");
+  if (count) count.textContent = hotels.length + (hotels.length === 1 ? " hotel" : " hotels");
+  if (navCount) navCount.textContent = hotels.length;
+  if (overviewCount) overviewCount.textContent = hotels.length;
+  if (!hotels.length) {
+    list.innerHTML = '<div class="empty-hotels">No hotel details added yet. Add your first hotel using the form.</div>';
+    return;
+  }
+  list.innerHTML = hotels.map((hotel, index) =>
+    '<article class="managed-hotel"><div><strong>' + escapeHtml(hotel.name) + '</strong><span>' + escapeHtml(hotel.location || "Location not added") + '</span><small>' + escapeHtml(hotel.priceLabel || "Rate on request") + '</small></div><div class="managed-hotel-actions"><button type="button" data-edit-hotel="' + index + '">Edit</button><button type="button" class="remove-hotel" data-remove-hotel="' + index + '">Remove</button></div></article>'
+  ).join("");
 }
 
+function clearHotelForm() {
+  const hotelForm = document.querySelector("#hotel-form");
+  if (!hotelForm) return;
+  hotelForm.reset();
+  editingIndex = -1;
+  document.querySelector("#hotel-add-button").textContent = "Add hotel to list";
+  document.querySelector("#hotel-cancel-edit").hidden = true;
+}
 
-/* Premium Super Admin workspace redesign */
-.admin-shell{min-height:100vh;padding:0;background:#f4f6f3;color:#20372e;font-family:'DM Sans',sans-serif}
-.admin-top{display:none}
-.admin-card.dashboard-mode{width:100%;max-width:none;min-height:100vh;margin:0;padding:0;border-radius:0;background:#f4f6f3;box-shadow:none}
-.admin-workspace{min-height:100vh;display:grid;grid-template-columns:258px minmax(0,1fr)}
-.admin-sidebar{position:sticky;top:0;height:100vh;display:flex;flex-direction:column;padding:27px 18px 18px;background:#0d3028;color:#e7eee9}
-.sidebar-brand{display:flex;align-items:center;gap:12px;padding:3px 10px 31px;border-bottom:1px solid #ffffff1c}
-.brand-emblem{width:43px;height:43px;display:grid;place-items:center;border:1px solid #c6a36a;color:#e0bd82;font:600 17px 'Playfair Display',serif}
-.sidebar-brand>span:last-child{display:grid;gap:4px}
-.sidebar-brand strong{font-size:13px;letter-spacing:.14em;color:#fff}
-.sidebar-brand small{font-size:9px;letter-spacing:.17em;color:#d3b77f}
-.sidebar-label{padding:27px 12px 10px;color:#8ea79a;font-size:9px;font-weight:700;letter-spacing:.17em}
-.sidebar-label-spaced{padding-top:24px}
-.admin-nav{display:grid;gap:5px}
-.admin-nav-link{min-height:44px;display:flex;align-items:center;gap:12px;padding:0 12px;border-radius:7px;color:#c2d0c7;font-size:12px;font-weight:500;transition:background .2s,color .2s}
-.admin-nav-link:hover,.admin-nav-link.is-current{background:#ffffff16;color:#fff}
-.admin-nav-link.is-current{box-shadow:inset 3px 0 #d1ad72}
-.nav-icon{width:19px;text-align:center;color:#d6b87e;font-size:17px}
-.nav-count{margin-left:auto;padding:2px 8px;border-radius:20px;background:#ffffff18;color:#e8d2a7;font-size:10px}
-.sidebar-bottom{display:flex;align-items:center;gap:10px;margin-top:auto;padding:15px 7px 4px;border-top:1px solid #ffffff1c}
-.sidebar-avatar{width:34px;height:34px;display:grid;place-items:center;border-radius:50%;background:#d2b47c;color:#15372d;font-weight:700;font-size:13px}
-.sidebar-user{display:grid;gap:3px;min-width:0;flex:1}
-.sidebar-user strong{overflow:hidden;text-overflow:ellipsis;white-space:nowrap;color:#fff;font-size:10px}
-.sidebar-user small{color:#a9beb1;font-size:10px}
-.sidebar-signout{width:31px;height:31px;border:1px solid #ffffff2a;border-radius:6px;background:transparent;color:#e4c58e;cursor:pointer}
-.admin-main{min-width:0}
-.workspace-topbar{height:69px;display:flex;align-items:center;justify-content:space-between;gap:18px;padding:0 clamp(22px,4vw,56px);background:#fff;border-bottom:1px solid #e7ebe6}
-.workspace-topbar>div{display:flex;align-items:center;gap:18px}
-.topbar-caption{color:#728078;font-size:9px;font-weight:700;letter-spacing:.14em}
-.topbar-secure{display:flex;align-items:center;gap:7px;color:#62816f;font-size:10px}
-.topbar-secure i,.section-tag i{width:7px;height:7px;border-radius:50%;background:#39a16c}
-.workspace-topbar>a{color:#315a48;font-size:11px;font-weight:700}
-.workspace-topbar>a span{padding-left:6px;color:#b18a4c}
-.workspace-content{width:min(1440px,100%);margin:auto;padding:38px clamp(22px,4vw,56px) 22px}
-.welcome-row{display:flex;align-items:flex-end;justify-content:space-between;gap:25px;margin-bottom:27px}
-.welcome-eyebrow,.section-eyebrow{color:#a17b42;font-size:9px;font-weight:800;letter-spacing:.18em}
-.welcome-row h1{margin:9px 0 7px;color:#173d31;font:500 clamp(28px,3vw,38px)/1.2 'Playfair Display',serif}
-.welcome-row p,.section-title-row p{margin:0;color:#78867e;font-size:12px;line-height:1.7}
-.welcome-date{min-width:190px;padding:13px 17px;border:1px solid #e5e8e1;border-radius:8px;background:#fff;display:grid;gap:4px}
-.welcome-date span{color:#9a8060;font-size:8px;font-weight:800;letter-spacing:.15em}
-.welcome-date strong{color:#244b3b;font-size:13px}
-.welcome-date small{color:#839087;font-size:9px}
-.overview-cards{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:15px;margin-bottom:42px}
-.overview-card{position:relative;min-height:137px;padding:19px 21px;border:1px solid #e5e9e2;border-radius:9px;background:#fff;display:grid;justify-items:start;align-content:start;gap:5px;box-shadow:0 4px 15px #193b2c08}
-.overview-card-primary{background:#153e32;border-color:#153e32}
-.overview-icon{position:absolute;right:18px;top:17px;width:32px;height:32px;display:grid;place-items:center;border-radius:8px;background:#f1eee5;color:#a27b43;font-size:16px}
-.overview-card-primary .overview-icon{background:#ffffff18;color:#e6c58d}
-.overview-label{color:#8b968f;font-size:8px;font-weight:800;letter-spacing:.14em}
-.overview-card-primary .overview-label{color:#c1d0c6}
-.overview-card>strong{margin-top:3px;color:#183f32;font:500 25px 'Playfair Display',serif}
-.overview-card-primary>strong{color:#fff}
-.overview-card>small{color:#849087;font-size:10px}
-.overview-card-primary>small{color:#c3d2c8}
-.section-title-row{display:flex;align-items:flex-end;justify-content:space-between;gap:18px;margin:0 0 17px}
-.section-title-row h2{margin:6px 0 5px;color:#193f33;font:500 27px 'Playfair Display',serif}
-.section-tag{display:flex;align-items:center;gap:8px;padding:8px 11px;border:1px solid #dce8df;border-radius:30px;background:#f7fbf7;color:#578065;font-size:8px;font-weight:800;letter-spacing:.1em;white-space:nowrap}
-.hotel-manager{margin:0 0 38px;padding:24px;border:1px solid #e4e9e2;border-radius:10px;background:#fff;box-shadow:0 6px 22px #193b2c08}
-.manager-heading{align-items:center}
-.manager-overline{color:#a17b42;font-size:8px;font-weight:800;letter-spacing:.16em}
-.manager-heading h3{margin:5px 0 5px;color:#1c4436;font:500 21px 'Playfair Display',serif}
-.manager-heading p{max-width:570px;color:#7c8981;font-size:11px;line-height:1.7}
-.switch-row{gap:10px;padding:10px 12px;border:1px solid #e7ebe5;border-radius:8px;background:#fafbf9}
-.manager-status{border-radius:6px;background:#f4f7f3;color:#65776c;font-size:10px}
-.field-label{color:#40574b;font-size:11px}
-.hotel-manager textarea{border:1px solid #e0e6df;border-radius:6px;padding:11px;font:12px 'DM Sans',sans-serif}
-.hotel-manager-grid{grid-template-columns:minmax(280px,.88fr) minmax(0,1.12fr);gap:16px}
-.hotel-editor-panel,.hotel-list-panel{padding:19px;border:1px solid #e8ece6;border-radius:8px;background:#fbfcfa}
-.panel-heading,.list-heading>div{display:flex;align-items:flex-start;gap:10px}
-.panel-step{width:25px;height:25px;flex:0 0 25px;display:grid;place-items:center;border-radius:6px;background:#f0e9dc;color:#967342;font-size:9px;font-weight:800}
-.panel-heading h4,.list-heading h4{margin:0;color:#234839;font:500 16px 'Playfair Display',serif}
-.panel-heading p,.list-heading p{margin:4px 0 0;color:#89948d;font-size:9px;line-height:1.5}
-.hotel-form{gap:12px;margin-top:19px}
-.hotel-form label{gap:6px;color:#40574b;font-size:10px}
-.hotel-form label small{color:#8a958e;font-size:9px}
-.hotel-form input,.hotel-form textarea{padding:10px 11px;border:1px solid #dfe6df;border-radius:6px;background:#fff;font:11px 'DM Sans',sans-serif}
-.hotel-form input:focus,.hotel-form textarea:focus,.hotel-manager textarea:focus{outline:2px solid #d8c29a;outline-offset:1px;border-color:#c7a66e}
-.save-hotel-button,.publish-button{border-radius:6px;background:#174536;color:#fff;font-size:10px}
-.save-hotel-button{padding:12px 16px}
-.cancel-edit-button{border-radius:6px;font-size:10px}
-.list-heading{margin-bottom:15px}
-.list-heading>span{padding:5px 9px;border-radius:20px;background:#edf3ed;color:#50735d;font-weight:700}
-.empty-hotels{border-radius:7px;background:#fff;color:#87938b}
-.managed-hotel{padding:13px;border:1px solid #e8ece7;border-radius:7px}
-.managed-hotel strong{font:600 12px 'DM Sans',sans-serif}
-.managed-hotel span,.managed-hotel small{font-size:9px}
-.managed-hotel-actions button{border-radius:5px;padding:7px 10px;font-size:9px}
-.manager-footer{padding-top:17px}
-.manager-footer>span{color:#89948d;font-size:10px}
-.publish-button{padding:12px 17px;background:#c8a56b;color:#17372d;font-size:10px;font-weight:800}
-.publish-button span{padding-left:8px;font-size:15px}
-.hotel-feedback{font-size:11px}
-.coming-modules{margin:0 0 34px}
-.section-title-row.compact{margin-bottom:15px}
-.admin-modules{grid-template-columns:repeat(3,minmax(0,1fr));gap:13px}
-.admin-modules article{min-height:145px;position:relative;padding:17px;border:1px solid #e5e9e3;border-radius:8px;background:#fff;display:flex;flex-direction:column;align-items:flex-start;gap:7px}
-.admin-modules article>span{width:29px;height:29px;display:grid;place-items:center;border-radius:7px;background:#f3eee4;color:#9b7846;font-size:15px}
-.admin-modules strong{color:#254a3b;font:600 12px 'DM Sans',sans-serif}
-.admin-modules small{color:#839087;font-size:10px;line-height:1.5}
-.admin-modules em{margin-top:auto;color:#a17b42;font-size:8px;font-style:normal;font-weight:800;letter-spacing:.08em;text-transform:uppercase}
-.workspace-footer{display:flex;justify-content:space-between;gap:12px;padding:16px 0 4px;border-top:1px solid #e2e8e1;color:#9aa49d;font-size:8px;letter-spacing:.1em}
-@media(max-width:1050px){.admin-workspace{grid-template-columns:220px minmax(0,1fr)}.admin-sidebar{padding-inline:13px}.hotel-manager-grid{grid-template-columns:1fr}.admin-modules{grid-template-columns:repeat(2,minmax(0,1fr))}}
-@media(max-width:760px){.admin-workspace{grid-template-columns:1fr}.admin-sidebar{position:relative;height:auto;padding:13px 15px}.sidebar-brand{padding:0 3px 12px;border:0}.brand-emblem{width:36px;height:36px}.sidebar-label{display:none}.admin-nav{display:flex;overflow-x:auto;gap:6px;padding:10px 0 2px}.admin-nav-link{min-height:36px;flex:0 0 auto;padding:0 10px;font-size:10px}.nav-icon{font-size:14px}.sidebar-bottom{position:absolute;right:13px;top:13px;margin:0;padding:0;border:0}.sidebar-user{display:none}.sidebar-avatar{width:29px;height:29px}.sidebar-signout{width:29px;height:29px}.workspace-topbar{height:53px;padding:0 17px}.topbar-caption{font-size:8px}.topbar-secure{font-size:9px}.workspace-topbar>a{font-size:9px}.workspace-content{padding:26px 16px 18px}.welcome-row{align-items:flex-start;flex-direction:column;gap:14px}.welcome-row h1{font-size:29px}.welcome-date{width:100%;min-width:0}.overview-cards{grid-template-columns:1fr 1fr;gap:9px;margin-bottom:30px}.overview-card{min-height:120px;padding:14px}.overview-card:last-child{grid-column:1/-1}.overview-card>strong{font-size:21px}.overview-icon{right:12px;top:12px;width:27px;height:27px}.section-title-row{align-items:flex-start;flex-direction:column}.section-title-row h2{font-size:24px}.hotel-manager{padding:15px}.manager-heading{gap:14px}.switch-row{align-self:flex-start}.hotel-manager-grid{grid-template-columns:1fr;gap:11px}.hotel-editor-panel,.hotel-list-panel{padding:14px}.admin-modules{grid-template-columns:1fr 1fr;gap:9px}.admin-modules article{min-height:139px;padding:13px}.admin-modules small{font-size:9px}.workspace-footer{flex-direction:column;font-size:7px}}
-@media(max-width:390px){.admin-nav-link{font-size:9px;padding:0 8px}.overview-cards{grid-template-columns:1fr 1fr}.admin-modules{grid-template-columns:1fr}.welcome-row h1{font-size:26px}.workspace-topbar>div{gap:8px}.topbar-secure{display:none}}
+function loadHotelIntoForm(index) {
+  const hotel = hotels[index];
+  if (!hotel) return;
+  const hotelForm = document.querySelector("#hotel-form");
+  hotelForm.elements.hotelName.value = hotel.name || "";
+  hotelForm.elements.location.value = hotel.location || "";
+  hotelForm.elements.description.value = hotel.description || "";
+  hotelForm.elements.priceLabel.value = hotel.priceLabel || "";
+  hotelForm.elements.imageUrl.value = hotel.imageUrl || "";
+  hotelForm.elements.bookingUrl.value = hotel.bookingUrl || "";
+  editingIndex = index;
+  document.querySelector("#hotel-add-button").textContent = "Save hotel changes";
+  document.querySelector("#hotel-cancel-edit").hidden = false;
+  hotelForm.scrollIntoView({ behavior: "smooth", block: "center" });
+}
+
+async function loadHotelSettings() {
+  try {
+    const snapshot = await getDoc(doc(db, "siteModules", "hotels"));
+    const data = snapshot.exists() ? snapshot.data() : {};
+    hotels = Array.isArray(data.hotels) ? data.hotels : [];
+    document.querySelector("#hotels-active").checked = data.active === true;
+    const overviewStatus = document.querySelector("#overview-hotel-status");
+    if (overviewStatus) overviewStatus.textContent = data.active === true ? "Visible" : "Hidden";
+    document.querySelector("#hotels-intro").value = data.intro || "Explore hotel options shared by our team. Contact us to check availability, rates and booking terms.";
+    renderHotelList();
+  } catch (error) {
+    say("Hotel settings could not be loaded. Please check that the latest Firestore rules are active, then refresh this page.", "error");
+  }
+}
+
+function showDashboard(user, role) {
+  currentRole = role;
+  form.hidden = true;
+  message.textContent = "";
+  dashboard.hidden = false;
+  card.classList.add("dashboard-mode");
+  const superAdmin = role === "super_admin";
+  dashboard.innerHTML = [
+    '<div class="admin-workspace">',
+      '<aside class="admin-sidebar">',
+        '<a class="sidebar-brand" href="/" aria-label="Al Naseem public website"><span class="brand-emblem">AN</span><span><strong>AL NASEEM</strong><small>GROUP · ADMIN</small></span></a>',
+        '<div class="sidebar-label">WORKSPACE</div>',
+        '<nav class="admin-nav" aria-label="Admin navigation">',
+          '<a class="admin-nav-link is-current" href="#admin-overview"><span class="nav-icon">⌂</span><span>Overview</span></a>',
+          '<a class="admin-nav-link" href="#hotel-management"><span class="nav-icon">▦</span><span>Hotels</span><span class="nav-count" id="nav-hotel-count">0</span></a>',
+          '<a class="admin-nav-link" href="#upcoming-modules"><span class="nav-icon">✧</span><span>Umrah Packages</span></a>',
+          '<a class="admin-nav-link" href="#upcoming-modules"><span class="nav-icon">▤</span><span>Enquiries</span></a>',
+          '<a class="admin-nav-link" href="#upcoming-modules"><span class="nav-icon">☆</span><span>Guest Feedback</span></a>',
+          '<a class="admin-nav-link" href="#upcoming-modules"><span class="nav-icon">▧</span><span>Website Content</span></a>',
+          (superAdmin ? '<div class="sidebar-label sidebar-label-spaced">ADMINISTRATION</div><a class="admin-nav-link" href="#upcoming-modules"><span class="nav-icon">♙</span><span>Staff & Permissions</span></a><a class="admin-nav-link" href="#upcoming-modules"><span class="nav-icon">⚙</span><span>System Settings</span></a>' : ''),
+        '</nav>',
+        '<div class="sidebar-bottom"><span class="sidebar-avatar">' + escapeHtml((user.email || "A").charAt(0).toUpperCase()) + '</span><span class="sidebar-user"><strong>' + escapeHtml(user.email || "Administrator") + '</strong><small>' + (superAdmin ? "Super Admin" : "Staff Admin") + '</small></span><button class="sidebar-signout" id="logout-button" type="button" aria-label="Sign out" title="Sign out">↗</button></div>',
+      '</aside>',
+      '<main class="admin-main">',
+        '<header class="workspace-topbar"><div><span class="topbar-caption">AL NASEEM GROUP / CONTROL CENTRE</span><span class="topbar-secure"><i></i> Secure workspace</span></div><a href="/" target="_blank" rel="noopener">View live website <span>↗</span></a></header>',
+        '<section class="workspace-content" id="admin-overview">',
+          '<div class="welcome-row"><div><span class="welcome-eyebrow">YOUR BUSINESS AT A GLANCE</span><h1>Good to have you here.</h1><p>Manage your website and keep your business information up to date.</p></div><div class="welcome-date"><span>ACCOUNT ACCESS</span><strong>' + (superAdmin ? "Full control" : "Staff access") + '</strong><small>' + (superAdmin ? "All administrative permissions" : "Assigned business permissions") + '</small></div></div>',
+          '<div class="overview-cards">',
+            '<article class="overview-card overview-card-primary"><span class="overview-icon">▦</span><span class="overview-label">HOTEL RECORDS</span><strong id="overview-hotel-count">—</strong><small>Hotel options saved in your website</small></article>',
+            '<article class="overview-card"><span class="overview-icon">◉</span><span class="overview-label">HOTEL SECTION</span><strong id="overview-hotel-status">Checking…</strong><small>Public website visibility</small></article>',
+            '<article class="overview-card"><span class="overview-icon">♙</span><span class="overview-label">YOUR ACCESS</span><strong>' + (superAdmin ? "Super Admin" : "Staff Admin") + '</strong><small>' + (superAdmin ? "Owner-level control" : "Limited staff access") + '</small></article>',
+          '</div>',
+          '<div class="section-title-row" id="hotel-management"><div><span class="section-eyebrow">WEBSITE MANAGEMENT</span><h2>Hotel management</h2><p>Add, update and publish the hotel options shown to your visitors.</p></div><span class="section-tag"><i></i> LIVE MODULE</span></div>',
+          '<section class="hotel-manager">',
+            '<div class="manager-heading"><div><span class="manager-overline">HOTEL BOOKING</span><h3>Manage your hotel listings</h3><p>Control the hotel section, edit hotel details and decide when the section is visible on your public website.</p></div><label class="switch-row"><input type="checkbox" id="hotels-active"><span class="switch-ui"></span><span class="switch-label">Show hotel booking</span></label></div>',
+            '<div class="manager-status"><span class="status-light"></span><span id="hotel-status-text">Loading hotel settings…</span></div>',
+            '<label class="field-label" for="hotels-intro">Section introduction</label><textarea id="hotels-intro" rows="2" placeholder="A short message shown above hotel options"></textarea>',
+            '<div class="hotel-manager-grid"><div class="hotel-editor-panel"><div class="panel-heading"><span class="panel-step">01</span><div><h4 id="hotel-form-heading">Add a hotel</h4><p>Enter the details visitors should see.</p></div></div><form id="hotel-form" class="hotel-form">',
+              '<label>Hotel name<input name="hotelName" required maxlength="80" placeholder="Example: Hotel name"></label><label>City / location<input name="location" maxlength="100" placeholder="Makkah, Madinah or other location"></label>',
+              '<label>Short description<textarea name="description" rows="3" maxlength="300" placeholder="Describe the hotel or key details"></textarea></label><label>Price note<input name="priceLabel" maxlength="60" placeholder="Example: Ask for current rates"></label>',
+              '<label>Hotel image URL <small>Optional · Direct image link beginning with https://</small><input name="imageUrl" type="url" placeholder="https://example.com/hotel.jpg"></label>',
+              '<label>Booking / information link <small>Optional · Leave blank to use the website enquiry form.</small><input name="bookingUrl" type="url" placeholder="https://example.com/booking"></label>',
+              '<div class="hotel-form-actions"><button type="submit" class="save-hotel-button" id="hotel-add-button">＋ Add hotel</button><button type="button" class="cancel-edit-button" id="hotel-cancel-edit" hidden>Cancel</button></div></form></div>',
+              '<div class="hotel-list-panel"><div class="list-heading"><div><span class="panel-step">02</span><div><h4>Published hotel options</h4><p>Hotels currently saved in your website settings.</p></div></div><span id="hotel-count">0 hotels</span></div><div id="hotel-list"><div class="empty-hotels">Loading your hotel list…</div></div></div></div>',
+            '<div class="manager-footer"><span>Changes are saved to Firebase when you publish.</span><button type="button" id="save-hotel-settings" class="publish-button">Save & publish changes <span>→</span></button></div><div id="hotel-feedback" class="hotel-feedback" role="status"></div>',
+          '</section>',
+          '<section class="coming-modules" id="upcoming-modules"><div class="section-title-row compact"><div><span class="section-eyebrow">NEXT DEVELOPMENT STAGES</span><h2>More tools for your business</h2><p>These areas will be activated as we complete each module.</p></div></div><div class="admin-modules"><article><span>✧</span><strong>Umrah Packages</strong><small>Manage package details, prices and inclusions</small><em>Coming next</em></article><article><span>▤</span><strong>Enquiries</strong><small>Review customer requests and follow-ups</small><em>Coming next</em></article><article><span>☆</span><strong>Guest Feedback</strong><small>Review and approve visitor feedback</small><em>Coming next</em></article><article><span>▧</span><strong>Website Content</strong><small>Update homepage and contact information</small><em>Coming next</em></article>' + (superAdmin ? '<article><span>♙</span><strong>Staff & Permissions</strong><small>Manage team accounts and access levels</small><em>Super Admin</em></article><article><span>⚙</span><strong>System Settings</strong><small>Manage technical and website settings</small><em>Super Admin</em></article>' : '') + '</div></section>',
+          '<footer class="workspace-footer"><span>AL NASEEM GROUP · ADMIN WORKSPACE</span><span>Secure access · Firebase powered</span></footer>',
+        '</section>',
+      '</main>',
+    '</div>'
+  ].join("");
+
+  document.querySelector("#logout-button").addEventListener("click", async () => {
+    await signOut(auth);
+    window.location.reload();
+  });
+
+  document.querySelectorAll(".admin-nav-link").forEach(link => {
+    link.addEventListener("click", () => {
+      document.querySelectorAll(".admin-nav-link").forEach(item => item.classList.remove("is-current"));
+      link.classList.add("is-current");
+    });
+  });
+  document.querySelector("#hotels-active").addEventListener("change", updateHotelStatus);
+  document.querySelector("#hotel-form").addEventListener("submit", (event) => {
+    event.preventDefault();
+    const hotelForm = event.currentTarget;
+    const values = new FormData(hotelForm);
+    const hotel = {
+      name: String(values.get("hotelName") || "").trim(),
+      location: String(values.get("location") || "").trim(),
+      description: String(values.get("description") || "").trim(),
+      priceLabel: String(values.get("priceLabel") || "").trim(),
+      imageUrl: String(values.get("imageUrl") || "").trim(),
+      bookingUrl: String(values.get("bookingUrl") || "").trim()
+    };
+    if (!hotel.name) return;
+    if (hotel.imageUrl && !/^https?:\/\//i.test(hotel.imageUrl)) {
+      setHotelFeedback("Please use a valid https:// or http:// image link.", true);
+      return;
+    }
+    if (hotel.bookingUrl && !/^https?:\/\//i.test(hotel.bookingUrl)) {
+      setHotelFeedback("Please use a valid https:// or http:// booking link.", true);
+      return;
+    }
+    if (editingIndex >= 0) hotels[editingIndex] = hotel;
+    else hotels.push(hotel);
+    renderHotelList();
+    clearHotelForm();
+    setHotelFeedback("Hotel details added to the draft list. Now save hotel settings to publish them.", false);
+  });
+
+  document.querySelector("#hotel-cancel-edit").addEventListener("click", clearHotelForm);
+  document.querySelector("#hotel-list").addEventListener("click", (event) => {
+    const editButton = event.target.closest("[data-edit-hotel]");
+    const removeButton = event.target.closest("[data-remove-hotel]");
+    if (editButton) loadHotelIntoForm(Number(editButton.dataset.editHotel));
+    if (removeButton) {
+      const index = Number(removeButton.dataset.removeHotel);
+      if (Number.isInteger(index) && index >= 0 && index < hotels.length) {
+        hotels.splice(index, 1);
+        if (editingIndex === index) clearHotelForm();
+        renderHotelList();
+        setHotelFeedback("Hotel removed from the draft list. Save settings to publish the change.", false);
+      }
+    }
+  });
+  document.querySelector("#save-hotel-settings").addEventListener("click", saveHotelSettings);
+  loadHotelSettings();
+}
+function updateHotelStatus() {
+  const active = document.querySelector("#hotels-active").checked;
+  const status = document.querySelector("#hotel-status-text");
+  const light = document.querySelector(".status-light");
+  status.textContent = active ? "Hotel booking will be visible on the public website after saving." : "Hotel booking is hidden from public visitors after saving.";
+  const overviewStatus = document.querySelector("#overview-hotel-status");
+  if (overviewStatus) overviewStatus.textContent = active ? "Visible" : "Hidden";
+  light.classList.toggle("is-active", active);
+}
+
+function setHotelFeedback(text, error) {
+  const feedback = document.querySelector("#hotel-feedback");
+  if (!feedback) return;
+  feedback.textContent = text;
+  feedback.dataset.type = error ? "error" : "success";
+}
+
+async function saveHotelSettings() {
+  const saveButton = document.querySelector("#save-hotel-settings");
+  saveButton.disabled = true;
+  saveButton.textContent = "Saving settings…";
+  setHotelFeedback("", false);
+  try {
+    const active = document.querySelector("#hotels-active").checked;
+    const intro = document.querySelector("#hotels-intro").value.trim();
+    await setDoc(doc(db, "siteModules", "hotels"), {
+      active: active,
+      intro: intro,
+      hotels: hotels,
+      updatedAt: serverTimestamp(),
+      updatedBy: auth.currentUser ? auth.currentUser.uid : null
+    }, { merge: true });
+    setHotelFeedback(active ? "Saved successfully. Hotel booking is enabled on the public website." : "Saved successfully. Hotel booking is now hidden from the public website.", false);
+    updateHotelStatus();
+  } catch (error) {
+    setHotelFeedback("Could not save settings. Please confirm the latest Firestore rules are deployed and try again.", true);
+  } finally {
+    saveButton.disabled = false;
+    saveButton.textContent = "Save hotel settings";
+  }
+}
+
+if (!isFirebaseConfigured || !auth || !db) {
+  say("Firebase configuration is not connected. Admin login is unavailable until Firebase is configured.", "warning");
+  button.disabled = true;
+}
+
+form.addEventListener("submit", async (event) => {
+  event.preventDefault();
+  if (!auth || !db) return;
+  button.disabled = true;
+  button.textContent = "Checking account…";
+  say("Verifying your login details…");
+  const values = new FormData(form);
+
+  try {
+    // Keep Authentication and Firestore checks separate so the real failure is clear.
+    const credential = await signInWithEmailAndPassword(
+      auth,
+      String(values.get("email") || "").trim(),
+      String(values.get("password") || "")
+    );
+
+    let profile;
+    try {
+      profile = await getDoc(doc(db, "users", credential.user.uid));
+    } catch (profileError) {
+      console.error("Firebase sign-in succeeded, but the admin role document could not be read:", profileError);
+      await signOut(auth);
+      const code = profileError.code || "unknown";
+      const detail = code === "permission-denied"
+        ? "Firestore rules are blocking access to your own admin profile. Please check that the latest Firestore rules are published."
+        : "Firebase Authentication accepted your login, but Firestore could not verify your admin profile.";
+      say(detail + " (Error: " + code + ")", "error");
+      return;
+    }
+
+    const role = profile.exists() ? profile.data().role : null;
+    if (role !== "super_admin" && role !== "staff_admin") {
+      await signOut(auth);
+      say("Login succeeded, but no valid admin role was found for this account. Check that users/" + credential.user.uid + " has role = super_admin.", "warning");
+      return;
+    }
+    showDashboard(credential.user, role);
+  } catch (error) {
+    console.error("Firebase Authentication sign-in failed:", error);
+    const code = error.code || "unknown";
+    const messages = {
+      "auth/invalid-credential": "Email or password is incorrect.",
+      "auth/too-many-requests": "Too many attempts. Please wait and try again.",
+      "auth/network-request-failed": "The browser could not reach Firebase. Check your internet connection or browser network blocking.",
+      "auth/unauthorized-domain": "This website address is not authorised in Firebase. Add al-naseem-d40c8.web.app under Authentication → Settings → Authorized domains.",
+      "auth/operation-not-allowed": "Email/Password sign-in is disabled. Enable it in Firebase Authentication → Sign-in method.",
+      "auth/invalid-api-key": "Firebase API key is invalid or restricted. Check the Web App configuration and API key restrictions.",
+      "auth/configuration-not-found": "Firebase Authentication is not configured for this project. Open Firebase Authentication and complete its setup."
+    };
+    say((messages[code] || "Firebase returned an unexpected login error. Check the exact error code below.") + " (Error: " + code + ")", "error");
+  } finally {
+    button.disabled = false;
+    button.textContent = "Sign in securely";
+  }
+});
+
+if (auth && db) {
+  onAuthStateChanged(auth, async (user) => {
+    if (!user) return;
+    try {
+      const profile = await getDoc(doc(db, "users", user.uid));
+      const role = profile.exists() ? profile.data().role : null;
+      if (role === "super_admin" || role === "staff_admin") showDashboard(user, role);
+      else await signOut(auth);
+    } catch (error) {
+      console.error("Could not read the signed-in user admin profile:", error);
+      say("Could not verify your admin permissions. Firestore error: " + (error.code || "unknown") + ". Please check the published Firestore rules.", "error");
+      await signOut(auth);
+    }
+  });
+}
+
+/* Customer enquiry inbox */
+.enquiry-management{margin:0 0 38px;padding:23px;border:1px solid #e4e9e2;border-radius:10px;background:#fff;box-shadow:0 6px 22px #193b2c08}
+.enquiry-list{display:grid;gap:10px}
+.enquiry-record{display:flex;justify-content:space-between;gap:20px;padding:17px;border:1px solid #e7ece6;border-radius:8px;background:#fbfcfa}
+.enquiry-record-main{min-width:0;flex:1}.enquiry-record-top{display:flex;align-items:center;gap:10px;flex-wrap:wrap}
+.enquiry-record-top strong{color:#204737;font-size:14px}.enquiry-record-main p{margin:7px 0;color:#64766b;font-size:11px}
+.enquiry-record-main small{color:#8a968e;font-size:10px}.enquiry-message{margin-top:10px;color:#4e6256;font-size:12px;line-height:1.6;overflow-wrap:anywhere}
+.enquiry-status{padding:4px 8px;border-radius:20px;background:#f5eddf;color:#8a6735;font-size:9px;font-weight:800;text-transform:uppercase}
+.enquiry-status.status-contacted{background:#e9f1f7;color:#426c8a}.enquiry-status.status-closed{background:#edf1ed;color:#65756a}
+.enquiry-record-actions{display:flex;align-items:flex-start;gap:8px;flex-direction:column;min-width:125px}
+.enquiry-record-actions a,.enquiry-record-actions select{border:1px solid #dfe6df;border-radius:5px;background:#fff;padding:8px 10px;color:#315b48;font:600 10px 'DM Sans',sans-serif}
+@media(max-width:760px){.enquiry-management{padding:15px}.enquiry-record{flex-direction:column;gap:12px}.enquiry-record-actions{flex-direction:row;flex-wrap:wrap}.enquiry-record-actions select{max-width:100%}}
