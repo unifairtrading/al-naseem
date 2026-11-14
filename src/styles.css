@@ -608,3 +608,112 @@ footer{background:#071f19;color:#d9e1db}
 .footer-bottom{border-top:1px solid rgba(255,255,255,.13);min-height:70px;display:flex;align-items:center;justify-content:space-between;gap:18px;font-size:11px;color:#aebdb4}
 @media(max-width:900px){.contact-wrap{grid-template-columns:1fr;gap:38px}.contact-intro>p{max-width:620px}.footer-main{grid-template-columns:repeat(2,minmax(0,1fr));gap:38px}}
 @media(max-width:600px){.contact-section{padding:68px 0}.contact-wrap{gap:28px}.contact-intro h2{font-size:45px}.contact-intro>p{font-size:14px}.contact-info-grid{gap:11px}.contact-info-card{min-height:205px;padding:17px}.contact-info-card strong{font-size:18px}.contact-info-card p{font-size:12px;overflow-wrap:anywhere}.contact-card-icon{width:39px;height:39px;margin-bottom:14px}.contact-intro .contact-social{gap:12px}.contact-intro .contact-social a{font-size:11px}.footer-main{grid-template-columns:1fr 1fr;gap:32px 20px;padding-top:45px;padding-bottom:38px}.footer-about{grid-column:1/-1}.footer-brand img{width:54px;height:54px}.footer-nav a,.footer-reach a{font-size:12px}.footer-bottom{padding:17px 0;min-height:0;align-items:flex-start;flex-direction:column;gap:8px;font-size:10px}}
+
+
+/* Layout repair pass: prevent oversized logo, collisions and overflow */
+*,*::before,*::after{box-sizing:border-box}
+html{overflow-x:hidden}
+body{overflow-x:hidden;line-height:1.65}
+img{max-width:100%;height:auto}
+.container{width:min(1280px,calc(100% - 64px));margin-inline:auto}
+h1,h2,h3,h4,p,small,strong,a,span,li,label{overflow-wrap:break-word;word-break:normal}
+p{line-height:1.75}
+section{scroll-margin-top:100px}
+.site-header,.site-header *{min-width:0}
+.nav-wrap{display:flex;align-items:center;justify-content:space-between;gap:24px}
+.brand{display:flex;align-items:center;gap:12px;flex:0 1 auto;min-width:0}
+.brand img{width:64px!important;height:64px!important;max-width:64px!important;max-height:64px!important;object-fit:contain;flex:0 0 64px}
+.brand strong,.brand small{display:block;line-height:1.35}
+.nav-links{display:flex;align-items:center;justify-content:flex-end;flex-wrap:wrap;min-width:0;row-gap:8px}
+.hero h1{max-width:900px;line-height:1.04;overflow-wrap:normal}
+.hero-copy>p{line-height:1.8;max-width:700px}
+.section-heading{align-items:end}
+.section-heading>*{min-width:0}
+.service-grid,.hotel-grid{align-items:stretch}
+.service-card,.hotel-card{min-width:0;display:flex;flex-direction:column}
+.service-content,.hotel-card-body{min-width:0;display:flex;flex-direction:column;flex:1}
+.service-content h3,.hotel-card h3{line-height:1.2;overflow-wrap:break-word}
+.service-content>p,.hotel-card p{line-height:1.75}
+.service-price-row{margin-top:auto;display:flex;align-items:center;justify-content:space-between;gap:14px;flex-wrap:wrap}
+.service-highlights{display:flex;flex-wrap:wrap;align-items:center}
+.guide-layout,.about-layout,.enquiry-layout{align-items:center}
+.guide-copy,.about-layout>div,.enquiry-copy,.enquiry-form{min-width:0}
+.guide-step{display:grid;grid-template-columns:38px minmax(0,1fr);align-items:start}
+.guide-step>div{min-width:0}
+.guide-step strong,.guide-step small{display:block;line-height:1.5}
+.enquiry-form{width:100%;max-width:100%}
+.enquiry-form label{display:flex;flex-direction:column;align-items:stretch;line-height:1.45}
+.enquiry-form input,.enquiry-form select,.enquiry-form textarea{width:100%;max-width:100%;min-width:0;line-height:1.45}
+.contact-section{padding:78px 0!important}
+.contact-wrap{width:min(1200px,calc(100% - 64px));display:grid;grid-template-columns:minmax(0,.82fr) minmax(0,1.18fr);gap:48px;align-items:center}
+.contact-intro,.contact-info-grid,.contact-info-card{min-width:0}
+.contact-intro h2{font-size:clamp(40px,4.2vw,58px);line-height:1.12;letter-spacing:-.02em;margin:14px 0 18px}
+.contact-intro>p{max-width:100%;font-size:15px;line-height:1.8;margin:0 0 22px}
+.contact-info-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px}
+.contact-info-card{min-height:205px;height:100%;padding:21px;display:flex;flex-direction:column;align-items:flex-start;gap:0;overflow:hidden}
+.contact-info-card small{font-size:10px;line-height:1.5;letter-spacing:.12em}
+.contact-info-card strong{font-size:clamp(17px,1.6vw,21px);line-height:1.3;margin:7px 0}
+.contact-info-card p{font-size:13px;line-height:1.65;margin:0 0 12px;overflow-wrap:anywhere}
+.contact-card-link{font-size:12px;line-height:1.5;margin-top:auto}
+.contact-intro .contact-social{display:flex;flex-wrap:wrap;gap:10px 17px;line-height:1.5}
+.contact-intro .contact-social a{line-height:1.5;margin:0}
+.site-footer{width:100%;overflow:hidden}
+.site-footer .footer-main{width:min(1280px,calc(100% - 64px));margin-inline:auto;display:grid;grid-template-columns:minmax(250px,1.35fr) repeat(2,minmax(125px,.75fr)) minmax(190px,1fr);gap:34px;padding:48px 0 38px;align-items:start}
+.site-footer .footer-about,.site-footer .footer-nav,.site-footer .footer-reach{min-width:0;max-width:100%}
+.site-footer .footer-brand{display:flex!important;align-items:center!important;gap:12px;min-width:0;max-width:100%}
+.site-footer .footer-brand img{display:block!important;width:58px!important;height:58px!important;min-width:58px!important;min-height:58px!important;max-width:58px!important;max-height:58px!important;object-fit:contain!important;flex:0 0 58px!important;padding:3px;border-radius:7px}
+.site-footer .footer-brand span{display:flex;flex-direction:column;gap:4px;min-width:0}
+.site-footer .footer-brand strong{font-size:14px;line-height:1.35;letter-spacing:.08em;white-space:normal}
+.site-footer .footer-brand small{font-size:9px;line-height:1.4;letter-spacing:.1em;white-space:normal}
+.site-footer .footer-about p{font-size:12px;line-height:1.75;margin:14px 0 0;max-width:270px}
+.site-footer .footer-nav,.site-footer .footer-reach{display:flex;flex-direction:column;align-items:flex-start;gap:11px;line-height:1.5}
+.site-footer .footer-nav>strong,.site-footer .footer-reach>strong{font-size:10px;line-height:1.5;margin:3px 0 5px;letter-spacing:.14em}
+.site-footer .footer-nav a,.site-footer .footer-reach a{display:block;max-width:100%;font-size:12px;line-height:1.6;overflow-wrap:anywhere}
+.site-footer .footer-reach .footer-admin{padding:8px 11px;white-space:normal}
+.site-footer .footer-bottom{width:min(1280px,calc(100% - 64px));margin-inline:auto;min-height:62px;padding:14px 0;display:flex;align-items:center;justify-content:space-between;gap:12px 24px;flex-wrap:wrap;font-size:10px;line-height:1.6}
+.floating-whatsapp{z-index:50;max-width:calc(100vw - 28px)}
+@media(max-width:1000px){
+ .container{width:calc(100% - 44px)}
+ .contact-wrap{grid-template-columns:1fr;gap:30px}
+ .contact-intro>p{max-width:650px}
+ .site-footer .footer-main{width:calc(100% - 44px);grid-template-columns:repeat(2,minmax(0,1fr));gap:30px 38px}
+ .site-footer .footer-bottom{width:calc(100% - 44px)}
+}
+@media(max-width:760px){
+ .container{width:calc(100% - 32px)}
+ .nav-wrap{gap:10px;flex-wrap:wrap}
+ .brand img{width:52px!important;height:52px!important;max-width:52px!important;max-height:52px!important;flex-basis:52px}
+ .nav-links{width:100%;justify-content:center;gap:12px 18px}
+ .hero h1{font-size:clamp(43px,10vw,62px);line-height:1.08}
+ .hero-copy>p{font-size:15px;line-height:1.75}
+ .section{padding:58px 0}
+ .section-heading{display:flex;flex-direction:column;align-items:flex-start;gap:12px}
+ .section-heading h2,.guide-copy h2,.about-layout h2,.enquiry-copy h2{font-size:clamp(34px,8vw,43px);line-height:1.15}
+ .service-grid,.hotel-grid{grid-template-columns:1fr}
+ .service-content h3{font-size:27px;line-height:1.2}
+ .service-content>p{min-height:0}
+ .service-price-row{align-items:flex-start}
+ .guide-layout,.about-layout,.enquiry-layout{display:grid;grid-template-columns:1fr;gap:28px}
+ .guide-visual{height:340px}
+ .contact-section{padding:58px 0!important}
+ .contact-wrap{width:calc(100% - 32px);grid-template-columns:1fr;gap:25px}
+ .contact-intro h2{font-size:clamp(37px,9vw,48px);line-height:1.12}
+ .contact-info-grid{grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}
+ .contact-info-card{min-height:190px;padding:15px}
+ .contact-info-card strong{font-size:17px;line-height:1.3}
+ .contact-info-card p{font-size:12px;line-height:1.6}
+ .site-footer .footer-main{width:calc(100% - 32px);grid-template-columns:repeat(2,minmax(0,1fr));gap:27px 18px;padding:38px 0 28px}
+ .site-footer .footer-about{grid-column:1/-1}
+ .site-footer .footer-brand img{width:54px!important;height:54px!important;min-width:54px!important;min-height:54px!important;max-width:54px!important;max-height:54px!important;flex-basis:54px!important}
+ .site-footer .footer-brand strong{font-size:13px}
+ .site-footer .footer-brand small{font-size:8px}
+ .site-footer .footer-nav a,.site-footer .footer-reach a{font-size:11px}
+ .site-footer .footer-bottom{width:calc(100% - 32px);flex-direction:column;align-items:flex-start;gap:6px;padding:14px 0}
+}
+@media(max-width:390px){
+ .contact-info-grid{grid-template-columns:1fr}
+ .contact-info-card{min-height:0}
+ .site-footer .footer-main{grid-template-columns:1fr 1fr;gap:24px 14px}
+ .site-footer .footer-brand{align-items:flex-start}
+ .site-footer .footer-brand img{width:48px!important;height:48px!important;min-width:48px!important;min-height:48px!important;max-width:48px!important;max-height:48px!important;flex-basis:48px!important}
+}
