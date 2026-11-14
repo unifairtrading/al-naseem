@@ -571,3 +571,40 @@ footer{background:#071f19;color:#d9e1db}
  .steps-list{grid-template-columns:1fr}
  .about-points{grid-template-columns:1fr}
 }
+
+
+/* Contact and footer rebuilt as a premium information architecture */
+.contact-section{background:linear-gradient(135deg,#f4f0e7 0%,#fbfaf6 58%,#eee7d9 100%);padding:100px 0 105px;position:relative;overflow:hidden}
+.contact-section::before{content:"";position:absolute;width:480px;height:480px;border:1px solid rgba(166,128,67,.13);border-radius:50%;right:-170px;top:-220px;box-shadow:0 0 0 45px rgba(166,128,67,.035),0 0 0 90px rgba(166,128,67,.025)}
+.contact-wrap{position:relative;display:grid;grid-template-columns:.78fr 1.22fr;gap:75px;align-items:center}
+.contact-intro h2{font:500 clamp(48px,5vw,68px)/1.04 'Playfair Display',serif;letter-spacing:-.035em;color:var(--forest);margin:16px 0 20px}
+.contact-intro h2 em{color:#a98249}
+.contact-intro>p{font-size:16px;line-height:1.9;color:#64756c;max-width:420px;margin:0 0 27px}
+.contact-primary{display:inline-flex;align-items:center;gap:22px;padding:16px 24px;border-radius:40px;background:#103b30;color:white;font-size:14px;font-weight:700;box-shadow:0 10px 24px rgba(8,40,32,.15)}
+.contact-primary b{color:#e4c58f;font-size:19px}
+.contact-intro .contact-social{display:flex;flex-wrap:wrap;gap:17px;margin-top:30px}
+.contact-intro .contact-social a{font-size:12px;font-weight:700;color:#98733f;margin:0}
+.contact-info-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:16px}
+.contact-info-card{display:flex;flex-direction:column;align-items:flex-start;min-height:220px;padding:25px;background:rgba(255,255,255,.82);border:1px solid #e7dfd1;border-radius:12px;box-shadow:0 10px 28px rgba(20,49,37,.055);transition:transform .25s,box-shadow .25s}
+.contact-info-card:hover{transform:translateY(-5px);box-shadow:0 17px 35px rgba(20,49,37,.11)}
+.contact-card-icon{width:44px;height:44px;display:grid;place-items:center;border-radius:50%;background:#f0e7d7;color:#98733f;font-size:23px;margin-bottom:18px}
+.contact-info-card small{font-size:10px;letter-spacing:.17em;font-weight:800;color:#a17b42}
+.contact-info-card strong{font:500 22px 'Playfair Display',serif;color:var(--forest);margin:7px 0 5px}
+.contact-info-card p{font-size:13px;line-height:1.75;color:#68786f;margin:0 0 15px}
+.contact-card-link{font-size:12px;color:#98733f;margin-top:auto}
+.site-footer{background:#09271f;color:#dce5df}
+.footer-main{display:grid;grid-template-columns:1.35fr .8fr .9fr 1fr;gap:55px;padding-top:65px;padding-bottom:55px}
+.footer-brand{display:flex;align-items:center;gap:13px}
+.footer-brand img{width:62px;height:62px;object-fit:contain;background:#fff;border-radius:9px;padding:4px}
+.footer-brand span{display:grid;gap:4px}
+.footer-brand strong{font-size:15px;letter-spacing:.12em;color:#fff}
+.footer-brand small{font-size:9px;letter-spacing:.16em;color:#d5bd91}
+.footer-about p{max-width:280px;font-size:13px;line-height:1.85;color:#b8c8bf;margin:19px 0 0}
+.footer-nav,.footer-reach{display:flex;flex-direction:column;align-items:flex-start;gap:13px}
+.footer-nav>strong,.footer-reach>strong{font-size:10px;letter-spacing:.18em;color:#dfc18d;margin:5px 0 7px}
+.footer-nav a,.footer-reach a{font-size:13px;color:#d0dbd4;transition:color .2s}
+.footer-nav a:hover,.footer-reach a:hover{color:#e9c98f}
+.footer-reach .footer-admin{margin-top:5px;padding:10px 14px;border:1px solid rgba(223,193,141,.4);border-radius:25px;color:#e7c990;font-size:12px}
+.footer-bottom{border-top:1px solid rgba(255,255,255,.13);min-height:70px;display:flex;align-items:center;justify-content:space-between;gap:18px;font-size:11px;color:#aebdb4}
+@media(max-width:900px){.contact-wrap{grid-template-columns:1fr;gap:38px}.contact-intro>p{max-width:620px}.footer-main{grid-template-columns:repeat(2,minmax(0,1fr));gap:38px}}
+@media(max-width:600px){.contact-section{padding:68px 0}.contact-wrap{gap:28px}.contact-intro h2{font-size:45px}.contact-intro>p{font-size:14px}.contact-info-grid{gap:11px}.contact-info-card{min-height:205px;padding:17px}.contact-info-card strong{font-size:18px}.contact-info-card p{font-size:12px;overflow-wrap:anywhere}.contact-card-icon{width:39px;height:39px;margin-bottom:14px}.contact-intro .contact-social{gap:12px}.contact-intro .contact-social a{font-size:11px}.footer-main{grid-template-columns:1fr 1fr;gap:32px 20px;padding-top:45px;padding-bottom:38px}.footer-about{grid-column:1/-1}.footer-brand img{width:54px;height:54px}.footer-nav a,.footer-reach a{font-size:12px}.footer-bottom{padding:17px 0;min-height:0;align-items:flex-start;flex-direction:column;gap:8px;font-size:10px}}
