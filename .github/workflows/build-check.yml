@@ -33,3 +33,5 @@ jobs:
           firebaseServiceAccount: ${{ secrets.FIREBASE_SERVICE_ACCOUNT }}
           projectId: al-naseem-d40c8
           channelId: live
+
+# Deployment workflow prepared for Firebase Hosting.
