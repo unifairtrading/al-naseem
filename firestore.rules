@@ -7,15 +7,11 @@ service cloud.firestore {
         && get(/databases/$(database)/documents/users/$(request.auth.uid)).data.role in ['super_admin', 'staff_admin'];
     }
 
-    // Each signed-in user can read only their own role profile.
-    // Role documents cannot be created, changed or deleted from the website.
     match /users/{userId} {
       allow get: if request.auth != null && request.auth.uid == userId;
       allow list, create, update, delete: if false;
     }
 
-    // The public website can read this single module document.
-    // Only an authorised Super Admin or Staff Admin can create or change it.
     match /siteModules/{moduleId} {
       allow get: if moduleId == 'hotels';
       allow list: if false;
@@ -23,7 +19,22 @@ service cloud.firestore {
       allow delete: if false;
     }
 
-    // All other data stays closed until its feature is implemented.
+    // Public visitors may submit enquiries; only signed-in Al Naseem admins can view or update them.
+    match /enquiries/{enquiryId} {
+      allow create: if request.auth == null
+        && request.resource.data.keys().hasOnly(['name', 'phone', 'interest', 'message', 'status', 'createdAt'])
+        && request.resource.data.name is string && request.resource.data.name.size() > 0 && request.resource.data.name.size() <= 100
+        && request.resource.data.phone is string && request.resource.data.phone.size() > 0 && request.resource.data.phone.size() <= 40
+        && request.resource.data.interest is string && request.resource.data.interest.size() <= 80
+        && request.resource.data.message is string && request.resource.data.message.size() <= 1500
+        && request.resource.data.status == 'new';
+      allow read: if isAlNaseemAdmin();
+      allow update: if isAlNaseemAdmin()
+        && request.resource.data.diff(resource.data).affectedKeys().hasOnly(['status', 'updatedAt', 'updatedBy'])
+        && request.resource.data.status in ['new', 'contacted', 'closed'];
+      allow delete: if isAlNaseemAdmin();
+    }
+
     match /{document=**} {
       allow read, write: if false;
     }
