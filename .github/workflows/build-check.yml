@@ -23,6 +23,14 @@ jobs:
         run: npm install
       - name: Build website
         run: npm run build
+      - name: Publish Firestore security rules
+        if: ${{ github.event_name == 'push' }}
+        env:
+          FIREBASE_SERVICE_ACCOUNT: ${{ secrets.FIREBASE_SERVICE_ACCOUNT }}
+        run: |
+          printf '%s' "$FIREBASE_SERVICE_ACCOUNT" > "$RUNNER_TEMP/firebase-service-account.json"
+          export GOOGLE_APPLICATION_CREDENTIALS="$RUNNER_TEMP/firebase-service-account.json"
+          npx --yes firebase-tools deploy --only firestore:rules --project al-naseem-d40c8 --non-interactive
       - name: Deploy to Firebase Hosting
         if: ${{ github.event_name == 'push' }}
         uses: FirebaseExtended/action-hosting-deploy@v0
