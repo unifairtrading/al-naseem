@@ -1,5 +1,5 @@
 import { db, isFirebaseConfigured } from "./firebase.js";
-import { doc, getDoc } from "firebase/firestore";
+import { addDoc, collection, doc, getDoc, serverTimestamp } from "firebase/firestore";
 
 const packages = [
   { name: "Bahraini by Air", price: "350 BHD", detail: "Air travel Umrah package", type: "AIR", note: "For guests who prefer to fly" },
@@ -100,9 +100,10 @@ document.querySelectorAll("[data-interest]").forEach((link) => link.addEventList
   prepareEnquiry(link.dataset.interest, link.dataset.message);
 }));
 
-document.querySelector("#enquiry-form").addEventListener("submit", (event) => {
+document.querySelector("#enquiry-form").addEventListener("submit", async (event) => {
   event.preventDefault();
   const values = new FormData(event.currentTarget);
+  const submitButton = event.currentTarget.querySelector("button[type=submit]");
   const lines = [
     "Assalamu Alaikum, I would like to make an enquiry with Al Naseem Group.",
     "Name: " + values.get("name"),
@@ -111,7 +112,24 @@ document.querySelector("#enquiry-form").addEventListener("submit", (event) => {
     "Message: " + (values.get("message") || "—")
   ];
   const target = "https://wa.me/97333224271?text=" + encodeURIComponent(lines.join("\n"));
-  window.open(target, "_blank", "noopener,noreferrer");
+  submitButton.disabled = true;
+  submitButton.textContent = "Saving your enquiry…";
+  try {
+    if (isFirebaseConfigured && db) await addDoc(collection(db, "enquiries"), {
+      name: String(values.get("name") || "").trim().slice(0, 100),
+      phone: String(values.get("phone") || "").trim().slice(0, 40),
+      interest: String(values.get("interest") || "Not selected").slice(0, 80),
+      message: String(values.get("message") || "").trim().slice(0, 1500),
+      status: "new", createdAt: serverTimestamp()
+    });
+    window.open(target, "_blank", "noopener,noreferrer");
+    submitButton.textContent = "Enquiry saved · Continue in WhatsApp";
+  } catch (error) {
+    console.error("Could not save enquiry:", error);
+    submitButton.disabled = false;
+    submitButton.textContent = "Try again · Send enquiry on WhatsApp";
+    alert("We could not save your enquiry just now. Please use the direct WhatsApp link to contact our team.");
+  }
 });
 
 async function loadHotelModule() {
