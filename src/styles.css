@@ -16,3 +16,81 @@ footer{background:#092720;color:#c5d1c9;font-size:9px}.footer-inner{min-height:5
 @media(max-width:980px){.nav-links{gap:14px}.nav-links a{font-size:10px}.hero-layout{grid-template-columns:1fr 260px;gap:30px}.contact-layout{gap:28px}.guide-layout{gap:50px}}
 @media(max-width:720px){html{scroll-padding-top:75px}.container{width:min(100% - 34px,560px)}.announcement-inner{min-height:32px;font-size:8px}.announcement-inner span:last-child{display:none}.nav-wrap{height:73px}.brand img{width:48px;height:48px}.brand strong{font-size:12px}.brand small{font-size:7px}.menu-toggle{display:block}.nav-links{display:none;position:absolute;top:73px;left:0;right:0;background:#fffdfa;padding:20px 24px 25px;box-shadow:0 12px 20px #14291d18;align-items:stretch;flex-direction:column;gap:19px}.nav-links.open{display:flex}.nav-links a{font-size:12px}.nav-cta{text-align:center}.hero{min-height:670px}.hero-layout{display:flex;flex-direction:column;align-items:stretch;gap:32px;padding:76px 0 76px}.hero h1{font-size:clamp(43px,11vw,60px)}.hero-copy>p{font-size:12px}.hero-side-card{width:min(100%,360px);align-self:flex-start;padding:22px}.hero-caption{font-size:7px;right:17px;bottom:14px}.hero-assurance{flex-wrap:wrap;gap:10px 17px;font-size:9px}.benefit-grid{grid-template-columns:1fr;padding:13px 0}.benefit-item,.benefit-item:first-child{padding:12px 3px;border-right:0;border-bottom:1px solid #ddd5c7}.benefit-item:last-child{border:0}.section{padding:70px 0}.section-heading,.hotel-heading{grid-template-columns:1fr;gap:15px;margin-bottom:30px}.section-heading h2,.hotel-heading h2,.guide-copy h2{font-size:42px}.section-heading>p,.hotel-heading>p{font-size:11px}.package-grid,.hotel-grid{grid-template-columns:1fr;gap:13px}.package-card{min-height:260px;padding:22px}.package-card:before{right:-50px}.hotel-image-wrap{height:190px}.guide-layout,.about-layout,.enquiry-layout,.contact-layout{grid-template-columns:1fr;gap:32px}.guide-visual{min-height:340px}.guide-copy h2{font-size:42px}.steps-list{gap:0 12px}.guide-step small{font-size:8px}.about-section{padding:60px 0}.about-layout h2{font-size:34px}.about-layout>div:last-child>p{font-size:11px}.about-points{gap:12px}.enquiry-layout{gap:30px}.enquiry-copy h2{font-size:45px}.enquiry-form{padding:23px 20px}.contact-section{padding:65px 0 55px}.contact-layout{gap:28px}.contact-details{gap:18px}.contact-brand h2{font-size:30px}.contact-social{grid-template-columns:1fr 1fr;gap:13px}.footer-inner{padding:16px 0;align-items:flex-start;flex-direction:column;gap:8px}.floating-whatsapp{right:13px;bottom:14px;padding:10px 13px}}
 @media(max-width:380px){.steps-list{grid-template-columns:1fr}.hero-actions{flex-direction:column;align-items:flex-start}.button{width:100%}.hero-side-card{width:100%}}
+
+
+/* Professional typography refinement: larger, calmer and easier to read */
+body { font-size: 15px; line-height: 1.65; }
+.announcement-bar { font-size: 11px; }
+.brand strong { font-size: 15px; }
+.brand small { font-size: 9px; }
+.nav-links { font-size: 13px; gap: 23px; }
+.nav-links a { font-size: 13px; }
+.nav-cta { padding: 14px 19px; }
+.eyebrow { font-size: 10px; }
+.hero-copy > p { font-size: 16px; line-height: 1.8; }
+.hero-assurance { font-size: 11px; }
+.hero-side-card p { font-size: 13px; line-height: 1.75; }
+.hero-side-card > a { font-size: 11px; }
+.side-card-kicker { font-size: 9px; }
+.benefit-item strong { font-size: 13px; }
+.benefit-item small { font-size: 11px; }
+.section-heading > p, .hotel-heading > p { font-size: 14px; line-height: 1.85; }
+.package-category { font-size: 9px; }
+.package-card h3 { font-size: 25px; }
+.package-card p { font-size: 13px; line-height: 1.7; }
+.package-card-bottom small { font-size: 10px; }
+.fine-print, .hotel-bottom-note { font-size: 11px; }
+.hotel-location { font-size: 10px; }
+.hotel-card h3 { font-size: 23px; }
+.hotel-card p { font-size: 13px; line-height: 1.75; }
+.hotel-action { font-size: 10px; }
+.guide-copy > p { font-size: 14px; line-height: 1.85; }
+.guide-step strong { font-size: 15px; }
+.guide-step small { font-size: 11px; line-height: 1.65; }
+.guide-photo-label span { font-size: 9px; }
+.about-layout > div:last-child > p { font-size: 14px; line-height: 1.85; }
+.about-points span { font-size: 12px; }
+.enquiry-copy > p { font-size: 14px; line-height: 1.85; }
+.enquiry-highlights { font-size: 12px; }
+.form-heading span { font-size: 9px; }
+.form-heading strong { font-size: 27px; }
+.enquiry-form label { font-size: 11px; }
+.enquiry-form input, .enquiry-form select, .enquiry-form textarea { font-size: 13px; padding: 12px 13px; }
+.enquiry-form > small { font-size: 10px; }
+.contact-brand > p { font-size: 12px; line-height: 1.8; }
+.contact-details span { font-size: 9px; }
+.contact-details p, .contact-details a { font-size: 12px; line-height: 1.7; }
+.contact-social { font-size: 12px; }
+.footer-inner { font-size: 10px; }
+.floating-whatsapp { font-size: 12px; }
+
+@media (max-width: 980px) {
+  .nav-links { gap: 15px; }
+  .nav-links a { font-size: 12px; }
+}
+@media (max-width: 720px) {
+  .announcement-inner { font-size: 9px; }
+  .nav-links a { font-size: 14px; }
+  .hero-copy > p { font-size: 14px; }
+  .hero-assurance { font-size: 10px; }
+  .benefit-item strong { font-size: 13px; }
+  .benefit-item small { font-size: 12px; }
+  .section-heading > p, .hotel-heading > p { font-size: 13px; }
+  .package-card h3 { font-size: 25px; }
+  .package-card p { font-size: 13px; }
+  .hotel-card h3 { font-size: 23px; }
+  .hotel-card p { font-size: 13px; }
+  .guide-copy > p { font-size: 13px; }
+  .guide-step strong { font-size: 14px; }
+  .guide-step small { font-size: 10px; }
+  .about-layout > div:last-child > p { font-size: 13px; }
+  .about-points span { font-size: 11px; }
+  .enquiry-copy > p { font-size: 13px; }
+  .enquiry-highlights { font-size: 11px; }
+  .enquiry-form label { font-size: 11px; }
+  .enquiry-form input, .enquiry-form select, .enquiry-form textarea { font-size: 13px; }
+  .enquiry-form > small { font-size: 10px; }
+  .contact-details p, .contact-details a { font-size: 12px; }
+  .contact-social { font-size: 11px; }
+  .footer-inner { font-size: 10px; }
+}
