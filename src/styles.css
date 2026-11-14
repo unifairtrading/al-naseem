@@ -366,3 +366,15 @@ footer{font-size:13px}
  .service-button{align-self:flex-start}
  .steps-list{grid-template-columns:1fr}
 }
+
+
+/* Graceful fallbacks for optional remote travel imagery */
+.service-photo.image-fallback,
+.hotel-image-wrap.image-fallback,
+.hotel-empty-card.image-fallback{display:grid;place-items:center;overflow:hidden;background:linear-gradient(135deg,#12382f,#527667)}
+.service-photo.image-fallback::after{display:block;color:#f5e5c4;font-size:clamp(64px,7vw,96px);line-height:1}
+.service-air .service-photo.image-fallback::after{content:"✈"}
+.service-bus .service-photo.image-fallback::after{content:"▰"}
+.service-hotel .service-photo.image-fallback::after{content:"⌂"}
+.hotel-image-wrap.image-fallback::after{content:"HOTEL STAY";color:#f5e5c4;font:700 15px 'DM Sans';letter-spacing:.2em}
+.hotel-empty-card.image-fallback::before{content:"⌂";display:grid;place-items:center;min-height:220px;background:linear-gradient(135deg,#12382f,#527667);color:#f5e5c4;font-size:90px}
