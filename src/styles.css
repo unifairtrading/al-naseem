@@ -189,3 +189,180 @@ footer{background:#092720;color:#d3ddd6;font-size:11px}
  .footer-inner{padding:16px 0;align-items:flex-start;flex-direction:column;gap:7px}.floating-whatsapp{right:13px;bottom:14px;padding:11px 14px;font-size:12px}
 }
 @media(max-width:390px){.steps-list{grid-template-columns:1fr}.hero-actions{align-items:stretch;flex-direction:column}.button{width:100%}.about-points{grid-template-columns:1fr}.bus-prices{gap:24px}}
+
+
+/* Premium visual refresh: stronger type scale, tighter spacing and photo-led cards */
+:root{--forest:#103b30;--deep:#082820;--gold:#caa56c}
+body{font-size:17px;line-height:1.7}
+.container{width:min(1420px,calc(100% - 76px))}
+.announcement-bar{font-size:13px}
+.announcement-inner{min-height:43px}
+.nav-wrap{min-height:98px}
+.brand{min-width:270px;gap:15px}
+.brand img{width:70px;height:70px}
+.brand strong{font-size:19px}
+.brand small{font-size:11px}
+.nav-links{gap:27px;font-size:15px}
+.nav-links>a{font-size:15px}
+.nav-cta{font-size:14px;padding:15px 20px}
+.hero{min-height:680px}
+.hero-background{object-position:center 48%}
+.hero-overlay{background:linear-gradient(90deg,#061c17ed 0%,#092923c9 42%,#09292363 76%,#09292336 100%)}
+.hero-content{padding-top:95px;padding-bottom:100px}
+.hero h1{font-size:clamp(64px,7vw,96px);margin:23px 0 25px}
+.hero-copy>p{font-size:20px;max-width:760px;line-height:1.8}
+.eyebrow{font-size:12px}
+.hero-meta{font-size:14px;gap:14px 28px}
+.button{font-size:15px;min-height:56px;padding:16px 25px}
+.trust-grid{padding:24px 0}
+.trust-item{padding:4px 25px;gap:16px}
+.trust-symbol{width:48px;height:48px;flex-basis:48px;font-size:24px}
+.trust-item strong{font-size:16px}
+.trust-item small{font-size:13px}
+.section{padding:88px 0}
+.section-heading{gap:80px;margin-bottom:38px}
+.section-heading h2,.guide-copy h2,.about-layout h2,.enquiry-copy h2,.contact-brand h2{font-size:clamp(46px,4.5vw,64px)}
+.section-heading>p{font-size:17px;line-height:1.85}
+.service-grid{gap:25px}
+.service-card{border-radius:5px;box-shadow:0 13px 35px #19372b12}
+.service-photo{height:285px}
+.service-label{font-size:11px;padding:10px 14px}
+.service-content{padding:27px 27px 25px}
+.service-kicker{font-size:11px}
+.service-content h3{font-size:33px}
+.service-icon{width:49px;height:49px;font-size:26px}
+.service-content>p{font-size:16px;line-height:1.8;margin:16px 0}
+.service-highlights{gap:10px;margin:7px 0 22px}
+.service-highlights span{font-size:14px}
+.service-price-row{padding-top:20px}
+.service-price-row small{font-size:12px}
+.service-price-row strong{font-size:31px}
+.service-button{font-size:14px;padding:14px 17px}
+.bus-prices{gap:36px;margin-bottom:20px;padding-top:15px}
+.bus-prices small{font-size:12px}
+.bus-prices strong{font-size:23px}
+.price-note{font-size:13px;margin-top:26px}
+.hotel-grid{gap:24px}
+.hotel-image-wrap{height:250px}
+.hotel-card-body{padding:25px}
+.hotel-location{font-size:13px}
+.hotel-card h3{font-size:29px}
+.hotel-card p{font-size:15px}
+.hotel-card-foot>strong,.hotel-action{font-size:14px}
+.guide-layout{gap:78px}
+.guide-visual{height:520px}
+.guide-photo-label strong{font-size:38px}
+.guide-copy>p{font-size:16px}
+.guide-step{gap:15px;padding:16px 0}
+.guide-step>span{font-size:20px}
+.guide-step strong{font-size:18px}
+.guide-step small{font-size:13px}
+.inline-link{font-size:15px}
+.about-section{padding:82px 0}
+.about-layout{gap:85px}
+.about-layout h2{font-size:51px}
+.about-layout>div:last-child>p{font-size:17px}
+.about-points{gap:15px;margin-top:25px}
+.about-points span{font-size:15px}
+.enquiry-layout{gap:90px}
+.enquiry-copy>p{font-size:17px}
+.enquiry-highlights{font-size:15px;gap:13px}
+.enquiry-form{padding:36px}
+.form-heading strong{font-size:34px}
+.form-heading span{font-size:11px}
+.form-heading small{font-size:14px}
+.enquiry-form label{font-size:14px}
+.enquiry-form input,.enquiry-form select,.enquiry-form textarea{font-size:16px;padding:15px}
+.enquiry-form>small{font-size:12px}
+.contact-layout{gap:55px}
+.contact-brand h2{font-size:43px}
+.contact-brand>p,.contact-details p,.contact-details a{font-size:15px}
+.contact-details span{font-size:11px}
+.contact-social{font-size:15px}
+footer{font-size:13px}
+.footer-inner{min-height:72px}
+.floating-whatsapp{font-size:15px;padding:15px 19px}
+@media(max-width:1060px){
+ .container{width:calc(100% - 48px)}
+ .nav-links{gap:15px}
+ .nav-links>a{font-size:13px}
+ .brand{min-width:225px}
+ .brand img{width:60px;height:60px}
+ .brand strong{font-size:16px}
+ .hero{min-height:610px}
+ .service-photo{height:220px}
+ .service-content{padding:21px}
+ .service-content h3{font-size:28px}
+ .service-content>p{font-size:14px}
+ .service-highlights span{font-size:12px}
+ .service-price-row strong{font-size:25px}
+ .service-button{font-size:12px}
+}
+@media(max-width:760px){
+ .container{width:calc(100% - 32px)}
+ .announcement-inner{font-size:11px;min-height:37px}
+ .nav-wrap{min-height:78px}
+ .brand img{width:55px;height:55px}
+ .brand strong{font-size:14px}
+ .brand small{font-size:9px}
+ .nav-links{top:78px}
+ .nav-links>a{font-size:16px}
+ .hero{min-height:630px}
+ .hero-background{object-position:58% center}
+ .hero-content{padding-top:75px;padding-bottom:85px}
+ .hero h1{font-size:clamp(48px,12vw,68px);line-height:1.04}
+ .hero-copy>p{font-size:16px;line-height:1.8}
+ .hero-meta{font-size:12px}
+ .eyebrow{font-size:11px}
+ .button{font-size:14px;min-height:52px}
+ .trust-grid{padding:13px 0}
+ .trust-item{padding:12px 7px;gap:9px}
+ .trust-symbol{width:36px;height:36px;flex-basis:36px;font-size:19px}
+ .trust-item strong{font-size:13px}
+ .trust-item small{font-size:11px}
+ .section{padding:62px 0}
+ .section-heading{gap:15px;margin-bottom:25px}
+ .section-heading h2,.guide-copy h2,.about-layout h2,.enquiry-copy h2{font-size:42px}
+ .section-heading>p{font-size:14px;line-height:1.8}
+ .service-grid{gap:20px}
+ .service-photo{height:245px}
+ .service-content{padding:23px}
+ .service-content h3{font-size:30px}
+ .service-content>p{font-size:15px;line-height:1.8}
+ .service-highlights span{font-size:13px}
+ .service-price-row small{font-size:11px}
+ .service-price-row strong{font-size:27px}
+ .service-button{font-size:13px;padding:12px 14px}
+ .bus-prices small{font-size:11px}
+ .bus-prices strong{font-size:21px}
+ .price-note{font-size:11px}
+ .hotel-image-wrap{height:225px}
+ .hotel-card h3{font-size:26px}
+ .hotel-card p{font-size:14px}
+ .guide-layout,.about-layout,.enquiry-layout,.contact-layout{gap:30px}
+ .guide-visual{height:350px}
+ .guide-photo-label strong{font-size:31px}
+ .guide-copy>p,.about-layout>div:last-child>p,.enquiry-copy>p{font-size:14px;line-height:1.8}
+ .guide-step strong{font-size:16px}
+ .guide-step small{font-size:12px}
+ .about-section{padding:60px 0}
+ .about-layout h2{font-size:38px}
+ .about-points span{font-size:12px}
+ .enquiry-form{padding:25px 21px}
+ .form-heading strong{font-size:29px}
+ .enquiry-form label{font-size:12px}
+ .enquiry-form input,.enquiry-form select,.enquiry-form textarea{font-size:15px;padding:14px}
+ .contact-brand h2{font-size:35px}
+ .contact-brand>p,.contact-details p,.contact-details a{font-size:13px}
+ .contact-social{font-size:13px}
+ .footer-inner{font-size:11px}
+ .floating-whatsapp{font-size:13px}
+}
+@media(max-width:390px){
+ .hero h1{font-size:46px}
+ .service-photo{height:215px}
+ .service-content{padding:19px}
+ .service-price-row{align-items:flex-start;flex-direction:column}
+ .service-button{align-self:flex-start}
+ .steps-list{grid-template-columns:1fr}
+}
