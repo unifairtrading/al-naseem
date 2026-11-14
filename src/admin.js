@@ -262,8 +262,9 @@ if (auth && db) {
       const role = profile.exists() ? profile.data().role : null;
       if (role === "super_admin" || role === "staff_admin") showDashboard(user, role);
       else await signOut(auth);
-    } catch {
-      console.error("Could not read the signed-in user admin profile:", error);\n      say("Could not verify your admin permissions. Firestore error: " + (error.code || "unknown") + ". Please check the published Firestore rules.", "error");
+    } catch (error) {
+      console.error("Could not read the signed-in user admin profile:", error);
+      say("Could not verify your admin permissions. Firestore error: " + (error.code || "unknown") + ". Please check the published Firestore rules.", "error");
       await signOut(auth);
     }
   });
