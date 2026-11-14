@@ -84,20 +84,49 @@ function showDashboard(user, role) {
   card.classList.add("dashboard-mode");
   const superAdmin = role === "super_admin";
   dashboard.innerHTML = [
-    '<div class="dashboard-heading"><div><span class="role-pill">' + (superAdmin ? "SUPER ADMIN" : "STAFF ADMIN") + '</span><h2>Welcome to your workspace</h2><p>' + escapeHtml(user.email || "Authorised administrator") + '</p></div><button class="admin-logout" id="logout-button" type="button">Sign out</button></div>',
-    '<div class="dashboard-intro"><strong>Manage your website content</strong><span>Hotel booking options are ready to manage below. Other business modules will be added in the next development stages.</span></div>',
-    '<section class="hotel-manager"><div class="manager-heading"><div><span class="admin-kicker">WEBSITE MODULE</span><h3>Hotel booking management</h3><p>Control whether hotel booking appears on the public website and update the hotel details shown to visitors.</p></div><label class="switch-row"><input type="checkbox" id="hotels-active"><span class="switch-ui"></span><span class="switch-label">Show hotel booking</span></label></div>',
-    '<div class="manager-status"><span class="status-light"></span><span id="hotel-status-text">Loading hotel settings…</span></div>',
-    '<label class="field-label" for="hotels-intro">Hotel section introduction</label><textarea id="hotels-intro" rows="2" placeholder="A short message shown above hotel options"></textarea>',
-    '<div class="hotel-manager-grid"><div class="hotel-editor-panel"><h4 id="hotel-form-heading">Add a hotel</h4><form id="hotel-form" class="hotel-form">',
-    '<label>Hotel name<input name="hotelName" required maxlength="80" placeholder="Example: Hotel name"></label><label>City / location<input name="location" maxlength="100" placeholder="Makkah, Madinah or other location"></label>',
-    '<label>Short description<textarea name="description" rows="3" maxlength="300" placeholder="Describe the hotel or key details"></textarea></label><label>Price note<input name="priceLabel" maxlength="60" placeholder="Example: Ask for current rates"></label>',
-    '<label>Hotel image URL <small>Optional. Add a direct image link beginning with https://</small><input name="imageUrl" type="url" placeholder="https://example.com/hotel.jpg"></label>',
-    '<label>Booking / information link <small>Optional. Leave blank to use the website enquiry form.</small><input name="bookingUrl" type="url" placeholder="https://example.com/booking"></label>',
-    '<div class="hotel-form-actions"><button type="submit" class="save-hotel-button" id="hotel-add-button">Add hotel to list</button><button type="button" class="cancel-edit-button" id="hotel-cancel-edit" hidden>Cancel edit</button></div></form></div>',
-    '<div class="hotel-list-panel"><div class="list-heading"><h4>Hotels on your website</h4><span id="hotel-count">0 hotels</span></div><div id="hotel-list"><div class="empty-hotels">Loading hotel list…</div></div></div></div>',
-    '<div class="manager-footer"><span>Remember to save after making changes.</span><button type="button" id="save-hotel-settings" class="publish-button">Save hotel settings</button></div><div id="hotel-feedback" class="hotel-feedback" role="status"></div></section>',
-    '<section class="coming-modules"><h3>Other website areas</h3><div class="admin-modules"><article><strong>Umrah Packages</strong><span>Package editing and pricing controls — coming next</span></article><article><strong>Enquiries</strong><span>Enquiry inbox and status management — coming next</span></article><article><strong>Guest Feedback</strong><span>Review approval tools — coming next</span></article><article><strong>Website Content</strong><span>Homepage and contact content — coming next</span></article>' + (superAdmin ? '<article><strong>Staff & Permissions</strong><span>Staff accounts and access levels — Super Admin</span></article><article><strong>Technical Settings</strong><span>Technical controls — Super Admin only</span></article>' : '') + '</div></section>'
+    '<div class="admin-workspace">',
+      '<aside class="admin-sidebar">',
+        '<a class="sidebar-brand" href="/" aria-label="Al Naseem public website"><span class="brand-emblem">AN</span><span><strong>AL NASEEM</strong><small>GROUP · ADMIN</small></span></a>',
+        '<div class="sidebar-label">WORKSPACE</div>',
+        '<nav class="admin-nav" aria-label="Admin navigation">',
+          '<a class="admin-nav-link is-current" href="#admin-overview"><span class="nav-icon">⌂</span><span>Overview</span></a>',
+          '<a class="admin-nav-link" href="#hotel-management"><span class="nav-icon">▦</span><span>Hotels</span><span class="nav-count" id="nav-hotel-count">0</span></a>',
+          '<a class="admin-nav-link" href="#upcoming-modules"><span class="nav-icon">✧</span><span>Umrah Packages</span></a>',
+          '<a class="admin-nav-link" href="#upcoming-modules"><span class="nav-icon">▤</span><span>Enquiries</span></a>',
+          '<a class="admin-nav-link" href="#upcoming-modules"><span class="nav-icon">☆</span><span>Guest Feedback</span></a>',
+          '<a class="admin-nav-link" href="#upcoming-modules"><span class="nav-icon">▧</span><span>Website Content</span></a>',
+          (superAdmin ? '<div class="sidebar-label sidebar-label-spaced">ADMINISTRATION</div><a class="admin-nav-link" href="#upcoming-modules"><span class="nav-icon">♙</span><span>Staff & Permissions</span></a><a class="admin-nav-link" href="#upcoming-modules"><span class="nav-icon">⚙</span><span>System Settings</span></a>' : ''),
+        '</nav>',
+        '<div class="sidebar-bottom"><span class="sidebar-avatar">' + escapeHtml((user.email || "A").charAt(0).toUpperCase()) + '</span><span class="sidebar-user"><strong>' + escapeHtml(user.email || "Administrator") + '</strong><small>' + (superAdmin ? "Super Admin" : "Staff Admin") + '</small></span><button class="sidebar-signout" id="logout-button" type="button" aria-label="Sign out" title="Sign out">↗</button></div>',
+      '</aside>',
+      '<main class="admin-main">',
+        '<header class="workspace-topbar"><div><span class="topbar-caption">AL NASEEM GROUP / CONTROL CENTRE</span><span class="topbar-secure"><i></i> Secure workspace</span></div><a href="/" target="_blank" rel="noopener">View live website <span>↗</span></a></header>',
+        '<section class="workspace-content" id="admin-overview">',
+          '<div class="welcome-row"><div><span class="welcome-eyebrow">YOUR BUSINESS AT A GLANCE</span><h1>Good to have you here.</h1><p>Manage your website and keep your business information up to date.</p></div><div class="welcome-date"><span>ACCOUNT ACCESS</span><strong>' + (superAdmin ? "Full control" : "Staff access") + '</strong><small>' + (superAdmin ? "All administrative permissions" : "Assigned business permissions") + '</small></div></div>',
+          '<div class="overview-cards">',
+            '<article class="overview-card overview-card-primary"><span class="overview-icon">▦</span><span class="overview-label">HOTEL RECORDS</span><strong id="overview-hotel-count">—</strong><small>Hotel options saved in your website</small></article>',
+            '<article class="overview-card"><span class="overview-icon">◉</span><span class="overview-label">HOTEL SECTION</span><strong id="overview-hotel-status">Checking…</strong><small>Public website visibility</small></article>',
+            '<article class="overview-card"><span class="overview-icon">♙</span><span class="overview-label">YOUR ACCESS</span><strong>' + (superAdmin ? "Super Admin" : "Staff Admin") + '</strong><small>' + (superAdmin ? "Owner-level control" : "Limited staff access") + '</small></article>',
+          '</div>',
+          '<div class="section-title-row" id="hotel-management"><div><span class="section-eyebrow">WEBSITE MANAGEMENT</span><h2>Hotel management</h2><p>Add, update and publish the hotel options shown to your visitors.</p></div><span class="section-tag"><i></i> LIVE MODULE</span></div>',
+          '<section class="hotel-manager">',
+            '<div class="manager-heading"><div><span class="manager-overline">HOTEL BOOKING</span><h3>Manage your hotel listings</h3><p>Control the hotel section, edit hotel details and decide when the section is visible on your public website.</p></div><label class="switch-row"><input type="checkbox" id="hotels-active"><span class="switch-ui"></span><span class="switch-label">Show hotel booking</span></label></div>',
+            '<div class="manager-status"><span class="status-light"></span><span id="hotel-status-text">Loading hotel settings…</span></div>',
+            '<label class="field-label" for="hotels-intro">Section introduction</label><textarea id="hotels-intro" rows="2" placeholder="A short message shown above hotel options"></textarea>',
+            '<div class="hotel-manager-grid"><div class="hotel-editor-panel"><div class="panel-heading"><span class="panel-step">01</span><div><h4 id="hotel-form-heading">Add a hotel</h4><p>Enter the details visitors should see.</p></div></div><form id="hotel-form" class="hotel-form">',
+              '<label>Hotel name<input name="hotelName" required maxlength="80" placeholder="Example: Hotel name"></label><label>City / location<input name="location" maxlength="100" placeholder="Makkah, Madinah or other location"></label>',
+              '<label>Short description<textarea name="description" rows="3" maxlength="300" placeholder="Describe the hotel or key details"></textarea></label><label>Price note<input name="priceLabel" maxlength="60" placeholder="Example: Ask for current rates"></label>',
+              '<label>Hotel image URL <small>Optional · Direct image link beginning with https://</small><input name="imageUrl" type="url" placeholder="https://example.com/hotel.jpg"></label>',
+              '<label>Booking / information link <small>Optional · Leave blank to use the website enquiry form.</small><input name="bookingUrl" type="url" placeholder="https://example.com/booking"></label>',
+              '<div class="hotel-form-actions"><button type="submit" class="save-hotel-button" id="hotel-add-button">＋ Add hotel</button><button type="button" class="cancel-edit-button" id="hotel-cancel-edit" hidden>Cancel</button></div></form></div>',
+              '<div class="hotel-list-panel"><div class="list-heading"><div><span class="panel-step">02</span><div><h4>Published hotel options</h4><p>Hotels currently saved in your website settings.</p></div></div><span id="hotel-count">0 hotels</span></div><div id="hotel-list"><div class="empty-hotels">Loading your hotel list…</div></div></div></div>',
+            '<div class="manager-footer"><span>Changes are saved to Firebase when you publish.</span><button type="button" id="save-hotel-settings" class="publish-button">Save & publish changes <span>→</span></button></div><div id="hotel-feedback" class="hotel-feedback" role="status"></div>',
+          '</section>',
+          '<section class="coming-modules" id="upcoming-modules"><div class="section-title-row compact"><div><span class="section-eyebrow">NEXT DEVELOPMENT STAGES</span><h2>More tools for your business</h2><p>These areas will be activated as we complete each module.</p></div></div><div class="admin-modules"><article><span>✧</span><strong>Umrah Packages</strong><small>Manage package details, prices and inclusions</small><em>Coming next</em></article><article><span>▤</span><strong>Enquiries</strong><small>Review customer requests and follow-ups</small><em>Coming next</em></article><article><span>☆</span><strong>Guest Feedback</strong><small>Review and approve visitor feedback</small><em>Coming next</em></article><article><span>▧</span><strong>Website Content</strong><small>Update homepage and contact information</small><em>Coming next</em></article>' + (superAdmin ? '<article><span>♙</span><strong>Staff & Permissions</strong><small>Manage team accounts and access levels</small><em>Super Admin</em></article><article><span>⚙</span><strong>System Settings</strong><small>Manage technical and website settings</small><em>Super Admin</em></article>' : '') + '</div></section>',
+          '<footer class="workspace-footer"><span>AL NASEEM GROUP · ADMIN WORKSPACE</span><span>Secure access · Firebase powered</span></footer>',
+        '</section>',
+      '</main>',
+    '</div>'
   ].join("");
 
   document.querySelector("#logout-button").addEventListener("click", async () => {
@@ -105,6 +134,12 @@ function showDashboard(user, role) {
     window.location.reload();
   });
 
+  document.querySelectorAll(".admin-nav-link").forEach(link => {
+    link.addEventListener("click", () => {
+      document.querySelectorAll(".admin-nav-link").forEach(item => item.classList.remove("is-current"));
+      link.classList.add("is-current");
+    });
+  });
   document.querySelector("#hotels-active").addEventListener("change", updateHotelStatus);
   document.querySelector("#hotel-form").addEventListener("submit", (event) => {
     event.preventDefault();
@@ -152,7 +187,6 @@ function showDashboard(user, role) {
   document.querySelector("#save-hotel-settings").addEventListener("click", saveHotelSettings);
   loadHotelSettings();
 }
-
 function updateHotelStatus() {
   const active = document.querySelector("#hotels-active").checked;
   const status = document.querySelector("#hotel-status-text");
