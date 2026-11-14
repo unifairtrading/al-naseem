@@ -29,6 +29,12 @@ let editingIndex = -1;
 function renderHotelList() {
   const list = document.querySelector("#hotel-list");
   if (!list) return;
+  const count = document.querySelector("#hotel-count");
+  const navCount = document.querySelector("#nav-hotel-count");
+  const overviewCount = document.querySelector("#overview-hotel-count");
+  if (count) count.textContent = hotels.length + (hotels.length === 1 ? " hotel" : " hotels");
+  if (navCount) navCount.textContent = hotels.length;
+  if (overviewCount) overviewCount.textContent = hotels.length;
   if (!hotels.length) {
     list.innerHTML = '<div class="empty-hotels">No hotel details added yet. Add your first hotel using the form.</div>';
     return;
@@ -69,6 +75,8 @@ async function loadHotelSettings() {
     const data = snapshot.exists() ? snapshot.data() : {};
     hotels = Array.isArray(data.hotels) ? data.hotels : [];
     document.querySelector("#hotels-active").checked = data.active === true;
+    const overviewStatus = document.querySelector("#overview-hotel-status");
+    if (overviewStatus) overviewStatus.textContent = data.active === true ? "Visible" : "Hidden";
     document.querySelector("#hotels-intro").value = data.intro || "Explore hotel options shared by our team. Contact us to check availability, rates and booking terms.";
     renderHotelList();
   } catch (error) {
@@ -192,6 +200,8 @@ function updateHotelStatus() {
   const status = document.querySelector("#hotel-status-text");
   const light = document.querySelector(".status-light");
   status.textContent = active ? "Hotel booking will be visible on the public website after saving." : "Hotel booking is hidden from public visitors after saving.";
+  const overviewStatus = document.querySelector("#overview-hotel-status");
+  if (overviewStatus) overviewStatus.textContent = active ? "Visible" : "Hidden";
   light.classList.toggle("is-active", active);
 }
 
