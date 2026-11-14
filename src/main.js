@@ -63,10 +63,14 @@ const page = [
 document.querySelector("#app").innerHTML = page;
 document.querySelector("#year").textContent = new Date().getFullYear();
 
-const heroImage = document.querySelector(".hero-background");
-heroImage.addEventListener("error", () => {
-  heroImage.src = "/makkaa.jpg";
-}, { once: true });
+// If a remote service photo cannot load, keep the card polished instead of showing
+// a broken-image icon. The fallback artwork stays separate from the company logo.
+document.querySelectorAll(".service-photo img, .hotel-empty-card img").forEach((img) => {
+  img.addEventListener("error", () => {
+    img.parentElement.classList.add("image-fallback");
+    img.remove();
+  }, { once: true });
+});
 
 document.querySelector("#steps-list").innerHTML = steps.map((step) =>
   '<div class="guide-step"><span>' + step[0] + '</span><div><strong>' + escapeHtml(step[1]) + '</strong><small>' + escapeHtml(step[2]) + '</small></div></div>'
