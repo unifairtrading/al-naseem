@@ -1,6 +1,6 @@
 import { auth, db, isFirebaseConfigured } from "./firebase.js";
 import { onAuthStateChanged, signInWithEmailAndPassword, signOut } from "firebase/auth";
-import { doc, getDoc, setDoc, serverTimestamp } from "firebase/firestore";
+import { collection, doc, getDoc, getDocs, orderBy, query, setDoc, serverTimestamp, updateDoc } from "firebase/firestore";
 import "./admin.css";
 
 const root = document.querySelector("#app");
@@ -100,7 +100,7 @@ function showDashboard(user, role) {
           '<a class="admin-nav-link is-current" href="#admin-overview"><span class="nav-icon">⌂</span><span>Overview</span></a>',
           '<a class="admin-nav-link" href="#hotel-management"><span class="nav-icon">▦</span><span>Hotels</span><span class="nav-count" id="nav-hotel-count">0</span></a>',
           '<a class="admin-nav-link" href="#upcoming-modules"><span class="nav-icon">✧</span><span>Umrah Packages</span></a>',
-          '<a class="admin-nav-link" href="#upcoming-modules"><span class="nav-icon">▤</span><span>Enquiries</span></a>',
+          '<a class="admin-nav-link" href="#enquiry-management"><span class="nav-icon">▤</span><span>Enquiries</span><span class="nav-count" id="nav-enquiry-count">0</span></a>',
           '<a class="admin-nav-link" href="#upcoming-modules"><span class="nav-icon">☆</span><span>Guest Feedback</span></a>',
           '<a class="admin-nav-link" href="#upcoming-modules"><span class="nav-icon">▧</span><span>Website Content</span></a>',
           (superAdmin ? '<div class="sidebar-label sidebar-label-spaced">ADMINISTRATION</div><a class="admin-nav-link" href="#upcoming-modules"><span class="nav-icon">♙</span><span>Staff & Permissions</span></a><a class="admin-nav-link" href="#upcoming-modules"><span class="nav-icon">⚙</span><span>System Settings</span></a>' : ''),
@@ -130,7 +130,7 @@ function showDashboard(user, role) {
               '<div class="hotel-list-panel"><div class="list-heading"><div><span class="panel-step">02</span><div><h4>Published hotel options</h4><p>Hotels currently saved in your website settings.</p></div></div><span id="hotel-count">0 hotels</span></div><div id="hotel-list"><div class="empty-hotels">Loading your hotel list…</div></div></div></div>',
             '<div class="manager-footer"><span>Changes are saved to Firebase when you publish.</span><button type="button" id="save-hotel-settings" class="publish-button">Save & publish changes <span>→</span></button></div><div id="hotel-feedback" class="hotel-feedback" role="status"></div>',
           '</section>',
-          '<section class="coming-modules" id="upcoming-modules"><div class="section-title-row compact"><div><span class="section-eyebrow">NEXT DEVELOPMENT STAGES</span><h2>More tools for your business</h2><p>These areas will be activated as we complete each module.</p></div></div><div class="admin-modules"><article><span>✧</span><strong>Umrah Packages</strong><small>Manage package details, prices and inclusions</small><em>Coming next</em></article><article><span>▤</span><strong>Enquiries</strong><small>Review customer requests and follow-ups</small><em>Coming next</em></article><article><span>☆</span><strong>Guest Feedback</strong><small>Review and approve visitor feedback</small><em>Coming next</em></article><article><span>▧</span><strong>Website Content</strong><small>Update homepage and contact information</small><em>Coming next</em></article>' + (superAdmin ? '<article><span>♙</span><strong>Staff & Permissions</strong><small>Manage team accounts and access levels</small><em>Super Admin</em></article><article><span>⚙</span><strong>System Settings</strong><small>Manage technical and website settings</small><em>Super Admin</em></article>' : '') + '</div></section>',
+          '<section class="enquiry-management" id="enquiry-management"><div class="section-title-row"><div><span class="section-eyebrow">CUSTOMER RELATIONSHIPS</span><h2>Customer enquiries</h2><p>Website enquiries saved securely for your team to review and follow up.</p></div><button type="button" class="publish-button" id="refresh-enquiries">Refresh enquiries ↻</button></div><div id="enquiry-list" class="enquiry-list"><div class="empty-hotels">Loading enquiries…</div></div><p id="enquiry-feedback" class="hotel-feedback" role="status"></p></section><section class="coming-modules" id="upcoming-modules"><div class="section-title-row compact"><div><span class="section-eyebrow">NEXT DEVELOPMENT STAGES</span><h2>More tools for your business</h2><p>These areas will be activated as we complete each module.</p></div></div><div class="admin-modules"><article><span>✧</span><strong>Umrah Packages</strong><small>Manage package details, prices and inclusions</small><em>Coming next</em></article><article><span>▤</span><strong>Enquiries</strong><small>Review customer requests and follow-ups</small><em>Coming next</em></article><article><span>☆</span><strong>Guest Feedback</strong><small>Review and approve visitor feedback</small><em>Coming next</em></article><article><span>▧</span><strong>Website Content</strong><small>Update homepage and contact information</small><em>Coming next</em></article>' + (superAdmin ? '<article><span>♙</span><strong>Staff & Permissions</strong><small>Manage team accounts and access levels</small><em>Super Admin</em></article><article><span>⚙</span><strong>System Settings</strong><small>Manage technical and website settings</small><em>Super Admin</em></article>' : '') + '</div></section>',
           '<footer class="workspace-footer"><span>AL NASEEM GROUP · ADMIN WORKSPACE</span><span>Secure access · Firebase powered</span></footer>',
         '</section>',
       '</main>',
@@ -194,7 +194,46 @@ function showDashboard(user, role) {
   });
   document.querySelector("#save-hotel-settings").addEventListener("click", saveHotelSettings);
   loadHotelSettings();
+  loadEnquiries();
+  document.querySelector("#refresh-enquiries").addEventListener("click", loadEnquiries);
 }
+
+async function loadEnquiries() {
+  const list = document.querySelector("#enquiry-list");
+  const feedback = document.querySelector("#enquiry-feedback");
+  if (!list) return;
+  list.innerHTML = '<div class="empty-hotels">Loading customer enquiries…</div>';
+  try {
+    const snapshot = await getDocs(query(collection(db, "enquiries"), orderBy("createdAt", "desc")));
+    const items = snapshot.docs.map(item => ({ id: item.id, ...item.data() }));
+    const count = document.querySelector("#nav-enquiry-count");
+    if (count) count.textContent = String(items.filter(item => item.status === "new").length);
+    if (!items.length) {
+      list.innerHTML = '<div class="empty-hotels">No enquiries received yet. New website enquiries will appear here.</div>';
+      return;
+    }
+    list.innerHTML = items.map(item => {
+      const date = item.createdAt && item.createdAt.toDate ? item.createdAt.toDate().toLocaleString() : "Just received";
+      return '<article class="enquiry-record"><div class="enquiry-record-main"><div class="enquiry-record-top"><strong>' + escapeHtml(item.name) + '</strong><span class="enquiry-status status-' + escapeHtml(item.status || "new") + '">' + escapeHtml(item.status || "new") + '</span></div><p>' + escapeHtml(item.interest || "General enquiry") + ' · ' + escapeHtml(item.phone) + '</p><small>' + escapeHtml(date) + '</small><div class="enquiry-message">' + escapeHtml(item.message || "No additional message") + '</div></div><div class="enquiry-record-actions"><a href="https://wa.me/' + escapeHtml(String(item.phone || "").replace(/[^0-9]/g, "")) + '" target="_blank" rel="noopener">WhatsApp ↗</a><select aria-label="Update enquiry status" data-enquiry-status="' + item.id + '"><option value="new" ' + (item.status === "new" ? "selected" : "") + '>New</option><option value="contacted" ' + (item.status === "contacted" ? "selected" : "") + '>Contacted</option><option value="closed" ' + (item.status === "closed" ? "selected" : "") + '>Closed</option></select></div></article>';
+    }).join("");
+    list.querySelectorAll("[data-enquiry-status]").forEach(select => select.addEventListener("change", async () => {
+      select.disabled = true;
+      try {
+        await updateDoc(doc(db, "enquiries", select.dataset.enquiryStatus), { status: select.value, updatedAt: serverTimestamp(), updatedBy: auth.currentUser.uid });
+        if (feedback) feedback.textContent = "Enquiry status updated.";
+        const count = document.querySelector("#nav-enquiry-count");
+        if (count) count.textContent = String([...list.querySelectorAll("[data-enquiry-status]")].filter(node => node.value === "new").length);
+      } catch (error) {
+        if (feedback) feedback.textContent = "Could not update this enquiry. Check your permissions and try again.";
+        select.value = "new";
+      } finally { select.disabled = false; }
+    }));
+  } catch (error) {
+    console.error("Could not load enquiries:", error);
+    list.innerHTML = '<div class="empty-hotels">Enquiries could not be loaded. Confirm the latest Firestore security rules are deployed.</div>';
+  }
+}
+
 function updateHotelStatus() {
   const active = document.querySelector("#hotels-active").checked;
   const status = document.querySelector("#hotel-status-text");
