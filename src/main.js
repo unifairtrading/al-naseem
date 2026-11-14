@@ -65,12 +65,15 @@ document.querySelector("#year").textContent = new Date().getFullYear();
 
 // If a remote service photo cannot load, keep the card polished instead of showing
 // a broken-image icon. The fallback artwork stays separate from the company logo.
-document.querySelectorAll(".service-photo img, .hotel-empty-card img").forEach((img) => {
-  img.addEventListener("error", () => {
-    img.parentElement.classList.add("image-fallback");
-    img.remove();
-  }, { once: true });
-});
+function attachPhotoFallbacks(scope = document) {
+  scope.querySelectorAll(".service-photo img, .hotel-empty-card img, .hotel-image-wrap img").forEach((img) => {
+    img.addEventListener("error", () => {
+      img.parentElement.classList.add("image-fallback");
+      img.remove();
+    }, { once: true });
+  });
+}
+attachPhotoFallbacks();
 
 document.querySelector("#steps-list").innerHTML = steps.map((step) =>
   '<div class="guide-step"><span>' + step[0] + '</span><div><strong>' + escapeHtml(step[1]) + '</strong><small>' + escapeHtml(step[2]) + '</small></div></div>'
@@ -128,6 +131,7 @@ async function loadHotelModule() {
     const hotelGrid = document.querySelector("#hotel-grid");
     if (!hotels.length) {
       hotelGrid.innerHTML = '<article class="hotel-empty-card"><img src="' + media.hotel + '" alt="Comfortable hotel room"><div><span class="service-kicker">HOTEL BOOKING ENQUIRIES</span><h3>Looking for a place to stay?</h3><p>Ask our team about hotel options in Makkah and Madinah, current availability and rates.</p><a class="service-button" href="#enquiry" data-interest="Hotel booking" data-message="I would like to enquire about hotel booking in Makkah or Madinah.">Ask about hotels <b>→</b></a></div></article>';
+      attachPhotoFallbacks(hotelGrid);
       return;
     }
 
@@ -143,6 +147,7 @@ async function loadHotelModule() {
         : '<a class="hotel-action" href="#enquiry" data-interest="Hotel booking" data-message="I would like to enquire about ' + name + '.">Enquire about this hotel →</a>';
       return '<article class="hotel-card"><div class="hotel-image-wrap"><img src="' + escapeHtml(imageUrl) + '" alt="' + name + '" loading="lazy"><span>HOTEL OPTION ' + String(index + 1).padStart(2, "0") + '</span></div><div class="hotel-card-body"><div class="hotel-location">⌖ ' + location + '</div><h3>' + name + '</h3><p>' + description + '</p><div class="hotel-card-foot"><strong>' + price + '</strong>' + button + '</div></div></article>';
     }).join("");
+    attachPhotoFallbacks(hotelGrid);
 
     hotelGrid.querySelectorAll("[data-interest]").forEach((link) => link.addEventListener("click", () => {
       prepareEnquiry(link.dataset.interest, link.dataset.message);
