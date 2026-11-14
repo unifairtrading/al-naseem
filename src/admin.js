@@ -1,5 +1,5 @@
 import { auth, db, isFirebaseConfigured } from "./firebase.js";
-import { onAuthStateChanged, signInWithEmailAndPassword, signOut } from "firebase/auth";
+import { signInWithEmailAndPassword, signOut } from "firebase/auth";
 import { collection, doc, getDoc, getDocs, orderBy, query, setDoc, serverTimestamp, updateDoc } from "firebase/firestore";
 import "./admin.css";
 
@@ -336,18 +336,8 @@ form.addEventListener("submit", async (event) => {
   }
 });
 
-if (auth && db) {
-  onAuthStateChanged(auth, async (user) => {
-    if (!user) return;
-    try {
-      const profile = await getDoc(doc(db, "users", user.uid));
-      const role = profile.exists() ? profile.data().role : null;
-      if (role === "super_admin" || role === "staff_admin") showDashboard(user, role);
-      else await signOut(auth);
-    } catch (error) {
-      console.error("Could not read the signed-in user admin profile:", error);
-      say("Could not verify your admin permissions. Firestore error: " + (error.code || "unknown") + ". Please check the published Firestore rules.", "error");
-      await signOut(auth);
-    }
-  });
+// Require an explicit sign-in every time the admin portal is opened.
+// Firebase otherwise restores the previous browser session and opens the dashboard silently.
+if (auth) {
+  signOut(auth).catch((error) => console.error("Could not clear the previous admin session:", error));
 }
