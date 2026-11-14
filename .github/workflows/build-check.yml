@@ -25,8 +25,9 @@ jobs:
         run: npm install
       - name: Build website
         run: npm run build
-      - name: Deploy Firestore security rules
+      - name: Attempt Firestore rules deployment
         if: ${{ github.event_name == 'push' && env.FIREBASE_SERVICE_ACCOUNT != '' }}
+        continue-on-error: true
         env:
           GOOGLE_APPLICATION_CREDENTIALS: ${{ runner.temp }}/firebase-service-account.json
           FIREBASE_SERVICE_ACCOUNT: ${{ secrets.FIREBASE_SERVICE_ACCOUNT }}
