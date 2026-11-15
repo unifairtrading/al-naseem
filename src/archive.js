@@ -13,10 +13,19 @@ const monthTitle = key => {
   return new Date(year, month - 1, 1).toLocaleDateString(undefined, { month: "long", year: "numeric" });
 };
 const toDate = value => value && typeof value.toDate === "function" ? value.toDate() : null;
-const eligibleMonth = key => {
-  const [year, month] = key.split("-").map(Number);
-  return new Date(year, month + 1, 0) <= new Date();
-};
+export function isArchiveMonthEligible(key, now = new Date()) {
+  const match = /^(\\d{4})-(0[1-9]|1[0-2])$/.exec(String(key));
+  if (!match) return false;
+  const year = Number(match[1]);
+  const month = Number(match[2]);
+  const lastDayOfMonth = new Date(year, month, 0);
+  const nextMonthIndex = lastDayOfMonth.getMonth() + 1;
+  const targetYear = lastDayOfMonth.getFullYear() + Math.floor(nextMonthIndex / 12);
+  const targetMonth = nextMonthIndex % 12;
+  const daysInTargetMonth = new Date(targetYear, targetMonth + 1, 0).getDate();
+  const eligibilityDate = new Date(targetYear, targetMonth, Math.min(lastDayOfMonth.getDate(), daysInTargetMonth));
+  return eligibilityDate <= now;
+}
 
 export function mountArchive(db, auth) {
   const root = document.querySelector("#archive-management");
@@ -46,7 +55,7 @@ export function mountArchive(db, auth) {
       const keys = new Set();
       [...cached.enquiries, ...cached.auditLogs].forEach(item => {
         const date = toDate(item.createdAt);
-        if (date && eligibleMonth(monthKey(date))) keys.add(monthKey(date));
+        if (date && isArchiveMonthEligible(monthKey(date))) keys.add(monthKey(date));
       });
       const options = [...keys].sort().reverse();
       select.innerHTML = options.length
@@ -65,7 +74,7 @@ export function mountArchive(db, auth) {
 
   function download() {
     const key = select.value;
-    if (!key || !eligibleMonth(key)) return;
+    if (!key || !isArchiveMonthEligible(key)) return;
     const enquiries = cached.enquiries.filter(item => {
       const date = toDate(item.createdAt);
       return date && monthKey(date) === key;
