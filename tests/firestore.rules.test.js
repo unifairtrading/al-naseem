@@ -6,7 +6,7 @@ import {
   assertFails
 } from "@firebase/rules-unit-testing";
 import {
-  collection, deleteDoc, doc, getDoc, serverTimestamp, setDoc, Timestamp
+  collection, deleteDoc, doc, getDoc, serverTimestamp, setDoc, Timestamp, updateDoc
 } from "firebase/firestore";
 import { readFile } from "node:fs/promises";
 
@@ -130,4 +130,16 @@ test("staff cannot create audit logs attributed to another user", async () => {
     entityType: "enquiry", entityId: "fresh-enquiry", changedFields: ["status"],
     archiveMonth: "2026-11", createdAt: serverTimestamp()
   }));
+});
+
+test("staff can change enquiry status but cannot rewrite its archive month", async () => {
+  const db = testEnv.authenticatedContext("staff-1").firestore();
+  await assertSucceeds(updateDoc(doc(db, "enquiries", "old-enquiry"), { status: "contacted" }));
+  await assertFails(updateDoc(doc(db, "enquiries", "old-enquiry"), { archiveMonth: "2026-01" }));
+});
+
+test("audit history is append-only before archive cleanup", async () => {
+  const db = testEnv.authenticatedContext("staff-1").firestore();
+  await assertFails(updateDoc(doc(db, "auditLogs", "old-log"), { action: "rewritten" }));
+  await assertFails(deleteDoc(doc(db, "auditLogs", "old-log")));
 });
