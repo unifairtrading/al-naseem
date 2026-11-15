@@ -15,3 +15,4 @@
 - Used browser print-to-PDF rather than a PDF library so multilingual customer text can use local browser fonts.
 - Added Firebase Emulator security-rule test suite (9/9 passed) covering public enquiry access, admin archive marker, age-gated purge, immutable archive month and append-only audit logs.
 - CI now runs emulator security tests before the production build; version branches skip Firestore rules publishing and Hosting deployment.
+- Corrected monthly archive eligibility to clamp one calendar month after the last day of each month, including February and leap-year boundaries; added date-boundary tests.
