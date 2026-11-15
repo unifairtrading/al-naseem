@@ -15,7 +15,7 @@ const monthTitle = key => {
 const toDate = value => value && typeof value.toDate === "function" ? value.toDate() : null;
 const eligibleMonth = key => {
   const [year, month] = key.split("-").map(Number);
-  return new Date(year, month + 1, 1) <= new Date();
+  return new Date(year, month + 1, 0) <= new Date();
 };
 
 export function mountArchive(db, auth) {
