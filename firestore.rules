@@ -19,13 +19,14 @@ service cloud.firestore {
       allow delete: if false;
     }
 
-    // Public visitors may submit enquiries; only signed-in Al Naseem admins can view or update them.
+    // Public visitors may submit classified enquiries; only admins can view or update them.
     match /enquiries/{enquiryId} {
       allow create: if request.auth == null
-        && request.resource.data.keys().hasOnly(['name', 'phone', 'interest', 'message', 'status', 'createdAt'])
+        && request.resource.data.keys().hasOnly(['name', 'phone', 'interest', 'serviceType', 'message', 'status', 'createdAt'])
         && request.resource.data.name is string && request.resource.data.name.size() > 0 && request.resource.data.name.size() <= 100
         && request.resource.data.phone is string && request.resource.data.phone.size() > 0 && request.resource.data.phone.size() <= 40
         && request.resource.data.interest is string && request.resource.data.interest.size() <= 80
+        && request.resource.data.serviceType in ['umrah', 'hotel', 'combined', 'general']
         && request.resource.data.message is string && request.resource.data.message.size() <= 1500
         && request.resource.data.status == 'new';
       allow read: if isAlNaseemAdmin();
@@ -33,6 +34,20 @@ service cloud.firestore {
         && request.resource.data.diff(resource.data).affectedKeys().hasOnly(['status', 'updatedAt', 'updatedBy'])
         && request.resource.data.status in ['new', 'contacted', 'closed'];
       allow delete: if false;
+    }
+
+    // Append-only audit trail. Admins can read it; clients cannot alter or erase history.
+    match /auditLogs/{logId} {
+      allow create: if isAlNaseemAdmin()
+        && request.resource.data.keys().hasOnly(['actorUid', 'actorEmail', 'action', 'entityType', 'entityId', 'changedFields', 'fromStatus', 'toStatus', 'createdAt'])
+        && request.resource.data.actorUid == request.auth.uid
+        && request.resource.data.action is string
+        && request.resource.data.entityType is string
+        && request.resource.data.entityId is string
+        && request.resource.data.changedFields is list
+        && request.resource.data.createdAt == request.time;
+      allow get, list: if isAlNaseemAdmin();
+      allow update, delete: if false;
     }
 
     match /{document=**} {
