@@ -119,6 +119,7 @@ document.querySelector("#enquiry-form").addEventListener("submit", async (event)
       name: String(values.get("name") || "").trim().slice(0, 100),
       phone: String(values.get("phone") || "").trim().slice(0, 40),
       interest: String(values.get("interest") || "Not selected").slice(0, 80),
+      serviceType: ({ "Umrah package": "umrah", "Hotel booking": "hotel", "Umrah and hotel booking": "combined", "General question": "general" })[String(values.get("interest") || "")] || "general",
       message: String(values.get("message") || "").trim().slice(0, 1500),
       status: "new", createdAt: serverTimestamp()
     });
