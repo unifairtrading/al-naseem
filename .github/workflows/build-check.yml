@@ -20,8 +20,15 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version: 22
+      - name: Set up Java for Firebase Emulator
+        uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: 21
       - name: Install dependencies
         run: npm install
+      - name: Test Firestore security rules in Emulator
+        run: npm test
       - name: Build website
         run: npm run build
       - name: Publish Firestore security rules
