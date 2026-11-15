@@ -1,6 +1,8 @@
 # Worklog
 
-- 2026-11-15 11:15 +03 | v0.1 | Implemented Staff Admin month-wise print-ready archive, browser Save-as-PDF flow, staff save confirmation, archive marker, batched source purge and Firestore age/marker guards; no server PDF storage | src/archive.js, src/admin.js, src/admin.css, src/main.js, firestore.rules, package.json | Next: verify CI; test Firestore rules and archive workflow before any release.
+- 2026-11-15 11:09 +03 | v0.1 | GitHub Actions build checks passed for monthly archive integration; Firestore rules remain undeployed and require Firebase testing | Actions runs 43693304878, 43693310375, 43693338747, 43693345217 | Next: validate Firestore rules and archive/purge flow in Firebase before any release.
+
+- 2026-11-15 11:09 +03 | v0.1 | Implemented Staff Admin month-wise print-ready archive, browser Save-as-PDF flow, staff save confirmation, archive marker, batched source purge and Firestore age/marker guards; no server PDF storage | src/archive.js, src/admin.js, src/admin.css, src/main.js, firestore.rules, package.json | Next: verify CI; test Firestore rules and archive workflow before any release.
 
 
 - 2026-11-15 10:30 +03 | v0.1 | Recorded one-calendar-month retention, monthly PDF download to staff PC, explicit save confirmation and post-confirmation Firestore purge; no server-side PDF storage | docs/PRD.md, docs/DECISIONS.md, docs/PROJECT_SUMMARY.md, docs/memory/context.md, docs/memory/open-questions.md, docs/versions/v0.1-foundation.md | Next: implement safe monthly archive/export workflow; never purge before confirmed download.
