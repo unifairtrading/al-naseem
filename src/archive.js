@@ -141,9 +141,6 @@ export function mountArchive(db, auth) {
       const { key, enquiries, logs } = pending;
       const markerRef = doc(db, "archiveRuns", key);
       const existing = await getDoc(markerRef);
-      if (existing.exists() && existing.data().confirmedBy !== auth.currentUser.uid) {
-        throw new Error("This month has an archive marker created by another staff member. Contact Super Admin.");
-      }
       if (!existing.exists()) await setDoc(markerRef, {
         monthKey: key,
         confirmedBy: auth.currentUser.uid,
