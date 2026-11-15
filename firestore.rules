@@ -54,7 +54,7 @@ service cloud.firestore {
         && (request.resource.data.archiveMonth == resource.data.archiveMonth || request.resource.data.archiveMonth is string);
       allow delete: if isAlNaseemAdmin()
         && resource.data.archiveMonth is string
-        && hasConfirmedArchive(resource.data.archiveMonth);
+        && resource.data.createdAt < request.time - duration.value(28, 'd')\n        && hasConfirmedArchive(resource.data.archiveMonth);
     }
 
     match /auditLogs/{logId} {
