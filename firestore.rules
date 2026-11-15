@@ -9,7 +9,6 @@ service cloud.firestore {
 
     function hasConfirmedArchive(monthKey) {
       return exists(/databases/$(database)/documents/archiveRuns/$(monthKey))
-        && get(/databases/$(database)/documents/archiveRuns/$(monthKey)).data.confirmedBy == request.auth.uid
         && get(/databases/$(database)/documents/archiveRuns/$(monthKey)).data.pdfDownloaded == true;
     }
 
@@ -56,9 +55,7 @@ service cloud.firestore {
       allow read: if isAlNaseemAdmin();
       allow update: if isAlNaseemAdmin()
         && request.resource.data.diff(resource.data).affectedKeys().hasOnly(['status', 'updatedAt', 'updatedBy'])
-        && (!request.resource.data.diff(resource.data).affectedKeys().hasAny(['status'])
-          || request.resource.data.status in ['new', 'contacted', 'closed'])
-        && request.resource.data.archiveMonth is string;
+        && request.resource.data.status in ['new', 'contacted', 'closed'];
       allow delete: if isAlNaseemAdmin()
         && resource.data.archiveMonth is string
         && isOldEnoughToArchive()
@@ -76,9 +73,7 @@ service cloud.firestore {
         && request.resource.data.archiveMonth is string
         && request.resource.data.createdAt == request.time;
       allow get, list: if isAlNaseemAdmin();
-      allow update: if isAlNaseemAdmin()
-        && request.resource.data.diff(resource.data).affectedKeys().hasOnly(['archiveMonth'])
-        && request.resource.data.archiveMonth is string;
+      allow update: if false;
       allow delete: if isAlNaseemAdmin()
         && resource.data.archiveMonth is string
         && isOldEnoughToArchive()
