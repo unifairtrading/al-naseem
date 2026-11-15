@@ -9,3 +9,4 @@
 - Denied permanent deletion of customer enquiries in the v0.1 Firestore rules.
 - Added explicit service classification for public enquiries (Umrah, hotel, combined, general).
 - Added append-only audit log rules and atomic audit records for hotel settings publication and enquiry status changes.
+- Added one-calendar-month retention policy and monthly PDF archive/download to Staff Admin; Firestore source records are purged only after staff confirms the PDF is saved to the company PC; no server-side PDF storage.
