@@ -6,3 +6,4 @@
 - Recorded client responsibility and audit-log requirements.
 - Recorded separate hotel and Umrah enquiry/booking workflows.
 - Added v0.1 branch CI build checks without live Hosting or Firestore deployment.
+- Denied permanent deletion of customer enquiries in the v0.1 Firestore rules.
