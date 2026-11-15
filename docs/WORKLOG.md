@@ -1,5 +1,9 @@
 # Worklog
 
+- 2026-11-15 11:20 +03 | v0.1 | Added isolated Firestore Emulator security tests; initial 7/7 suite passed, expanded suite covers immutable archive month and append-only audit logs and is running; no live deployment | tests/firestore.rules.test.js, firebase.json, package.json, .github/workflows/build-check.yml | Next: confirm expanded CI, then perform browser PDF workflow QA; live Firebase rules remain untouched.
+
+- 2026-11-15 11:17 +03 | v0.1 | Hardened archive rules: fixed malformed rule text, made archiveMonth immutable, made audit logs append-only, required confirmed marker and 28-day minimum age for deletion; made archive cleanup resumable and aligned month eligibility to one calendar month | firestore.rules, src/archive.js | Next: run expanded emulator tests and inspect print-to-PDF flow.
+
 - 2026-11-15 11:09 +03 | v0.1 | GitHub Actions build checks passed for monthly archive integration; Firestore rules remain undeployed and require Firebase testing | Actions runs 43693304878, 43693310375, 43693338747, 43693345217 | Next: validate Firestore rules and archive/purge flow in Firebase before any release.
 
 - 2026-11-15 11:09 +03 | v0.1 | Implemented Staff Admin month-wise print-ready archive, browser Save-as-PDF flow, staff save confirmation, archive marker, batched source purge and Firestore age/marker guards; no server PDF storage | src/archive.js, src/admin.js, src/admin.css, src/main.js, firestore.rules, package.json | Next: verify CI; test Firestore rules and archive workflow before any release.
