@@ -27,6 +27,19 @@ export function isArchiveMonthEligible(key, now = new Date()) {
   return eligibilityDate <= now;
 }
 
+
+export function buildArchiveReportHtml({ key, enquiries, logs, generatedAt = new Date() }) {
+  const enquiryRows = enquiries.map((item, index) => {
+    const date = toDate(item.createdAt);
+    return '<tr><td>' + (index + 1) + '</td><td>' + escapeHtml(item.name || "—") + '</td><td>' + escapeHtml(item.phone || "—") + '</td><td>' + escapeHtml(item.serviceType || "general") + '</td><td>' + escapeHtml(item.interest || "—") + '</td><td>' + escapeHtml(item.status || "new") + '</td><td>' + escapeHtml(date ? date.toLocaleString() : "Unknown") + '</td><td dir="auto">' + escapeHtml(item.message || "—") + '</td></tr>';
+  }).join("");
+  const auditRows = logs.map((item, index) => {
+    const date = toDate(item.createdAt);
+    return '<tr><td>' + (index + 1) + '</td><td>' + escapeHtml(item.action || "Activity") + '</td><td>' + escapeHtml(item.actorEmail || item.actorUid || "—") + '</td><td>' + escapeHtml(item.entityType || "—") + ' / ' + escapeHtml(item.entityId || "—") + '</td><td>' + escapeHtml(Array.isArray(item.changedFields) ? item.changedFields.join(", ") : "—") + '</td><td>' + escapeHtml((item.fromStatus || "—") + " → " + (item.toStatus || "—")) + '</td><td>' + escapeHtml(date ? date.toLocaleString() : "Unknown") + '</td></tr>';
+  }).join("");
+  return '<!doctype html><html><head><meta charset="utf-8"><title>Al Naseem Archive ' + escapeHtml(key) + '</title><style>body{font-family:Arial,"Noto Sans",sans-serif;color:#183b2d;margin:24px;font-size:11px}h1{font-size:20px;margin-bottom:4px}h2{font-size:15px;margin-top:28px}p{color:#52665a}table{width:100%;border-collapse:collapse;margin:12px 0 22px;table-layout:auto}th,td{border:1px solid #ccd7ce;padding:6px;text-align:left;vertical-align:top;overflow-wrap:anywhere}th{background:#edf3ee}td{white-space:normal}.meta{margin:14px 0 22px}@media print{body{margin:12mm}h2{break-after:avoid}tr{break-inside:avoid}table{font-size:9px}}</style></head><body><h1>AL NASEEM GROUP — MONTHLY RECORDS ARCHIVE</h1><p class="meta">Period: ' + escapeHtml(monthTitle(key)) + ' | Generated: ' + escapeHtml(generatedAt.toLocaleString()) + '<br>Enquiries: ' + enquiries.length + ' | Audit entries: ' + logs.length + '</p><h2>Customer enquiries</h2><table><thead><tr><th>#</th><th>Name</th><th>Phone</th><th>Service</th><th>Interest</th><th>Status</th><th>Date</th><th>Message</th></tr></thead><tbody>' + enquiryRows + '</tbody></table><h2>Staff activity / audit history</h2><table><thead><tr><th>#</th><th>Action</th><th>Staff</th><th>Record</th><th>Changed fields</th><th>Status change</th><th>Date</th></tr></thead><tbody>' + auditRows + '</tbody></table><p>Company record copy — keep this PDF securely in the company records folder.</p><script>window.onload=function(){window.focus();window.print();};</script></body></html>';
+}
+
 export function mountArchive(db, auth) {
   const root = document.querySelector("#archive-management");
   if (!root) return;
@@ -88,14 +101,7 @@ export function mountArchive(db, auth) {
       return;
     }
 
-    const enquiryRows = enquiries.map((item, index) => {
-      const date = toDate(item.createdAt);
-      return '<tr><td>' + (index + 1) + '</td><td>' + escapeHtml(item.name || "—") + '</td><td>' + escapeHtml(item.phone || "—") + '</td><td>' + escapeHtml(item.serviceType || "general") + '</td><td>' + escapeHtml(item.interest || "—") + '</td><td>' + escapeHtml(item.status || "new") + '</td><td>' + escapeHtml(date ? date.toLocaleString() : "Unknown") + '</td><td dir="auto">' + escapeHtml(item.message || "—") + '</td></tr>';
-    }).join("");
-    const auditRows = logs.map((item, index) => {
-      const date = toDate(item.createdAt);
-      return '<tr><td>' + (index + 1) + '</td><td>' + escapeHtml(item.action || "Activity") + '</td><td>' + escapeHtml(item.actorEmail || item.actorUid || "—") + '</td><td>' + escapeHtml(item.entityType || "—") + ' / ' + escapeHtml(item.entityId || "—") + '</td><td>' + escapeHtml(Array.isArray(item.changedFields) ? item.changedFields.join(", ") : "—") + '</td><td>' + escapeHtml((item.fromStatus || "—") + " → " + (item.toStatus || "—")) + '</td><td>' + escapeHtml(date ? date.toLocaleString() : "Unknown") + '</td></tr>';
-    }).join("");
+    const html = buildArchiveReportHtml({ key, enquiries, logs });
 
     const printWindow = window.open("", "_blank");
     if (!printWindow) {
