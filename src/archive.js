@@ -125,16 +125,19 @@ export function mountArchive(db, auth) {
         ...enquiries.map(item => ({ ...item, source: "enquiries" })),
         ...logs.map(item => ({ ...item, source: "auditLogs" }))
       ];
-      for (let i = 0; i < all.length; i += 400) {
+      const enquiryIds = new Set(enquiries.map(item => item.id));
+      const auditIds = new Set(logs.map(item => item.id));
+      const [currentEnquiries, currentLogs] = await Promise.all([
+        getDocs(collection(db, "enquiries")),
+        getDocs(collection(db, "auditLogs"))
+      ]);
+      const deletions = [
+        ...currentEnquiries.docs.filter(item => enquiryIds.has(item.id) && item.data().archiveMonth === key).map(item => ({ source: "enquiries", id: item.id })),
+        ...currentLogs.docs.filter(item => auditIds.has(item.id) && item.data().archiveMonth === key).map(item => ({ source: "auditLogs", id: item.id }))
+      ];
+      for (let i = 0; i < deletions.length; i += 400) {
         const batch = writeBatch(db);
-        all.slice(i, i + 400).forEach(item => {
-          batch.update(doc(db, item.source, item.id), { archiveMonth: key });
-        });
-        await batch.commit();
-      }
-      for (let i = 0; i < all.length; i += 400) {
-        const batch = writeBatch(db);
-        all.slice(i, i + 400).forEach(item => batch.delete(doc(db, item.source, item.id)));
+        deletions.slice(i, i + 400).forEach(item => batch.delete(doc(db, item.source, item.id)));
         await batch.commit();
       }
       say("Archive confirmed. " + enquiries.length + " enquiries and " + logs.length + " audit entries were removed from live Firestore. Keep the PDF safely on the company PC.");
