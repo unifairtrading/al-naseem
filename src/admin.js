@@ -195,6 +195,7 @@ function showDashboard(user, role) {
   document.querySelector("#save-hotel-settings").addEventListener("click", saveHotelSettings);
   loadHotelSettings();
   loadEnquiries();
+  mountArchive(db, auth);
   document.querySelector("#refresh-enquiries").addEventListener("click", loadEnquiries);
 }
 
@@ -231,6 +232,7 @@ async function loadEnquiries() {
           changedFields: ["status"],
           fromStatus: previousStatus,
           toStatus: select.value,
+          archiveMonth: new Date().getFullYear() + "-" + String(new Date().getMonth() + 1).padStart(2, "0"),
           createdAt: serverTimestamp()
         });
         await batch.commit();
@@ -290,6 +292,7 @@ async function saveHotelSettings() {
       entityType: "site_module",
       entityId: "hotels",
       changedFields: ["active", "intro", "hotels"],
+      archiveMonth: new Date().getFullYear() + "-" + String(new Date().getMonth() + 1).padStart(2, "0"),
       createdAt: serverTimestamp()
     });
     await batch.commit();
