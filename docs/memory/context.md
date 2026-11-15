@@ -5,7 +5,7 @@
 - User is non-technical; prefers short Hinglish steps, direct links and assistant-led GitHub changes.
 - User is Super Admin + Developer. Al Naseem staff are Staff Admin.
 - Staff may directly publish permitted business content without separate approval; client is responsible for staff actions.
-- Audit trail should record who changed what and when.
+- Audit trail should record who changed what and when; retain enquiries/audit records for one calendar month, then monthly PDF download to company PC and purge Firestore only after staff confirms saved. Do not retain PDFs on server.
 - Never request Firebase service-account JSON/private keys or commit secrets.
 - No paid billing, domain purchase, production data edits or merge to main without approval.
 - Keep changes small, tested and operationally safe.
