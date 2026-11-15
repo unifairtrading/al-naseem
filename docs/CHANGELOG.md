@@ -5,3 +5,4 @@
 - Recorded Staff Admin direct-publish permission for permitted business content; no separate Super Admin approval.
 - Recorded client responsibility and audit-log requirements.
 - Recorded separate hotel and Umrah enquiry/booking workflows.
+- Added v0.1 branch CI build checks without live Hosting or Firestore deployment.
