@@ -13,3 +13,5 @@
 - Implemented Staff Admin monthly print-ready archive for enquiries and audit history; staff save as PDF locally, inspect and confirm before Firestore purge.
 - Added archive markers, batched cleanup, and Firestore safeguards requiring a confirmed archive marker and at least 28 days of record age; no server-side PDF storage.
 - Used browser print-to-PDF rather than a PDF library so multilingual customer text can use local browser fonts.
+- Added Firebase Emulator security-rule test suite (9/9 passed) covering public enquiry access, admin archive marker, age-gated purge, immutable archive month and append-only audit logs.
+- CI now runs emulator security tests before the production build; version branches skip Firestore rules publishing and Hosting deployment.
