@@ -1,5 +1,8 @@
 # Worklog
 
+- 2026-11-15 10:30 +03 | v0.1 | Recorded one-calendar-month retention, monthly PDF download to staff PC, explicit save confirmation and post-confirmation Firestore purge; no server-side PDF storage | docs/PRD.md, docs/DECISIONS.md, docs/PROJECT_SUMMARY.md, docs/memory/context.md, docs/memory/open-questions.md, docs/versions/v0.1-foundation.md | Next: implement safe monthly archive/export workflow; never purge before confirmed download.
+
+
 - 2026-11-15 10:22 +03 | v0.1 | Corrected enquiry status rollback to restore the actual previous status if the atomic update/audit batch fails | src/admin.js | Next: verify latest build checks; then continue with enquiry views and role testing.
 
 - 2026-11-15 10:18 +03 | v0.1 | Added serviceType classification (umrah/hotel/combined/general), admin display, append-only audit rules and atomic audit writes for hotel publication/enquiry status changes | src/main.js, src/admin.js, firestore.rules | Next: verify CI; complete remaining role and workflow review.
