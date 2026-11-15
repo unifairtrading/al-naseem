@@ -1,5 +1,7 @@
 # Worklog
 
+- 2026-11-15 10:18 +03 | v0.1 | Added serviceType classification (umrah/hotel/combined/general), admin display, append-only audit rules and atomic audit writes for hotel publication/enquiry status changes | src/main.js, src/admin.js, firestore.rules | Next: verify CI; complete remaining role and workflow review.
+
 - 2026-11-15 10:12 +03 | v0.1 | GitHub Actions build checks completed successfully on version/v0.1-foundation; no live deploy occurred | CI workflow, docs/versions/v0.1-foundation.md | Next: inspect admin/public behavior and complete Firestore role/data authorization review.
 
 - 2026-11-15 10:08 +03 | v0.1 | Denied permanent deletion of customer enquiries in Firestore rules; version branch CI remains build-only | firestore.rules | Next: validate build and review role/data rules.
