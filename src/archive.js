@@ -121,10 +121,6 @@ export function mountArchive(db, auth) {
         auditCount: logs.length
       });
 
-      const all = [
-        ...enquiries.map(item => ({ ...item, source: "enquiries" })),
-        ...logs.map(item => ({ ...item, source: "auditLogs" }))
-      ];
       const enquiryIds = new Set(enquiries.map(item => item.id));
       const auditIds = new Set(logs.map(item => item.id));
       const [currentEnquiries, currentLogs] = await Promise.all([
