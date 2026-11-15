@@ -1,4 +1,3 @@
-import { jsPDF } from "jspdf";
 import {
   collection, doc, getDoc, getDocs, query, orderBy, setDoc, serverTimestamp,
   writeBatch
@@ -18,17 +17,6 @@ const eligibleMonth = key => {
   const [year, month] = key.split("-").map(Number);
   return new Date(year, month + 1, 1) <= new Date();
 };
-
-function addParagraph(pdf, value, y, fontSize = 9) {
-  pdf.setFontSize(fontSize);
-  const lines = pdf.splitTextToSize(String(value ?? "—"), 180);
-  if (y + lines.length * 4.5 > 282) {
-    pdf.addPage();
-    y = 18;
-  }
-  pdf.text(lines, 14, y);
-  return y + lines.length * 4.5 + 2;
-}
 
 export function mountArchive(db, auth) {
   const root = document.querySelector("#archive-management");
@@ -91,48 +79,30 @@ export function mountArchive(db, auth) {
       return;
     }
 
-    const pdf = new jsPDF({ unit: "mm", format: "a4" });
-    let y = 18;
-    pdf.setFont("helvetica", "bold");
-    y = addParagraph(pdf, "AL NASEEM GROUP — MONTHLY RECORDS ARCHIVE", y, 16);
-    pdf.setFont("helvetica", "normal");
-    y = addParagraph(pdf, "Period: " + monthTitle(key), y, 10);
-    y = addParagraph(pdf, "Generated: " + new Date().toLocaleString(), y, 9);
-    y = addParagraph(pdf, "Enquiries: " + enquiries.length + " | Audit entries: " + logs.length, y, 9);
-    y += 4;
-    pdf.setFont("helvetica", "bold");
-    y = addParagraph(pdf, "CUSTOMER ENQUIRIES", y, 12);
-    pdf.setFont("helvetica", "normal");
-    enquiries.forEach((item, index) => {
+    const enquiryRows = enquiries.map((item, index) => {
       const date = toDate(item.createdAt);
-      y = addParagraph(pdf, (index + 1) + ". " + (item.name || "Name not provided"), y);
-      y = addParagraph(pdf, "Date: " + (date ? date.toLocaleString() : "Unknown") + " | Type: " + (item.serviceType || "general") + " | Status: " + (item.status || "new"), y);
-      y = addParagraph(pdf, "Phone: " + (item.phone || "—") + " | Interest: " + (item.interest || "—"), y);
-      y = addParagraph(pdf, "Message: " + (item.message || "—"), y);
-      y += 2;
-    });
-    if (logs.length) {
-      if (y > 265) { pdf.addPage(); y = 18; }
-      pdf.setFont("helvetica", "bold");
-      y = addParagraph(pdf, "STAFF ACTIVITY / AUDIT HISTORY", y, 12);
-      pdf.setFont("helvetica", "normal");
-      logs.forEach((item, index) => {
-        const date = toDate(item.createdAt);
-        y = addParagraph(pdf, (index + 1) + ". " + (item.action || "Activity"), y);
-        y = addParagraph(pdf, "Date: " + (date ? date.toLocaleString() : "Unknown") + " | Staff: " + (item.actorEmail || item.actorUid || "—"), y);
-        y = addParagraph(pdf, "Record: " + (item.entityType || "—") + " / " + (item.entityId || "—") + " | Changed: " + (Array.isArray(item.changedFields) ? item.changedFields.join(", ") : "—"), y);
-        if (item.fromStatus || item.toStatus) y = addParagraph(pdf, "Status: " + (item.fromStatus || "—") + " → " + (item.toStatus || "—"), y);
-        y += 2;
-      });
+      return '<tr><td>' + (index + 1) + '</td><td>' + escapeHtml(item.name || "—") + '</td><td>' + escapeHtml(item.phone || "—") + '</td><td>' + escapeHtml(item.serviceType || "general") + '</td><td>' + escapeHtml(item.interest || "—") + '</td><td>' + escapeHtml(item.status || "new") + '</td><td>' + escapeHtml(date ? date.toLocaleString() : "Unknown") + '</td><td dir="auto">' + escapeHtml(item.message || "—") + '</td></tr>';
+    }).join("");
+    const auditRows = logs.map((item, index) => {
+      const date = toDate(item.createdAt);
+      return '<tr><td>' + (index + 1) + '</td><td>' + escapeHtml(item.action || "Activity") + '</td><td>' + escapeHtml(item.actorEmail || item.actorUid || "—") + '</td><td>' + escapeHtml(item.entityType || "—") + ' / ' + escapeHtml(item.entityId || "—") + '</td><td>' + escapeHtml(Array.isArray(item.changedFields) ? item.changedFields.join(", ") : "—") + '</td><td>' + escapeHtml((item.fromStatus || "—") + " → " + (item.toStatus || "—")) + '</td><td>' + escapeHtml(date ? date.toLocaleString() : "Unknown") + '</td></tr>';
+    }).join("");
+
+    const printWindow = window.open("", "_blank");
+    if (!printWindow) {
+      say("Your browser blocked the archive window. Allow pop-ups for this website and try again. Nothing was deleted.");
+      return;
     }
-    pdf.save("Al-Naseem-Archive-" + key + ".pdf");
+    const html = '<!doctype html><html><head><meta charset="utf-8"><title>Al Naseem Archive ' + key + '</title><style>body{font-family:Arial,"Noto Sans",sans-serif;color:#183b2d;margin:24px;font-size:11px}h1{font-size:20px;margin-bottom:4px}h2{font-size:15px;margin-top:28px}p{color:#52665a}table{width:100%;border-collapse:collapse;margin:12px 0 22px;table-layout:auto}th,td{border:1px solid #ccd7ce;padding:6px;text-align:left;vertical-align:top;overflow-wrap:anywhere}th{background:#edf3ee}td{white-space:normal}.meta{margin:14px 0 22px}@media print{body{margin:12mm}h2{break-after:avoid}tr{break-inside:avoid}table{font-size:9px}}</style></head><body><h1>AL NASEEM GROUP — MONTHLY RECORDS ARCHIVE</h1><p class="meta">Period: ' + escapeHtml(monthTitle(key)) + ' | Generated: ' + escapeHtml(new Date().toLocaleString()) + '<br>Enquiries: ' + enquiries.length + ' | Audit entries: ' + logs.length + '</p><h2>Customer enquiries</h2><table><thead><tr><th>#</th><th>Name</th><th>Phone</th><th>Service</th><th>Interest</th><th>Status</th><th>Date</th><th>Message</th></tr></thead><tbody>' + enquiryRows + '</tbody></table><h2>Staff activity / audit history</h2><table><thead><tr><th>#</th><th>Action</th><th>Staff</th><th>Record</th><th>Changed fields</th><th>Status change</th><th>Date</th></tr></thead><tbody>' + auditRows + '</tbody></table><p>Company record copy — keep this PDF securely in the company records folder.</p><script>window.onload=function(){window.focus();window.print();};<\/script></body></html>';
+    printWindow.document.open();
+    printWindow.document.write(html);
+    printWindow.document.close();
     pending = { key, enquiries, logs };
     savedCheck.checked = false;
     confirmButton.disabled = true;
     confirmPanel.hidden = false;
-    say("The PDF download has been requested. Open it, check the contents and save it securely on the company PC. Do not confirm before that.");
+    say("Print window opened. Choose 'Save as PDF' in the print destination, save it on the company PC, open and check the file. Do not confirm before that.");
   }
-
   async function commitAndPurge() {
     if (!pending || !savedCheck.checked) return;
     confirmButton.disabled = true;
