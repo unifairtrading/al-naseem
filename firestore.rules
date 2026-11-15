@@ -6,6 +6,11 @@ service cloud.firestore {
         && exists(/databases/$(database)/documents/users/$(request.auth.uid))
         && get(/databases/$(database)/documents/users/$(request.auth.uid)).data.role in ['super_admin', 'staff_admin'];
     }
+    function hasConfirmedArchive(monthKey) {
+      return exists(/databases/$(database)/documents/archiveRuns/$(monthKey))
+        && get(/databases/$(database)/documents/archiveRuns/$(monthKey)).data.confirmedBy == request.auth.uid
+        && get(/databases/$(database)/documents/archiveRuns/$(monthKey)).data.pdfDownloaded == true;
+    }
 
     match /users/{userId} {
       allow get: if request.auth != null && request.auth.uid == userId;
@@ -19,35 +24,56 @@ service cloud.firestore {
       allow delete: if false;
     }
 
-    // Public visitors may submit classified enquiries; only admins can view or update them.
+    match /archiveRuns/{monthKey} {
+      allow get, list: if isAlNaseemAdmin();
+      allow create: if isAlNaseemAdmin()
+        && request.resource.data.keys().hasOnly(['monthKey', 'confirmedBy', 'confirmedByEmail', 'confirmedAt', 'pdfDownloaded', 'enquiryCount', 'auditCount'])
+        && request.resource.data.monthKey == monthKey
+        && request.resource.data.confirmedBy == request.auth.uid
+        && request.resource.data.confirmedAt == request.time
+        && request.resource.data.pdfDownloaded == true
+        && request.resource.data.enquiryCount is int
+        && request.resource.data.auditCount is int;
+      allow update, delete: if false;
+    }
+
     match /enquiries/{enquiryId} {
       allow create: if request.auth == null
-        && request.resource.data.keys().hasOnly(['name', 'phone', 'interest', 'serviceType', 'message', 'status', 'createdAt'])
+        && request.resource.data.keys().hasOnly(['name', 'phone', 'interest', 'serviceType', 'message', 'status', 'createdAt', 'archiveMonth'])
         && request.resource.data.name is string && request.resource.data.name.size() > 0 && request.resource.data.name.size() <= 100
         && request.resource.data.phone is string && request.resource.data.phone.size() > 0 && request.resource.data.phone.size() <= 40
         && request.resource.data.interest is string && request.resource.data.interest.size() <= 80
         && request.resource.data.serviceType in ['umrah', 'hotel', 'combined', 'general']
         && request.resource.data.message is string && request.resource.data.message.size() <= 1500
+        && request.resource.data.archiveMonth is string
         && request.resource.data.status == 'new';
       allow read: if isAlNaseemAdmin();
       allow update: if isAlNaseemAdmin()
-        && request.resource.data.diff(resource.data).affectedKeys().hasOnly(['status', 'updatedAt', 'updatedBy'])
-        && request.resource.data.status in ['new', 'contacted', 'closed'];
-      allow delete: if false;
+        && request.resource.data.diff(resource.data).affectedKeys().hasOnly(['status', 'updatedAt', 'updatedBy', 'archiveMonth'])
+        && request.resource.data.status in ['new', 'contacted', 'closed']
+        && (request.resource.data.archiveMonth == resource.data.archiveMonth || request.resource.data.archiveMonth is string);
+      allow delete: if isAlNaseemAdmin()
+        && resource.data.archiveMonth is string
+        && hasConfirmedArchive(resource.data.archiveMonth);
     }
 
-    // Append-only audit trail. Admins can read it; clients cannot alter or erase history.
     match /auditLogs/{logId} {
       allow create: if isAlNaseemAdmin()
-        && request.resource.data.keys().hasOnly(['actorUid', 'actorEmail', 'action', 'entityType', 'entityId', 'changedFields', 'fromStatus', 'toStatus', 'createdAt'])
+        && request.resource.data.keys().hasOnly(['actorUid', 'actorEmail', 'action', 'entityType', 'entityId', 'changedFields', 'fromStatus', 'toStatus', 'createdAt', 'archiveMonth'])
         && request.resource.data.actorUid == request.auth.uid
         && request.resource.data.action is string
         && request.resource.data.entityType is string
         && request.resource.data.entityId is string
         && request.resource.data.changedFields is list
+        && request.resource.data.archiveMonth is string
         && request.resource.data.createdAt == request.time;
       allow get, list: if isAlNaseemAdmin();
-      allow update, delete: if false;
+      allow update: if isAlNaseemAdmin()
+        && request.resource.data.diff(resource.data).affectedKeys().hasOnly(['archiveMonth'])
+        && request.resource.data.archiveMonth is string;
+      allow delete: if isAlNaseemAdmin()
+        && resource.data.archiveMonth is string
+        && hasConfirmedArchive(resource.data.archiveMonth);
     }
 
     match /{document=**} {
