@@ -10,3 +10,6 @@
 - Added explicit service classification for public enquiries (Umrah, hotel, combined, general).
 - Added append-only audit log rules and atomic audit records for hotel settings publication and enquiry status changes.
 - Added one-calendar-month retention policy and monthly PDF archive/download to Staff Admin; Firestore source records are purged only after staff confirms the PDF is saved to the company PC; no server-side PDF storage.
+- Implemented Staff Admin monthly print-ready archive for enquiries and audit history; staff save as PDF locally, inspect and confirm before Firestore purge.
+- Added archive markers, batched cleanup, and Firestore safeguards requiring a confirmed archive marker and at least 28 days of record age; no server-side PDF storage.
+- Used browser print-to-PDF rather than a PDF library so multilingual customer text can use local browser fonts.
