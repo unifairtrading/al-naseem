@@ -9,6 +9,7 @@ import {
   collection, deleteDoc, doc, getDoc, serverTimestamp, setDoc, Timestamp, updateDoc
 } from "firebase/firestore";
 import { readFile } from "node:fs/promises";
+import { isArchiveMonthEligible } from "../src/archive.js";
 
 const projectId = "al-naseem-rules-tests";
 let testEnv;
@@ -142,4 +143,16 @@ test("audit history is append-only before archive cleanup", async () => {
   const db = testEnv.authenticatedContext("staff-1").firestore();
   await assertFails(updateDoc(doc(db, "auditLogs", "old-log"), { action: "rewritten" }));
   await assertFails(deleteDoc(doc(db, "auditLogs", "old-log")));
+});
+
+test("monthly archive eligibility is exactly one calendar month after the month's last day", () => {
+  assert.equal(isArchiveMonthEligible("2026-01", new Date("2026-02-27T23:59:59")), false);
+  assert.equal(isArchiveMonthEligible("2026-01", new Date("2026-02-28T00:00:00")), true);
+  assert.equal(isArchiveMonthEligible("2026-02", new Date("2026-03-27T23:59:59")), false);
+  assert.equal(isArchiveMonthEligible("2026-02", new Date("2026-03-28T00:00:00")), true);
+  assert.equal(isArchiveMonthEligible("2028-02", new Date("2028-03-28T23:59:59")), false);
+  assert.equal(isArchiveMonthEligible("2028-02", new Date("2028-03-29T00:00:00")), true);
+  assert.equal(isArchiveMonthEligible("2026-12", new Date("2027-01-30T23:59:59")), false);
+  assert.equal(isArchiveMonthEligible("2026-12", new Date("2027-01-31T00:00:00")), true);
+  assert.equal(isArchiveMonthEligible("not-a-month", new Date("2027-12-31")), false);
 });
