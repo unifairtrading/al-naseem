@@ -9,7 +9,7 @@ import {
   collection, deleteDoc, doc, getDoc, serverTimestamp, setDoc, Timestamp, updateDoc
 } from "firebase/firestore";
 import { readFile } from "node:fs/promises";
-import { isArchiveMonthEligible, buildArchiveReportHtml } from "../src/archive.js";
+import { isArchiveMonthEligible, buildArchiveReportHtml, getRecordArchiveMonth } from "../src/archive.js";
 
 const projectId = "al-naseem-rules-tests";
 let testEnv;
@@ -155,6 +155,13 @@ test("monthly archive eligibility is exactly one calendar month after the month'
   assert.equal(isArchiveMonthEligible("2026-12", new Date("2027-01-30T23:59:59")), false);
   assert.equal(isArchiveMonthEligible("2026-12", new Date("2027-01-31T00:00:00")), true);
   assert.equal(isArchiveMonthEligible("not-a-month", new Date("2027-12-31")), false);
+});
+
+test("archive month uses stored month consistently and falls back for legacy records", () => {
+  assert.equal(getRecordArchiveMonth({ archiveMonth: "2026-08", createdAt: freshDate }), "2026-08");
+  assert.equal(getRecordArchiveMonth({ createdAt: oldDate }), oldDate.toDate().getFullYear() + "-" + String(oldDate.toDate().getMonth() + 1).padStart(2, "0"));
+  assert.equal(getRecordArchiveMonth({ archiveMonth: "invalid", createdAt: oldDate }), oldDate.toDate().getFullYear() + "-" + String(oldDate.toDate().getMonth() + 1).padStart(2, "0"));
+  assert.equal(getRecordArchiveMonth({}), null);
 });
 
 test("monthly PDF report contains both record groups and correct totals", () => {
