@@ -11,5 +11,5 @@
 - Implemented in v0.1 branch: build-only CI, classified enquiries, atomic audit logs, Staff Admin monthly print-to-PDF archive panel, explicit save confirmation, marker-gated batch purge and 28-day minimum age rule. Expanded isolated Firestore Emulator suite passed 9/9 tests; build also passed in CI. Firestore rules have not been deployed or tested against the live database.
 - No paid billing, domain purchase, production data edits or merge to main without explicit approval.
 - PRD reconstructed from PROJECT_BLUEPRINT.md and confirmed decisions; open items in memory/open-questions.md.
-- Archive feature implemented in version branch and build checks passed. Browser PDF flow QA and a separately approved safe Firebase release test remain; no live deployment.
+- Archive feature implemented in version branch and build checks passed. Added exact month-end/leap-year eligibility logic; the extra date-boundary test is running. Browser PDF flow QA and a separately approved safe Firebase release test remain; no live deployment.
 - Remaining: test browser PDF flow and (only after approval) deploy rules, separate enquiry views/filters, staff account provisioning, editable Umrah packages/business content, feedback moderation and QA. No live deploy or merge to main.
