@@ -14,7 +14,7 @@ const monthTitle = key => {
 };
 const toDate = value => value && typeof value.toDate === "function" ? value.toDate() : null;
 export function isArchiveMonthEligible(key, now = new Date()) {
-  const match = /^(\\d{4})-(0[1-9]|1[0-2])$/.exec(String(key));
+  const match = /^(\d{4})-(0[1-9]|1[0-2])$/.exec(String(key));
   if (!match) return false;
   const year = Number(match[1]);
   const month = Number(match[2]);
