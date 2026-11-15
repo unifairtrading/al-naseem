@@ -9,7 +9,7 @@ import {
   collection, deleteDoc, doc, getDoc, serverTimestamp, setDoc, Timestamp, updateDoc
 } from "firebase/firestore";
 import { readFile } from "node:fs/promises";
-import { isArchiveMonthEligible } from "../src/archive.js";
+import { isArchiveMonthEligible, buildArchiveReportHtml } from "../src/archive.js";
 
 const projectId = "al-naseem-rules-tests";
 let testEnv;
@@ -155,4 +155,38 @@ test("monthly archive eligibility is exactly one calendar month after the month'
   assert.equal(isArchiveMonthEligible("2026-12", new Date("2027-01-30T23:59:59")), false);
   assert.equal(isArchiveMonthEligible("2026-12", new Date("2027-01-31T00:00:00")), true);
   assert.equal(isArchiveMonthEligible("not-a-month", new Date("2027-12-31")), false);
+});
+
+test("monthly PDF report contains both record groups and correct totals", () => {
+  const report = buildArchiveReportHtml({
+    key: "2026-09",
+    enquiries: [
+      { name: "Amina", phone: "+97312345678", serviceType: "hotel", interest: "Hotel", status: "new", message: "Please call", createdAt: oldDate }
+    ],
+    logs: [
+      { action: "hotel_settings_published", actorEmail: "staff@example.test", entityType: "site_module", entityId: "hotels", changedFields: ["hotels"], createdAt: oldDate }
+    ],
+    generatedAt: new Date("2026-11-15T00:00:00Z")
+  });
+  assert.match(report, /AL NASEEM GROUP/);
+  assert.match(report, /Customer enquiries/);
+  assert.match(report, /Staff activity \/ audit history/);
+  assert.match(report, /Enquiries: 1 \| Audit entries: 1/);
+  assert.match(report, /Amina/);
+  assert.match(report, /hotel_settings_published/);
+});
+
+test("monthly PDF report escapes customer-controlled HTML and script content", () => {
+  const report = buildArchiveReportHtml({
+    key: "2026-09",
+    enquiries: [
+      { name: '<script>alert("x")<\/script>', phone: "<img src=x onerror=alert(1)>", message: "1 < 2 & 3 > 2", createdAt: oldDate }
+    ],
+    logs: [],
+    generatedAt: new Date("2026-11-15T00:00:00Z")
+  });
+  assert.doesNotMatch(report, /<script>alert/);
+  assert.doesNotMatch(report, /<img src=x/);
+  assert.match(report, /&lt;script&gt;/);
+  assert.match(report, /1 &lt; 2 &amp; 3 &gt; 2/);
 });
