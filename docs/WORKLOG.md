@@ -1,5 +1,7 @@
 # Worklog
 
+- 2026-11-15 11:25 +03 | v0.1 | Corrected month eligibility to add one calendar month with end-of-month clamping (Jan 31 → Feb 28; Feb 28 → Mar 28; leap-year Feb 29 → Mar 29); added boundary tests, CI run pending | src/archive.js, tests/firestore.rules.test.js | Next: verify boundary test/build; browser print-to-PDF QA; no live deployment.
+
 - 2026-11-15 11:23 +03 | v0.1 | Expanded Firestore Emulator suite passed 9/9 tests and Vite production build passed; Firebase rules publish and Hosting deploy were skipped on version branch | GitHub Actions run 43693914852 | Next: perform browser PDF print/save/confirm/retry QA; keep production rules untouched until release approval.
 
 - 2026-11-15 11:20 +03 | v0.1 | Added isolated Firestore Emulator security tests; initial 7/7 suite passed, expanded suite covers immutable archive month and append-only audit logs and is running; no live deployment | tests/firestore.rules.test.js, firebase.json, package.json, .github/workflows/build-check.yml | Next: confirm expanded CI, then perform browser PDF workflow QA; live Firebase rules remain untouched.
