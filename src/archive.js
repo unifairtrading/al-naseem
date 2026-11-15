@@ -13,6 +13,11 @@ const monthTitle = key => {
   return new Date(year, month - 1, 1).toLocaleDateString(undefined, { month: "long", year: "numeric" });
 };
 const toDate = value => value && typeof value.toDate === "function" ? value.toDate() : null;
+export function getRecordArchiveMonth(item) {
+  if (/^\d{4}-(0[1-9]|1[0-2])$/.test(String(item?.archiveMonth || ""))) return item.archiveMonth;
+  const date = toDate(item?.createdAt);
+  return date ? monthKey(date) : null;
+}
 export function isArchiveMonthEligible(key, now = new Date()) {
   const match = /^(\d{4})-(0[1-9]|1[0-2])$/.exec(String(key));
   if (!match) return false;
@@ -67,8 +72,8 @@ export function mountArchive(db, auth) {
       cached.auditLogs = logs.docs.map(s => ({ id: s.id, ...s.data() }));
       const keys = new Set();
       [...cached.enquiries, ...cached.auditLogs].forEach(item => {
-        const date = toDate(item.createdAt);
-        if (date && isArchiveMonthEligible(monthKey(date))) keys.add(monthKey(date));
+        const key = getRecordArchiveMonth(item);
+        if (key && isArchiveMonthEligible(key)) keys.add(key);
       });
       const options = [...keys].sort().reverse();
       select.innerHTML = options.length
@@ -89,8 +94,7 @@ export function mountArchive(db, auth) {
     const key = select.value;
     if (!key || !isArchiveMonthEligible(key)) return;
     const enquiries = cached.enquiries.filter(item => {
-      const date = toDate(item.createdAt);
-      return date && monthKey(date) === key;
+      return getRecordArchiveMonth(item) === key;
     });
     const logs = cached.auditLogs.filter(item => {
       const date = toDate(item.createdAt);
@@ -142,7 +146,7 @@ export function mountArchive(db, auth) {
         getDocs(collection(db, "auditLogs"))
       ]);
       const deletions = [
-        ...currentEnquiries.docs.filter(item => enquiryIds.has(item.id) && item.data().archiveMonth === key).map(item => ({ source: "enquiries", id: item.id })),
+        ...currentEnquiries.docs.filter(item => enquiryIds.has(item.id) && getRecordArchiveMonth(item.data()) === key).map(item => ({ source: "enquiries", id: item.id })),
         ...currentLogs.docs.filter(item => auditIds.has(item.id) && item.data().archiveMonth === key).map(item => ({ source: "auditLogs", id: item.id }))
       ];
       for (let i = 0; i < deletions.length; i += 400) {
