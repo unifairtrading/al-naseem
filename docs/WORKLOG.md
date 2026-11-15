@@ -1,5 +1,7 @@
 # Worklog
 
+- 2026-11-15 11:23 +03 | v0.1 | Expanded Firestore Emulator suite passed 9/9 tests and Vite production build passed; Firebase rules publish and Hosting deploy were skipped on version branch | GitHub Actions run 43693914852 | Next: perform browser PDF print/save/confirm/retry QA; keep production rules untouched until release approval.
+
 - 2026-11-15 11:20 +03 | v0.1 | Added isolated Firestore Emulator security tests; initial 7/7 suite passed, expanded suite covers immutable archive month and append-only audit logs and is running; no live deployment | tests/firestore.rules.test.js, firebase.json, package.json, .github/workflows/build-check.yml | Next: confirm expanded CI, then perform browser PDF workflow QA; live Firebase rules remain untouched.
 
 - 2026-11-15 11:17 +03 | v0.1 | Hardened archive rules: fixed malformed rule text, made archiveMonth immutable, made audit logs append-only, required confirmed marker and 28-day minimum age for deletion; made archive cleanup resumable and aligned month eligibility to one calendar month | firestore.rules, src/archive.js | Next: run expanded emulator tests and inspect print-to-PDF flow.
