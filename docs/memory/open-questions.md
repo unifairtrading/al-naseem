@@ -9,4 +9,4 @@
 7. Confirm Bahrain privacy/legal wording and customer-data retention/export policy.
 8. Confirm Firebase Storage/Cloud Functions billing implications before enabling.
 9. Confirm custom domain and launch date.
-10. Confirm the final PDF layout/fields and test the browser Save-as-PDF flow on the staff PCs. Current implementation waits until a full calendar month plus the following month have elapsed, so records are never purged early.
+10. Confirm the final PDF layout/fields and test the browser Save-as-PDF flow on the staff PCs. Current implementation waits until the last day of that month has aged by one calendar month, so records are never purged early.
