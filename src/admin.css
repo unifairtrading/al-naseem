@@ -25,3 +25,11 @@
 @media(max-width:650px){.admin-shell{padding:0}.admin-top{padding:12px 15px;margin:0}.admin-top span{font-size:8px}.admin-card{margin:18px 14px;padding:25px}.admin-workspace{display:block;border-radius:0;min-height:100vh}.admin-sidebar{min-height:0;padding:12px;display:block}.sidebar-brand{padding:0 4px 12px}.sidebar-brand .brand-emblem{width:32px;height:32px}.sidebar-label{display:none}.admin-nav{display:flex;overflow-x:auto;gap:5px;padding-bottom:8px}.admin-nav-link{flex:0 0 auto;min-height:35px;padding:8px;font-size:10px}.nav-disabled small{display:none}.sidebar-bottom{padding:10px 4px 0}.workspace-topbar{height:auto;min-height:58px;padding:10px 14px}.workspace-content{padding:20px 14px}.welcome-row{align-items:flex-start;flex-direction:column}.welcome-row h1{font-size:23px}.welcome-date{width:100%}.overview-cards{grid-template-columns:1fr;gap:9px}.overview-card{min-height:100px;padding:14px}.overview-icon{margin-bottom:8px}.section-title-row{align-items:flex-start;flex-direction:column}.hotel-manager{padding:15px}.manager-heading{flex-direction:column}.switch-row{white-space:normal}.hotel-manager-grid{grid-template-columns:1fr}.manager-footer{align-items:flex-start;flex-direction:column}.enquiry-record{flex-direction:column}.workspace-footer{gap:10px;flex-direction:column}.list-heading{flex-direction:column}}
 
 .topbar-actions{display:flex;align-items:center;gap:18px}.topbar-logout{border:1px solid #dfe6df;border-radius:8px;background:#fff;color:#315b47;padding:9px 14px;font-size:11px;font-weight:700}.topbar-logout:hover{background:#f4f7f3}
+
+.archive-controls{display:flex;align-items:end;gap:12px;flex-wrap:wrap;padding:16px;background:#f8faf7;border:1px solid #e6ece5;border-radius:9px}
+.archive-controls label{display:grid;gap:7px;font-size:11px;font-weight:700;color:#52685a}
+.archive-controls select{min-width:210px;border:1px solid #dfe6df;border-radius:7px;padding:10px;background:#fff;color:#294b39;font:inherit}
+.archive-confirmation{margin-top:14px;padding:16px;border:1px solid #d9e6d9;border-radius:9px;background:#f7faf6}
+.archive-confirmation p{font-size:12px;line-height:1.6;color:#4d6254}
+.archive-confirmation label{display:flex;gap:8px;align-items:flex-start;margin:12px 0;font-size:11px;color:#405b49}
+.archive-confirmation button:disabled{opacity:.5;cursor:not-allowed}
