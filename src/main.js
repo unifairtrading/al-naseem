@@ -121,7 +121,7 @@ document.querySelector("#enquiry-form").addEventListener("submit", async (event)
       interest: String(values.get("interest") || "Not selected").slice(0, 80),
       serviceType: ({ "Umrah package": "umrah", "Hotel booking": "hotel", "Umrah and hotel booking": "combined", "General question": "general" })[String(values.get("interest") || "")] || "general",
       message: String(values.get("message") || "").trim().slice(0, 1500),
-      status: "new", createdAt: serverTimestamp()
+      status: "new", archiveMonth: new Date().getFullYear() + "-" + String(new Date().getMonth() + 1).padStart(2, "0"), createdAt: serverTimestamp()
     });
     window.open(target, "_blank", "noopener,noreferrer");
     submitButton.textContent = "Enquiry saved · Continue in WhatsApp";
