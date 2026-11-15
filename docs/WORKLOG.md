@@ -1,5 +1,7 @@
 # Worklog
 
+- 2026-11-15 10:22 +03 | v0.1 | Corrected enquiry status rollback to restore the actual previous status if the atomic update/audit batch fails | src/admin.js | Next: verify latest build checks; then continue with enquiry views and role testing.
+
 - 2026-11-15 10:18 +03 | v0.1 | Added serviceType classification (umrah/hotel/combined/general), admin display, append-only audit rules and atomic audit writes for hotel publication/enquiry status changes | src/main.js, src/admin.js, firestore.rules | Next: verify CI; complete remaining role and workflow review.
 
 - 2026-11-15 10:12 +03 | v0.1 | GitHub Actions build checks completed successfully on version/v0.1-foundation; no live deploy occurred | CI workflow, docs/versions/v0.1-foundation.md | Next: inspect admin/public behavior and complete Firestore role/data authorization review.
