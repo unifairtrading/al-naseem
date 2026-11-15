@@ -9,4 +9,4 @@
 7. Confirm Bahrain privacy/legal wording and customer-data retention/export policy.
 8. Confirm Firebase Storage/Cloud Functions billing implications before enabling.
 9. Confirm custom domain and launch date.
-10. Confirm the exact PDF layout/fields; current default retention is one calendar month from each record's creation date.
+10. Confirm the final PDF layout/fields and test the browser Save-as-PDF flow on the staff PCs. Current implementation waits until a full calendar month plus the following month have elapsed, so records are never purged early.
