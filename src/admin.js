@@ -1,6 +1,6 @@
 import { auth, db, isFirebaseConfigured } from "./firebase.js";
 import { signInWithEmailAndPassword, signOut } from "firebase/auth";
-import { collection, doc, getDoc, getDocs, orderBy, query, setDoc, serverTimestamp, updateDoc } from "firebase/firestore";
+import { collection, doc, getDoc, getDocs, orderBy, query, setDoc, serverTimestamp, updateDoc, writeBatch } from "firebase/firestore";
 import "./admin.css";
 
 const root = document.querySelector("#app");
@@ -217,14 +217,30 @@ async function loadEnquiries() {
     }).join("");
     list.querySelectorAll("[data-enquiry-status]").forEach(select => select.addEventListener("change", async () => {
       select.disabled = true;
+      const previousStatus = select.dataset.previousStatus || "new";
       try {
-        await updateDoc(doc(db, "enquiries", select.dataset.enquiryStatus), { status: select.value, updatedAt: serverTimestamp(), updatedBy: auth.currentUser.uid });
+        const batch = writeBatch(db);
+        batch.update(doc(db, "enquiries", select.dataset.enquiryStatus), { status: select.value, updatedAt: serverTimestamp(), updatedBy: auth.currentUser.uid });
+        batch.set(doc(collection(db, "auditLogs")), {
+          actorUid: auth.currentUser.uid,
+          actorEmail: auth.currentUser.email || "",
+          action: "enquiry_status_changed",
+          entityType: "enquiry",
+          entityId: select.dataset.enquiryStatus,
+          changedFields: ["status"],
+          fromStatus: previousStatus,
+          toStatus: select.value,
+          createdAt: serverTimestamp()
+        });
+        await batch.commit();
+        select.dataset.previousStatus = select.value;
         if (feedback) feedback.textContent = "Enquiry status updated.";
         const count = document.querySelector("#nav-enquiry-count");
         if (count) count.textContent = String([...list.querySelectorAll("[data-enquiry-status]")].filter(node => node.value === "new").length);
       } catch (error) {
-        if (feedback) feedback.textContent = "Could not update this enquiry. Check your permissions and try again.";
-        select.value = "new";
+        console.error("Could not update enquiry status and audit log:", error);
+        if (feedback) feedback.textContent = "Could not update this enquiry. No change was saved; please try again.";
+        select.value = previousStatus;
       } finally { select.disabled = false; }
     }));
   } catch (error) {
@@ -258,13 +274,24 @@ async function saveHotelSettings() {
   try {
     const active = document.querySelector("#hotels-active").checked;
     const intro = document.querySelector("#hotels-intro").value.trim();
-    await setDoc(doc(db, "siteModules", "hotels"), {
+    const batch = writeBatch(db);
+    batch.set(doc(db, "siteModules", "hotels"), {
       active: active,
       intro: intro,
       hotels: hotels,
       updatedAt: serverTimestamp(),
       updatedBy: auth.currentUser ? auth.currentUser.uid : null
     }, { merge: true });
+    batch.set(doc(collection(db, "auditLogs")), {
+      actorUid: auth.currentUser.uid,
+      actorEmail: auth.currentUser.email || "",
+      action: "hotel_settings_published",
+      entityType: "site_module",
+      entityId: "hotels",
+      changedFields: ["active", "intro", "hotels"],
+      createdAt: serverTimestamp()
+    });
+    await batch.commit();
     setHotelFeedback(active ? "Saved successfully. Hotel booking is enabled on the public website." : "Saved successfully. Hotel booking is now hidden from the public website.", false);
     updateHotelStatus();
   } catch (error) {
