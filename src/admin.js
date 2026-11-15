@@ -6,7 +6,7 @@ import "./admin.css";
 const root = document.querySelector("#app");
 root.innerHTML = [
   '<main class="admin-shell"><header class="admin-top"><a href="/">← Back to public website</a><span>AL NASEEM GROUP · CONTROL PANEL</span></header>',
-  '<section class="admin-card" id="admin-card"><div class="admin-mark">AN</div><p class="admin-kicker">SECURE BUSINESS ACCESS</p><h1>Admin Portal</h1><p class="admin-intro">Sign in with your authorised Al Naseem administrator account.</p>',
+  '<section class="admin-card" id="admin-card"><div class="admin-mark"><img class="admin-logo-image" src="/logo2.png" alt="Al Naseem Group logo"></div><p class="admin-kicker">SECURE BUSINESS ACCESS</p><h1>Admin Portal</h1><p class="admin-intro">Sign in with your authorised Al Naseem administrator account.</p>',
   '<div id="admin-message" class="admin-message" role="status"></div>',
   '<form id="login-form" class="admin-form"><label>Email address<input name="email" type="email" autocomplete="username" required placeholder="Enter admin email"></label><label>Password<input name="password" type="password" autocomplete="current-password" required placeholder="Enter password"></label><button type="submit" id="login-button">Sign in securely</button></form>',
   '<div id="admin-dashboard" hidden></div><p class="admin-foot">Your dashboard access depends on the role assigned to your Firebase account.</p></section></main>'
@@ -94,7 +94,7 @@ function showDashboard(user, role) {
   dashboard.innerHTML = [
     '<div class="admin-workspace">',
       '<aside class="admin-sidebar">',
-        '<a class="sidebar-brand" href="/" aria-label="Al Naseem public website"><span class="brand-emblem">AN</span><span><strong>AL NASEEM</strong><small>GROUP · ADMIN</small></span></a>',
+        '<a class="sidebar-brand" href="/" aria-label="Al Naseem public website"><span class="brand-emblem"><img class="sidebar-logo-image" src="/logo2.png" alt="Al Naseem Group logo"></span><span><strong>AL NASEEM</strong><small>GROUP · ADMIN</small></span></a>',
         '<div class="sidebar-label">WORKSPACE</div>',
         '<nav class="admin-nav" aria-label="Admin navigation">',
           '<a class="admin-nav-link is-current" href="#admin-overview"><span class="nav-icon">⌂</span><span>Overview</span></a>',
