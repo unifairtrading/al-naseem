@@ -1,5 +1,7 @@
 # Worklog
 
+- 2026-11-15 11:32 +03 | v0.1 | Extracted monthly archive HTML/PDF report builder and added tests for both report sections, counts and escaping of customer-supplied HTML; CI run 43694551097 in progress | src/archive.js, tests/firestore.rules.test.js | Next: verify CI result; perform real browser print/save/confirm/retry QA without production data.
+
 - 2026-11-15 11:27 +03 | v0.1 | Latest CI passed: 10/10 Firestore Emulator tests (including month-end/leap-year boundaries) and Vite build; Hosting and Firestore production deployment skipped as intended | GitHub Actions run 43694085194 | Next: browser print-to-PDF workflow QA in a non-production environment; production rules untouched.
 
 - 2026-11-15 11:25 +03 | v0.1 | Corrected month eligibility to add one calendar month with end-of-month clamping (Jan 31 → Feb 28; Feb 28 → Mar 28; leap-year Feb 29 → Mar 29); added boundary tests, CI run pending | src/archive.js, tests/firestore.rules.test.js | Next: verify boundary test/build; browser print-to-PDF QA; no live deployment.
