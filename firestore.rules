@@ -32,7 +32,7 @@ service cloud.firestore {
       allow update: if isAlNaseemAdmin()
         && request.resource.data.diff(resource.data).affectedKeys().hasOnly(['status', 'updatedAt', 'updatedBy'])
         && request.resource.data.status in ['new', 'contacted', 'closed'];
-      allow delete: if isAlNaseemAdmin();
+      allow delete: if false;
     }
 
     match /{document=**} {
