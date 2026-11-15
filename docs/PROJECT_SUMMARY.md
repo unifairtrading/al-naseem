@@ -8,7 +8,7 @@
 - Staff directly edit and publish permitted business content without Super Admin approval; client is responsible for staff publishing decisions. Keep audit records.
 - Hotel enquiry/booking is separate from Umrah.
 - Existing foundation: public site, admin login/dashboard, hotel management and enquiry inbox.
-- Remaining: stabilize security and login; staff account provisioning; package/content CMS; feedback; audit log; separate enquiry workflows; QA.
+- Implemented in v0.1 branch: build-only CI, enquiry deletion denial, serviceType classification (umrah/hotel/combined/general), append-only audit logs for hotel publishing and enquiry status changes (atomic writes). Latest CI for UI/audit commits is still running; rules commit passed.
 - No paid billing, domain purchase, production data edits or merge to main without explicit approval.
 - PRD reconstructed from PROJECT_BLUEPRINT.md and confirmed decisions; open items in memory/open-questions.md.
-- v0.1 started: CI workflow now runs build checks on version branches without deploying them. Next: inspect/fix confirmed baseline issues and verify CI.
+- Remaining: verify latest CI, test rules in deployed environment, separate enquiry views/filters, staff account provisioning, editable Umrah packages/business content, feedback moderation, full audit viewer, QA. No live deploy or merge to main.
