@@ -1,6 +1,6 @@
 import { jsPDF } from "jspdf";
 import {
-  collection, doc, getDocs, query, orderBy, setDoc, serverTimestamp,
+  collection, doc, getDoc, getDocs, query, orderBy, setDoc, serverTimestamp,
   writeBatch
 } from "firebase/firestore";
 
@@ -140,11 +140,11 @@ export function mountArchive(db, auth) {
     try {
       const { key, enquiries, logs } = pending;
       const markerRef = doc(db, "archiveRuns", key);
-      const existing = await getDocs(query(collection(db, "archiveRuns")));
-      if (existing.docs.some(item => item.id === key)) {
-        throw new Error("This month already has a completed archive marker. Contact Super Admin before retrying.");
+      const existing = await getDoc(markerRef);
+      if (existing.exists() && existing.data().confirmedBy !== auth.currentUser.uid) {
+        throw new Error("This month has an archive marker created by another staff member. Contact Super Admin.");
       }
-      await setDoc(markerRef, {
+      if (!existing.exists()) await setDoc(markerRef, {
         monthKey: key,
         confirmedBy: auth.currentUser.uid,
         confirmedByEmail: auth.currentUser.email || "",
