@@ -453,7 +453,7 @@ function loadPackageIntoForm(index) {
   form.elements.price.value = item.price || "";
   form.elements.priceNote.value = item.priceNote || "";
   form.elements.description.value = item.description || "";
-  form.elements.highlights.value = Array.isArray(item.highlights) ? item.highlights.join("\\n") : "";
+  form.elements.highlights.value = Array.isArray(item.highlights) ? item.highlights.join("\n") : "";
   form.elements.imageUrl.value = item.imageUrl || "";
   form.elements.buttonText.value = item.buttonText || "Enquire now";
   editingPackageIndex = index;
@@ -502,7 +502,7 @@ function handlePackageForm(event) {
   const form=event.currentTarget;
   const values=new FormData(form);
   const imageUrl=String(values.get("imageUrl")||"").trim();
-  if(imageUrl && !/^https?:\\/\\//i.test(imageUrl)) {
+  if(imageUrl && !(imageUrl.startsWith("https://") || imageUrl.startsWith("http://"))) {
     setPackageFeedback("Please use a valid https:// or http:// image link.",true);
     return;
   }
@@ -513,7 +513,7 @@ function handlePackageForm(event) {
     price:String(values.get("price")||"").trim(),
     priceNote:String(values.get("priceNote")||"").trim(),
     description:String(values.get("description")||"").trim(),
-    highlights:String(values.get("highlights")||"").split(/\\r?\\n/).map(x=>x.trim()).filter(Boolean).slice(0,8),
+    highlights:String(values.get("highlights")||"").split(/\r?\n/).map(x=>x.trim()).filter(Boolean).slice(0,8),
     imageUrl,
     buttonText:String(values.get("buttonText")||"Enquire now").trim() || "Enquire now"
   };
