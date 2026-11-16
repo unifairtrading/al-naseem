@@ -56,3 +56,24 @@
 .staff-audit-record{display:grid;grid-template-columns:minmax(140px,.7fr) minmax(120px,1fr) minmax(180px,1.3fr);gap:12px;padding:11px 0;border-top:1px solid #edf0ec;font-size:10px}
 .staff-audit-record strong{color:#355b43}.staff-audit-record span{color:#6e7e73;overflow-wrap:anywhere}.staff-audit-record small{color:#929d95}
 @media(max-width:760px){.staff-management{padding:15px}.staff-grid{grid-template-columns:1fr}.staff-audit-record{grid-template-columns:1fr;gap:4px}}
+
+/* Umrah package management */
+.package-management{margin:0 0 34px}
+.package-manager{background:#fff;border:1px solid #e4eae3;border-radius:14px;padding:22px;margin-bottom:30px}
+.package-manager-grid{display:grid;grid-template-columns:minmax(0,.95fr) minmax(0,1.05fr);gap:16px;margin-top:18px}
+.package-editor-panel,.package-list-panel{border:1px solid #e7ece6;border-radius:10px;padding:17px;min-width:0}
+.package-form{display:grid;gap:12px}
+.package-form label{display:grid;gap:6px;font-size:10px;font-weight:700;color:#45594d}
+.package-form label small{font-weight:400;color:#89958d}
+.package-form input,.package-form select,.package-form textarea{width:100%;min-width:0;padding:10px 11px;border:1px solid #dfe6df;border-radius:8px;background:#fbfcfa;color:#263d31;font:400 12px 'DM Sans',sans-serif}
+.package-form textarea{resize:vertical}
+.package-form-two{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.package-form-actions{display:flex;gap:8px;flex-wrap:wrap}
+.managed-package{display:flex;justify-content:space-between;align-items:center;gap:12px;border-top:1px solid #edf0ec;padding:13px 0}
+.managed-package>div:first-child{min-width:0}
+.managed-package strong,.managed-package span,.managed-package small{display:block;overflow-wrap:anywhere}
+.managed-package strong{font-size:12px;color:#294a38}
+.managed-package span{font-size:10px;color:#7b8980;margin:3px 0}
+.managed-package small{font-size:10px;color:#9a8055}
+@media(max-width:900px){.package-manager-grid{grid-template-columns:1fr}}
+@media(max-width:650px){.package-manager{padding:15px}.package-form-two{grid-template-columns:1fr}}
