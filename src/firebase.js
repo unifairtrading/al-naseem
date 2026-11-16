@@ -4,7 +4,7 @@ import { getFirestore } from "firebase/firestore";
 import { getStorage } from "firebase/storage";
 
 // Public Firebase Web App configuration (not a service-account private key).
-const firebaseConfig = {
+export const firebaseConfig = {
   apiKey: "AIzaSyAi_ZO0D1NfnMqA0pSmHrr_75fARdKkBjI",
   authDomain: "al-naseem-d40c8.firebaseapp.com",
   projectId: "al-naseem-d40c8",
