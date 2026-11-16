@@ -55,7 +55,7 @@ service cloud.firestore {
     match /siteModules/{moduleId} {
       // Public visitors can read the currently published hotel module. Other business modules
       // remain private until their public read requirements are explicitly defined.
-      allow get: if moduleId == 'hotels' || isAlNaseemAdmin();
+      allow get: if moduleId in ['hotels', 'umrahPackages'] || isAlNaseemAdmin();
       allow list: if false;
       // Every active Staff Admin and the Super Admin can manage all business content modules.
       // User roles and system-security collections remain Super Admin-only above.
@@ -79,14 +79,17 @@ service cloud.firestore {
       allow delete: if isAlNaseemAdmin();
     }
 
-    // Access-management audit trail: visible and writable only by Super Admin.
+    // Append-only activity trail. Active Staff Admins can record their own business changes;
+    // only the Super Admin can read the log and manage access/security activity.
     match /auditLogs/{logId} {
       allow get, list: if isSuperAdmin();
-      allow create: if isSuperAdmin()
+      allow create: if isAlNaseemAdmin()
         && request.resource.data.keys().hasAll(['action', 'targetUid', 'targetEmail', 'details', 'actorUid', 'actorEmail', 'createdAt'])
-        && request.resource.data.keys().hasOnly(['action', 'targetUid', 'targetEmail', 'details', 'actorUid', 'actorEmail', 'createdAt'])
+        && request.resource.data.keys().hasOnly(['action', 'moduleId', 'targetUid', 'targetEmail', 'details', 'actorUid', 'actorEmail', 'createdAt'])
         && request.resource.data.action is string
         && request.resource.data.targetUid is string
+        && request.resource.data.targetEmail is string
+        && request.resource.data.details is string
         && request.resource.data.actorUid == request.auth.uid;
       allow update, delete: if false;
     }
