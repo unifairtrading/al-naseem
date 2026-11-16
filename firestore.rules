@@ -53,9 +53,13 @@ service cloud.firestore {
     }
 
     match /siteModules/{moduleId} {
-      allow get: if moduleId == 'hotels';
+      // Public visitors can read the currently published hotel module. Other business modules
+      // remain private until their public read requirements are explicitly defined.
+      allow get: if moduleId == 'hotels' || isAlNaseemAdmin();
       allow list: if false;
-      allow create, update: if moduleId == 'hotels' && isAlNaseemAdmin();
+      // Every active Staff Admin and the Super Admin can manage all business content modules.
+      // User roles and system-security collections remain Super Admin-only above.
+      allow create, update: if isAlNaseemAdmin();
       allow delete: if false;
     }
 
