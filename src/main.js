@@ -46,7 +46,7 @@ const page = [
   '<main>',
   '<section class="hero" id="home"><img class="hero-background" src="' + media.kaaba + '" alt="" fetchpriority="high"><div class="hero-overlay"></div><div class="container hero-content"><div class="hero-copy"><span class="eyebrow hero-eyebrow">YOUR JOURNEY · OUR RESPONSIBILITY</span><h1>Your journey to<br><em>the Holy Cities.</em></h1><p>Plan your Umrah journey from Bahrain with travel options by air or bus, hotel booking assistance and a team ready to help you with the next steps.</p><div class="hero-actions"><a class="button button-gold" href="#packages">Explore Umrah Packages <span>→</span></a><a class="button button-white" href="#enquiry">Speak to our team</a></div><div class="hero-meta"><span>✦ Air & road travel</span><span>✦ Makkah & Madinah stay assistance</span><span>✦ Bahrain-based support</span></div></div><div class="hero-stamp"><span>AL NASEEM GROUP</span><strong>Faith.<br>Comfort.<br>Care.</strong><small>BAHRAIN</small></div></div><div class="hero-bottom-caption">MASJID AL-HARAM · MAKKAH</div></section>',
   '<section class="trust-strip"><div class="container trust-grid"><div class="trust-item"><span class="trust-symbol">✓</span><div><strong>Trusted assistance</strong><small>Clear information and support</small></div></div><div class="trust-item"><span class="trust-symbol">✈</span><div><strong>Flexible travel options</strong><small>Packages by air and bus</small></div></div><div class="trust-item"><span class="trust-symbol">⌂</span><div><strong>Hotel booking help</strong><small>When the service is active</small></div></div><div class="trust-item"><span class="trust-symbol">◎</span><div><strong>Direct contact</strong><small>Speak with our Bahrain team</small></div></div></div></section>',
-  '<section class="section services-section" id="packages"><div class="container"><div class="section-heading"><div><span class="eyebrow">CHOOSE HOW YOU TRAVEL</span><h2>Umrah packages<br><em>made easier to explore.</em></h2></div><p>Compare the available travel options below. Select a service to send your enquiry directly to our team. Final dates, inclusions and rates will be confirmed before booking.</p></div><div class="service-grid">',
+  '<section class="section services-section" id="packages"><div class="container"><div class="section-heading"><div><span class="eyebrow">CHOOSE HOW YOU TRAVEL</span><h2>Umrah packages<br><em>made easier to explore.</em></h2></div><p><span id="packages-public-intro">Compare the available travel options below. Select a service to send your enquiry directly to our team. Final dates, inclusions and rates will be confirmed before booking.</span></p></div><div class="service-grid" id="package-grid">',
   '<article class="service-card service-air"><div class="service-photo"><img src="' + media.air + '" alt="Passenger aircraft in a clear sky" loading="lazy"><span class="service-label">AIR TRAVEL</span></div><div class="service-content"><div class="service-title-row"><div><span class="service-kicker">TRAVEL BY AIR</span><h3>Umrah by Air</h3></div><span class="service-icon">✈</span></div><p>Reach the Holy Cities by air with a travel option designed for guests who prefer a flight journey.</p><div class="service-highlights"><span>✓ Flight-based travel option</span><span>✓ Convenient journey planning</span><span>✓ Team assistance for enquiries</span></div><div class="service-price-row"><div><small>Indicative price · per person</small><strong>350 BHD</strong></div><a href="#enquiry" class="service-button" data-interest="Umrah package" data-message="I would like to enquire about the Bahraini by Air Umrah package.">View package <b>→</b></a></div></div></article>',
   '<article class="service-card service-bus"><div class="service-photo"><img src="' + media.bus + '" alt="Modern long-distance coach bus on a road" loading="lazy"><span class="service-label">ROAD TRAVEL</span></div><div class="service-content"><div class="service-title-row"><div><span class="service-kicker">TRAVEL BY BUS</span><h3>Umrah by Bus</h3></div><span class="service-icon">▰</span></div><p>A road travel option for guests who prefer to travel by coach from Bahrain.</p><div class="service-highlights"><span>✓ Bus journey option</span><span>✓ Package for different traveller groups</span><span>✓ Assistance with travel enquiries</span></div><div class="bus-prices"><div><small>Bahraini</small><strong>70 BHD</strong></div><div><small>Non-Bahraini</small><strong>120 BHD</strong></div></div><div class="service-price-row"><small>Indicative price · per person</small><a href="#enquiry" class="service-button" data-interest="Umrah package" data-message="I would like to enquire about the Umrah by Bus packages.">View package <b>→</b></a></div></div></article>',
   '<article class="service-card service-hotel" id="hotel-promo-card" hidden><div class="service-photo"><img src="' + media.hotel + '" alt="Comfortable modern hotel room" loading="lazy"><span class="service-label">STAY IN COMFORT</span></div><div class="service-content"><div class="service-title-row"><div><span class="service-kicker">MAKKAH & MADINAH</span><h3>Hotel Booking</h3></div><span class="service-icon">⌂</span></div><p>Explore hotel options for your stay in the Holy Cities. Our team can help you enquire about room options and current rates.</p><div class="service-highlights"><span>✓ Hotel options shared by our team</span><span>✓ Location and room information</span><span>✓ Availability and rates on request</span></div><div class="service-price-row"><div><small>Rates and availability</small><strong>On request</strong></div><a href="#hotels" class="service-button">Explore hotels <b>→</b></a></div></div></article>',
@@ -132,6 +132,44 @@ document.querySelector("#enquiry-form").addEventListener("submit", async (event)
   }
 });
 
+
+async function loadManagedPackages() {
+  if(!isFirebaseConfigured || !db) return;
+  try {
+    const snapshot=await getDoc(doc(db,"siteModules","umrahPackages"));
+    if(!snapshot.exists()) return;
+    const data=snapshot.data();
+    if(data.active!==true || !Array.isArray(data.packages)) return;
+    const grid=document.querySelector("#package-grid");
+    const intro=document.querySelector("#packages-public-intro");
+    if(intro && data.intro) intro.textContent=data.intro;
+    const items=data.packages;
+    if(!items.length) {
+      grid.innerHTML='<article class="service-card"><div class="service-content"><span class="service-kicker">UMRAH PACKAGES</span><h3>Packages coming soon</h3><p>Please contact our team for current travel options and availability.</p><div class="service-price-row"><div><small>Current rates</small><strong>On request</strong></div><a href="#enquiry" class="service-button" data-interest="Umrah package" data-message="Please share your current Umrah package options.">Contact us →</a></div></div></article>';
+      return;
+    }
+    grid.innerHTML=items.map((item,index)=>{
+      const name=escapeHtml(item.name||"Umrah package");
+      const type=String(item.type||"OTHER").toUpperCase();
+      const travelLabel=type==="AIR"?"AIR TRAVEL":type==="BUS"?"ROAD TRAVEL":"UMRAH PACKAGE";
+      const icon=type==="AIR"?"✈":type==="BUS"?"▰":"✦";
+      const image=safeWebUrl(item.imageUrl)|| (type==="AIR"?media.air:type==="BUS"?media.bus:media.kaaba);
+      const highlights=Array.isArray(item.highlights)?item.highlights.slice(0,8):[];
+      const highlightHtml=highlights.map(value=>'<span>✓ '+escapeHtml(value)+'</span>').join("");
+      const price=escapeHtml(item.price||"On request");
+      const priceNote=escapeHtml(item.priceNote||"Confirm current rate");
+      const description=escapeHtml(item.description||item.detail||"Contact our team for package information.");
+      const audience=item.audience?'<span class="service-kicker">'+escapeHtml(item.audience)+'</span>':"";
+      const button=escapeHtml(item.buttonText||"Enquire about this package");
+      return '<article class="service-card '+(type==="AIR"?"service-air":type==="BUS"?"service-bus":"")+'"><div class="service-photo"><img src="'+escapeHtml(image)+'" alt="'+name+'" loading="lazy"><span class="service-label">'+travelLabel+'</span></div><div class="service-content"><div class="service-title-row"><div>'+audience+'<h3>'+name+'</h3></div><span class="service-icon">'+icon+'</span></div><p>'+description+'</p><div class="service-highlights">'+highlightHtml+'</div><div class="service-price-row"><div><small>'+priceNote+'</small><strong>'+price+'</strong></div><a href="#enquiry" class="service-button" data-interest="Umrah package" data-message="'+escapeHtml("I would like to enquire about the "+(item.name||"Umrah")+" package.")+'">'+button+' <b>→</b></a></div></div></article>';
+    }).join("");
+    attachPhotoFallbacks(grid);
+    grid.querySelectorAll("[data-interest]").forEach(link=>link.addEventListener("click",()=>prepareEnquiry(link.dataset.interest,link.dataset.message)));
+  } catch(error) {
+    console.warn("Managed Umrah packages could not be loaded; showing the default package information.",error);
+  }
+}
+
 async function loadHotelModule() {
   if (!isFirebaseConfigured || !db) return;
   try {
@@ -174,4 +212,5 @@ async function loadHotelModule() {
     console.warn("Hotel section could not be loaded. Hotel booking will remain hidden until the module is available.", error);
   }
 }
+loadManagedPackages();
 loadHotelModule();
