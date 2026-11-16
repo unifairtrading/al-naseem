@@ -26,6 +26,8 @@ const escapeHtml = (value) => String(value ?? "").replace(/[&<>"']/g, (char) => 
 let currentRole = null;
 let hotels = [];
 let editingIndex = -1;
+let managedPackages = [];
+let editingPackageIndex = -1;
 
 function renderHotelList() {
   const list = document.querySelector("#hotel-list");
@@ -100,7 +102,7 @@ function showDashboard(user, role) {
         '<nav class="admin-nav" aria-label="Admin navigation">',
           '<a class="admin-nav-link is-current" href="#admin-overview"><span class="nav-icon">⌂</span><span>Overview</span></a>',
           '<a class="admin-nav-link" href="#hotel-management"><span class="nav-icon">▦</span><span>Hotels</span><span class="nav-count" id="nav-hotel-count">0</span></a>',
-          '<span class="admin-nav-link nav-disabled" aria-disabled="true"><span class="nav-icon">✧</span><span>Umrah Packages</span><small>In development</small></span>',
+          '<a class="admin-nav-link" href="#package-management"><span class="nav-icon">✧</span><span>Umrah Packages</span><span class="nav-count" id="nav-package-count">0</span></a>',
           '<a class="admin-nav-link" href="#enquiry-management"><span class="nav-icon">▤</span><span>Enquiries</span><span class="nav-count" id="nav-enquiry-count">0</span></a>',
           '<span class="admin-nav-link nav-disabled" aria-disabled="true"><span class="nav-icon">☆</span><span>Guest Feedback</span><small>In development</small></span>',
           '<span class="admin-nav-link nav-disabled" aria-disabled="true"><span class="nav-icon">▧</span><span>Website Content</span><small>In development</small></span>',
@@ -196,6 +198,12 @@ function showDashboard(user, role) {
   });
   document.querySelector("#save-hotel-settings").addEventListener("click", saveHotelSettings);
   loadHotelSettings();
+  loadPackageSettings();
+  document.querySelector("#packages-active").addEventListener("change", updatePackageStatus);
+  document.querySelector("#package-form").addEventListener("submit", handlePackageForm);
+  document.querySelector("#package-cancel-edit").addEventListener("click", clearPackageForm);
+  document.querySelector("#package-list").addEventListener("click", handlePackageListClick);
+  document.querySelector("#save-package-settings").addEventListener("click", savePackageSettings);
   loadEnquiries();
   document.querySelector("#refresh-enquiries").addEventListener("click", loadEnquiries);
   if (superAdmin) {
@@ -406,6 +414,165 @@ function setHotelFeedback(text, error) {
   if (!feedback) return;
   feedback.textContent = text;
   feedback.dataset.type = error ? "error" : "success";
+}
+
+
+function renderPackageList() {
+  const list = document.querySelector("#package-list");
+  if (!list) return;
+  const count = document.querySelector("#package-count");
+  const navCount = document.querySelector("#nav-package-count");
+  if (count) count.textContent = managedPackages.length + (managedPackages.length === 1 ? " package" : " packages");
+  if (navCount) navCount.textContent = String(managedPackages.length);
+  if (!managedPackages.length) {
+    list.innerHTML = '<div class="empty-hotels">No packages added yet. Add your first Umrah package.</div>';
+    return;
+  }
+  list.innerHTML = managedPackages.map((item,index) =>
+    '<article class="managed-package"><div><strong>' + escapeHtml(item.name) + '</strong><span>' + escapeHtml(item.type || "OTHER") + ' · ' + escapeHtml(item.audience || "All travellers") + '</span><small>' + escapeHtml(item.price || "Price on request") + '</small></div><div class="managed-hotel-actions"><button type="button" data-edit-package="' + index + '">Edit</button><button type="button" class="remove-hotel" data-remove-package="' + index + '">Remove</button></div></article>'
+  ).join("");
+}
+
+function clearPackageForm() {
+  const form = document.querySelector("#package-form");
+  if (!form) return;
+  form.reset();
+  editingPackageIndex = -1;
+  document.querySelector("#package-add-button").textContent = "＋ Add package";
+  document.querySelector("#package-form-heading").textContent = "Add an Umrah package";
+  document.querySelector("#package-cancel-edit").hidden = true;
+}
+
+function loadPackageIntoForm(index) {
+  const item = managedPackages[index];
+  if (!item) return;
+  const form = document.querySelector("#package-form");
+  form.elements.packageName.value = item.name || "";
+  form.elements.packageType.value = item.type || "AIR";
+  form.elements.audience.value = item.audience || "";
+  form.elements.price.value = item.price || "";
+  form.elements.priceNote.value = item.priceNote || "";
+  form.elements.description.value = item.description || "";
+  form.elements.highlights.value = Array.isArray(item.highlights) ? item.highlights.join("\\n") : "";
+  form.elements.imageUrl.value = item.imageUrl || "";
+  form.elements.buttonText.value = item.buttonText || "Enquire now";
+  editingPackageIndex = index;
+  document.querySelector("#package-add-button").textContent = "Save package changes";
+  document.querySelector("#package-form-heading").textContent = "Edit Umrah package";
+  document.querySelector("#package-cancel-edit").hidden = false;
+  form.scrollIntoView({behavior:"smooth",block:"center"});
+}
+
+async function loadPackageSettings() {
+  try {
+    const snapshot = await getDoc(doc(db,"siteModules","umrahPackages"));
+    const data = snapshot.exists() ? snapshot.data() : {};
+    managedPackages = Array.isArray(data.packages) ? data.packages : [
+      {name:"Bahraini by Air",type:"AIR",audience:"Bahraini travellers",price:"350 BHD",priceNote:"Indicative price · per person",description:"Air travel Umrah package for guests who prefer to fly.",highlights:["Flight-based travel option","Convenient journey planning","Team assistance for enquiries"],buttonText:"Enquire about this package"},
+      {name:"Bahraini by Bus",type:"BUS",audience:"Bahraini travellers",price:"70 BHD",priceNote:"Indicative price · per person",description:"A road travel option for guests travelling by coach from Bahrain.",highlights:["Bus journey option","Package for Bahraini travellers","Assistance with travel enquiries"],buttonText:"Enquire about this package"},
+      {name:"Non-Bahraini by Bus",type:"BUS",audience:"Non-Bahraini travellers",price:"120 BHD",priceNote:"Indicative price · per person",description:"A bus travel option for eligible non-Bahraini travellers.",highlights:["Land travel Umrah package","For eligible non-Bahraini travellers","Team assistance for enquiries"],buttonText:"Enquire about this package"}
+    ];
+    document.querySelector("#packages-active").checked = data.active === true;
+    document.querySelector("#packages-intro").value = data.intro || "Explore the available travel options below. Select a package to send your enquiry directly to our team.";
+    updatePackageStatus();
+    renderPackageList();
+  } catch(error) {
+    console.error("Could not load Umrah packages:",error);
+    setPackageFeedback("Package settings could not be loaded. Check that the latest Firestore rules are deployed.",true);
+  }
+}
+
+function setPackageFeedback(text,error=false) {
+  const node=document.querySelector("#package-feedback");
+  if (!node) return;
+  node.textContent=text;
+  node.dataset.type=error?"error":"success";
+}
+
+function updatePackageStatus() {
+  const active=document.querySelector("#packages-active").checked;
+  const status=document.querySelector("#package-status-text");
+  const light=document.querySelector("#package-status-light");
+  if(status) status.textContent=active?"Managed packages will be shown on the public website after saving.":"Managed packages are currently disabled; the existing public package information will remain visible.";
+  if(light) light.classList.toggle("is-active",active);
+}
+
+function handlePackageForm(event) {
+  event.preventDefault();
+  const form=event.currentTarget;
+  const values=new FormData(form);
+  const imageUrl=String(values.get("imageUrl")||"").trim();
+  if(imageUrl && !/^https?:\\/\\//i.test(imageUrl)) {
+    setPackageFeedback("Please use a valid https:// or http:// image link.",true);
+    return;
+  }
+  const item={
+    name:String(values.get("packageName")||"").trim(),
+    type:String(values.get("packageType")||"OTHER"),
+    audience:String(values.get("audience")||"").trim(),
+    price:String(values.get("price")||"").trim(),
+    priceNote:String(values.get("priceNote")||"").trim(),
+    description:String(values.get("description")||"").trim(),
+    highlights:String(values.get("highlights")||"").split(/\\r?\\n/).map(x=>x.trim()).filter(Boolean).slice(0,8),
+    imageUrl,
+    buttonText:String(values.get("buttonText")||"Enquire now").trim() || "Enquire now"
+  };
+  if(!item.name) return;
+  if(editingPackageIndex>=0) managedPackages[editingPackageIndex]=item;
+  else managedPackages.push(item);
+  renderPackageList();
+  clearPackageForm();
+  setPackageFeedback("Package added to the draft list. Select Save & publish packages to update the website.");
+}
+
+function handlePackageListClick(event) {
+  const edit=event.target.closest("[data-edit-package]");
+  const remove=event.target.closest("[data-remove-package]");
+  if(edit) loadPackageIntoForm(Number(edit.dataset.editPackage));
+  if(remove) {
+    const index=Number(remove.dataset.removePackage);
+    if(Number.isInteger(index)&&index>=0&&index<managedPackages.length) {
+      managedPackages.splice(index,1);
+      if(editingPackageIndex===index) clearPackageForm();
+      renderPackageList();
+      setPackageFeedback("Package removed from the draft list. Save & publish to apply the change.");
+    }
+  }
+}
+
+async function savePackageSettings() {
+  const button=document.querySelector("#save-package-settings");
+  button.disabled=true;
+  button.textContent="Publishing packages…";
+  setPackageFeedback("");
+  try {
+    const active=document.querySelector("#packages-active").checked;
+    const intro=document.querySelector("#packages-intro").value.trim();
+    await setDoc(doc(db,"siteModules","umrahPackages"),{
+      active,intro,packages:managedPackages,updatedAt:serverTimestamp(),updatedBy:auth.currentUser.uid
+    },{merge:true});
+    try {
+      await writeBusinessAudit("Umrah packages published","umrahPackages",managedPackages.length+" package records saved; public visibility "+(active?"enabled":"disabled")+".");
+    } catch(auditError) {
+      console.error("Umrah package audit write failed:",auditError);
+      setPackageFeedback("Packages saved, but the activity log could not be recorded. Please check the latest Firestore rules.",true);
+      return;
+    }
+    setPackageFeedback(active?"Packages saved and published to the public website.":"Package settings saved. Managed packages are disabled; existing public information remains visible.");
+  } catch(error) {
+    console.error("Could not publish Umrah packages:",error);
+    setPackageFeedback("Could not save packages. Confirm the latest Firestore rules are deployed and try again.",true);
+  } finally {
+    button.disabled=false;
+    button.textContent="Save & publish packages";
+  }
+}
+
+async function writeBusinessAudit(action,moduleId,details) {
+  await addDoc(collection(db,"auditLogs"),{
+    action,moduleId,targetUid:"",targetEmail:"",details,
+    actorUid:auth.currentUser.uid,actorEmail:auth.currentUser.email||"",createdAt:serverTimestamp()
+  });
 }
 
 async function saveHotelSettings() {
