@@ -1,6 +1,7 @@
-import { auth, db, isFirebaseConfigured } from "./firebase.js";
-import { signInWithEmailAndPassword, signOut } from "firebase/auth";
-import { collection, doc, getDoc, getDocs, orderBy, query, setDoc, serverTimestamp, updateDoc } from "firebase/firestore";
+import { auth, db, firebaseConfig, isFirebaseConfigured } from "./firebase.js";
+import { initializeApp } from "firebase/app";
+import { createUserWithEmailAndPassword, getAuth, sendPasswordResetEmail, signInWithEmailAndPassword, signOut } from "firebase/auth";
+import { addDoc, collection, doc, getDoc, getDocs, limit, orderBy, query, setDoc, serverTimestamp, updateDoc } from "firebase/firestore";
 import "./admin.css";
 
 const root = document.querySelector("#app");
@@ -103,7 +104,7 @@ function showDashboard(user, role) {
           '<a class="admin-nav-link" href="#enquiry-management"><span class="nav-icon">▤</span><span>Enquiries</span><span class="nav-count" id="nav-enquiry-count">0</span></a>',
           '<span class="admin-nav-link nav-disabled" aria-disabled="true"><span class="nav-icon">☆</span><span>Guest Feedback</span><small>In development</small></span>',
           '<span class="admin-nav-link nav-disabled" aria-disabled="true"><span class="nav-icon">▧</span><span>Website Content</span><small>In development</small></span>',
-          (superAdmin ? '<div class="sidebar-label sidebar-label-spaced">ADMINISTRATION</div><span class="admin-nav-link nav-disabled" aria-disabled="true"><span class="nav-icon">♙</span><span>Staff & Permissions</span><small>Secure setup pending</small></span><span class="admin-nav-link nav-disabled" aria-disabled="true"><span class="nav-icon">⚙</span><span>System Settings</span><small>In development</small></span>' : ''),
+          (superAdmin ? '<div class="sidebar-label sidebar-label-spaced">ADMINISTRATION</div><a class="admin-nav-link" href="#staff-management"><span class="nav-icon">♙</span><span>Staff & Permissions</span></a><span class="admin-nav-link nav-disabled" aria-disabled="true"><span class="nav-icon">⚙</span><span>System Settings</span><small>In development</small></span>' : ''),
         '</nav>',
         '<div class="sidebar-bottom"><span class="sidebar-avatar">' + escapeHtml((user.email || "A").charAt(0).toUpperCase()) + '</span><span class="sidebar-user"><strong>' + escapeHtml(user.email || "Administrator") + '</strong><small>' + (superAdmin ? "Super Admin" : "Staff Admin") + '</small></span></div>',
       '</aside>',
@@ -130,7 +131,9 @@ function showDashboard(user, role) {
               '<div class="hotel-list-panel"><div class="list-heading"><div><span class="panel-step">02</span><div><h4>Published hotel options</h4><p>Hotels currently saved in your website settings.</p></div></div><span id="hotel-count">0 hotels</span></div><div id="hotel-list"><div class="empty-hotels">Loading your hotel list…</div></div></div></div>',
             '<div class="manager-footer"><span>Changes are saved to Firebase when you publish.</span><button type="button" id="save-hotel-settings" class="publish-button">Save & publish changes <span>→</span></button></div><div id="hotel-feedback" class="hotel-feedback" role="status"></div>',
           '</section>',
-          '<section class="enquiry-management" id="enquiry-management"><div class="section-title-row"><div><span class="section-eyebrow">CUSTOMER RELATIONSHIPS</span><h2>Customer enquiries</h2><p>Website enquiries saved securely for your team to review and follow up.</p></div><button type="button" class="publish-button" id="refresh-enquiries">Refresh enquiries ↻</button></div><div id="enquiry-list" class="enquiry-list"><div class="empty-hotels">Loading enquiries…</div></div><p id="enquiry-feedback" class="hotel-feedback" role="status"></p></section><footer class="workspace-footer"><span>AL NASEEM GROUP · ADMIN WORKSPACE</span><span>Secure access · Firebase powered</span></footer>',
+          '<section class="enquiry-management" id="enquiry-management"><div class="section-title-row"><div><span class="section-eyebrow">CUSTOMER RELATIONSHIPS</span><h2>Customer enquiries</h2><p>Website enquiries saved securely for your team to review and follow up.</p></div><button type="button" class="publish-button" id="refresh-enquiries">Refresh enquiries ↻</button></div><div id="enquiry-list" class="enquiry-list"><div class="empty-hotels">Loading enquiries…</div></div><p id="enquiry-feedback" class="hotel-feedback" role="status"></p></section>',
+          (superAdmin ? '<section class="staff-management" id="staff-management"><div class="section-title-row"><div><span class="section-eyebrow">ACCESS CONTROL</span><h2>Staff & permissions</h2><p>Create staff login accounts and control who can access the admin workspace.</p></div><span class="section-tag">SUPER ADMIN ONLY</span></div><div class="staff-grid"><div class="staff-create-panel"><h3>Add a staff member</h3><p>Enter the staff member’s name and email. A password setup link will be sent to their email.</p><form id="staff-form" class="staff-form"><label>Staff name<input name="displayName" required maxlength="80" placeholder="Full name"></label><label>Email address<input name="email" type="email" required maxlength="120" placeholder="staff@example.com"></label><button type="submit" class="publish-button" id="create-staff-button">＋ Create staff account</button></form><p id="staff-feedback" class="hotel-feedback" role="status"></p><p class="staff-note">Staff accounts receive Staff Admin access only. They cannot manage staff roles or system security.</p></div><div class="staff-list-panel"><div class="staff-list-heading"><h3>Team accounts</h3><button type="button" class="publish-button" id="refresh-staff">Refresh</button></div><div id="staff-list" class="staff-list"><div class="empty-hotels">Loading staff accounts…</div></div></div></div><div class="staff-audit-panel"><h3>Recent access activity</h3><div id="staff-audit-list" class="staff-audit-list"><div class="empty-hotels">Loading activity…</div></div></div></section>' : ''),
+          '<footer class="workspace-footer"><span>AL NASEEM GROUP · ADMIN WORKSPACE</span><span>Secure access · Firebase powered</span></footer>',
         '</section>',
       '</main>',
     '</div>'
@@ -195,6 +198,161 @@ function showDashboard(user, role) {
   loadHotelSettings();
   loadEnquiries();
   document.querySelector("#refresh-enquiries").addEventListener("click", loadEnquiries);
+  if (superAdmin) {
+    document.querySelector("#staff-form").addEventListener("submit", createStaffAccount);
+    document.querySelector("#refresh-staff").addEventListener("click", loadStaffManagement);
+    document.querySelector("#staff-list").addEventListener("click", handleStaffAction);
+    loadStaffManagement();
+  }
+}
+
+let secondaryAuthInstance = null;
+
+function getSecondaryAuth() {
+  if (!secondaryAuthInstance) {
+    const secondaryApp = initializeApp(firebaseConfig, "al-naseem-staff-creator");
+    secondaryAuthInstance = getAuth(secondaryApp);
+  }
+  return secondaryAuthInstance;
+}
+
+function setStaffFeedback(text, error = false) {
+  const node = document.querySelector("#staff-feedback");
+  if (!node) return;
+  node.textContent = text;
+  node.dataset.type = error ? "error" : "success";
+}
+
+async function writeStaffAudit(action, targetUid, targetEmail, details) {
+  await addDoc(collection(db, "auditLogs"), {
+    action, targetUid, targetEmail, details,
+    actorUid: auth.currentUser.uid,
+    actorEmail: auth.currentUser.email || "",
+    createdAt: serverTimestamp()
+  });
+}
+
+async function loadStaffManagement() {
+  const list = document.querySelector("#staff-list");
+  const auditList = document.querySelector("#staff-audit-list");
+  if (!list || currentRole !== "super_admin") return;
+  list.innerHTML = '<div class="empty-hotels">Loading staff accounts…</div>';
+  try {
+    const snapshot = await getDocs(collection(db, "users"));
+    const staff = snapshot.docs.map(item => ({ uid: item.id, ...item.data() }))
+      .filter(item => item.role === "staff_admin");
+    if (!staff.length) {
+      list.innerHTML = '<div class="empty-hotels">No staff accounts yet. Add your first staff member using the form.</div>';
+    } else {
+      list.innerHTML = staff.map(item => '<article class="staff-record"><div class="staff-record-info"><strong>' + escapeHtml(item.displayName || "Staff member") + '</strong><span>' + escapeHtml(item.email || "") + '</span><small>' + (item.active === true ? "Active access" : "Access paused") + '</small></div><button type="button" class="' + (item.active === true ? "staff-deactivate" : "staff-activate") + '" data-staff-action="' + (item.active === true ? "deactivate" : "activate") + '" data-staff-uid="' + escapeHtml(item.uid) + '" data-staff-email="' + escapeHtml(item.email || "") + '">' + (item.active === true ? "Deactivate" : "Activate") + '</button></article>').join("");
+    }
+  } catch (error) {
+    console.error("Staff list load failed:", error);
+    list.innerHTML = '<div class="empty-hotels">Staff accounts could not be loaded. Confirm the latest Firestore security rules are deployed.</div>';
+  }
+  if (auditList) {
+    try {
+      const logs = await getDocs(query(collection(db, "auditLogs"), orderBy("createdAt", "desc"), limit(10)));
+      if (logs.empty) auditList.innerHTML = '<div class="empty-hotels">No staff access changes recorded yet.</div>';
+      else auditList.innerHTML = logs.docs.map(item => {
+        const entry = item.data();
+        const date = entry.createdAt && entry.createdAt.toDate ? entry.createdAt.toDate().toLocaleString() : "Just now";
+        return '<article class="staff-audit-record"><strong>' + escapeHtml(entry.action || "Access updated") + '</strong><span>' + escapeHtml(entry.targetEmail || "") + '</span><small>By ' + escapeHtml(entry.actorEmail || "Super Admin") + ' · ' + escapeHtml(date) + '</small></article>';
+      }).join("");
+    } catch (error) {
+      auditList.innerHTML = '<div class="empty-hotels">Activity log is not available until its security rules are published.</div>';
+    }
+  }
+}
+
+async function createStaffAccount(event) {
+  event.preventDefault();
+  const staffForm = event.currentTarget;
+  const submit = document.querySelector("#create-staff-button");
+  const values = new FormData(staffForm);
+  const displayName = String(values.get("displayName") || "").trim();
+  const email = String(values.get("email") || "").trim().toLowerCase();
+  if (!displayName || !email || currentRole !== "super_admin") return;
+  submit.disabled = true;
+  submit.textContent = "Creating secure account…";
+  setStaffFeedback("Creating the staff login and sending a password setup email…");
+  let createdUid = null;
+  try {
+    const secondaryAuth = getSecondaryAuth();
+    const randomBytes = new Uint8Array(24);
+    crypto.getRandomValues(randomBytes);
+    const alphabet = "ABCDEFGHJKLMNPQRSTUVWXYZabcdefghijkmnopqrstuvwxyz23456789!@#$%";
+    const temporaryPassword = Array.from(randomBytes, value => alphabet[value % alphabet.length]).join("");
+    const credential = await createUserWithEmailAndPassword(secondaryAuth, email, temporaryPassword);
+    createdUid = credential.user.uid;
+    await setDoc(doc(db, "users", createdUid), {
+      displayName, email, role: "staff_admin", active: true,
+      createdAt: serverTimestamp(), createdBy: auth.currentUser.uid
+    });
+    let resetSent = true;
+    try {
+      await sendPasswordResetEmail(secondaryAuth, email);
+    } catch (mailError) {
+      resetSent = false;
+      console.error("Staff account created, but password setup email could not be sent:", mailError);
+    }
+    try {
+      await writeStaffAudit("Staff account created", createdUid, email, "Staff Admin access created and activated.");
+    } catch (auditError) {
+      console.error("Staff account audit write failed:", auditError);
+    }
+    staffForm.reset();
+    setStaffFeedback(resetSent
+      ? "Staff account created. Password setup link sent to " + email + "."
+      : "Staff account created, but the password email could not be sent. Use Firebase Authentication to send a password reset email.");
+    await loadStaffManagement();
+  } catch (error) {
+    console.error("Could not create staff account:", error);
+    const messages = {
+      "auth/email-already-in-use": "This email already has a Firebase login. No duplicate account was created.",
+      "auth/invalid-email": "Please enter a valid email address.",
+      "auth/weak-password": "Firebase rejected the generated password. Please try again.",
+      "auth/operation-not-allowed": "Email/Password sign-in must be enabled in Firebase Authentication."
+    };
+    setStaffFeedback(messages[error.code] || "Could not create the staff account. Error: " + (error.code || "unknown"), true);
+    if (createdUid) setStaffFeedback("The login was created but its staff profile could not be saved. Please contact the Super Admin before trying this email again.", true);
+  } finally {
+    const secondaryAuth = secondaryAuthInstance;
+    if (secondaryAuth && secondaryAuth.currentUser) {
+      try { await signOut(secondaryAuth); } catch (error) { console.warn("Secondary staff session cleanup:", error); }
+    }
+    submit.disabled = false;
+    submit.textContent = "＋ Create staff account";
+  }
+}
+
+async function handleStaffAction(event) {
+  const actionButton = event.target.closest("[data-staff-action]");
+  if (!actionButton || currentRole !== "super_admin") return;
+  const action = actionButton.dataset.staffAction;
+  const uid = actionButton.dataset.staffUid;
+  const email = actionButton.dataset.staffEmail || "";
+  if (!uid || !["activate", "deactivate"].includes(action)) return;
+  const active = action === "activate";
+  const confirmText = active ? "Activate this staff member’s access?" : "Deactivate this staff member? They will no longer be able to use protected admin features.";
+  if (!window.confirm(confirmText)) return;
+  actionButton.disabled = true;
+  try {
+    await updateDoc(doc(db, "users", uid), {
+      active, updatedAt: serverTimestamp(), updatedBy: auth.currentUser.uid
+    });
+    try {
+      await writeStaffAudit(active ? "Staff access activated" : "Staff access deactivated", uid, email, active ? "Staff Admin access enabled." : "Staff Admin access paused.");
+    } catch (auditError) {
+      console.error("Staff access audit write failed:", auditError);
+    }
+    setStaffFeedback(active ? "Staff access activated." : "Staff access deactivated.");
+    await loadStaffManagement();
+  } catch (error) {
+    console.error("Could not update staff access:", error);
+    setStaffFeedback("Could not update this staff account. Confirm Firestore security rules are deployed.", true);
+    actionButton.disabled = false;
+  }
 }
 
 async function loadEnquiries() {
@@ -310,10 +468,16 @@ form.addEventListener("submit", async (event) => {
       return;
     }
 
-    const role = profile.exists() ? profile.data().role : null;
+    const profileData = profile.exists() ? profile.data() : {};
+    const role = profileData.role || null;
     if (role !== "super_admin" && role !== "staff_admin") {
       await signOut(auth);
-      say("Login succeeded, but no valid admin role was found for this account. Check that users/" + credential.user.uid + " has role = super_admin.", "warning");
+      say("Login succeeded, but no valid admin role was found for this account. Ask the Super Admin to verify your access.", "warning");
+      return;
+    }
+    if (role === "staff_admin" && profileData.active !== true) {
+      await signOut(auth);
+      say("This staff account is currently inactive. Please contact the Al Naseem Super Admin.", "warning");
       return;
     }
     showDashboard(credential.user, role);
