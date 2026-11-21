@@ -195,13 +195,10 @@ async function loadHotelModule() {
       const name = escapeHtml(hotel.name || "Hotel");
       const location = escapeHtml(hotel.location || "");
       const description = escapeHtml(hotel.description || "");
-      const price = escapeHtml(hotel.priceLabel || "Ask for current rates");
       const imageUrl = safeWebUrl(hotel.imageUrl) || media.hotel;
-      const bookingUrl = safeWebUrl(hotel.bookingUrl);
-      const button = bookingUrl
-        ? '<a class="hotel-action" href="' + escapeHtml(bookingUrl) + '" target="_blank" rel="noopener noreferrer">View booking details ↗</a>'
-        : '<a class="hotel-action" href="#enquiry" data-interest="Hotel booking" data-message="I would like to enquire about ' + name + '.">Enquire about this hotel →</a>';
-      return '<article class="hotel-card"><div class="hotel-image-wrap"><img src="' + escapeHtml(imageUrl) + '" alt="' + name + '" loading="lazy"><span>HOTEL OPTION ' + String(index + 1).padStart(2, "0") + '</span></div><div class="hotel-card-body"><div class="hotel-location">⌖ ' + location + '</div><h3>' + name + '</h3><p>' + description + '</p><div class="hotel-card-foot"><strong>' + price + '</strong>' + button + '</div></div></article>';
+      const message = "Assalamu Alaikum, I would like to check the latest price and availability for " + (hotel.name || "this hotel") + (hotel.location ? " in " + hotel.location : "") + ". Please share the current rates for my travel dates.";
+      const whatsappUrl = "https://wa.me/97333224271?text=" + encodeURIComponent(message);
+      return '<article class="hotel-card"><div class="hotel-image-wrap"><img src="' + escapeHtml(imageUrl) + '" alt="' + name + '" loading="lazy"><span>HOTEL OPTION ' + String(index + 1).padStart(2, "0") + '</span></div><div class="hotel-card-body"><div class="hotel-location">⌖ ' + location + '</div><h3>' + name + '</h3><p>' + description + '</p><div class="hotel-card-foot"><strong>Price on WhatsApp</strong><a class="hotel-action" href="' + escapeHtml(whatsappUrl) + '" target="_blank" rel="noopener noreferrer">Check latest price on WhatsApp ↗</a></div></div></article>';
     }).join("");
     attachPhotoFallbacks(hotelGrid);
 
