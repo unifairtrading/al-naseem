@@ -140,6 +140,7 @@ function showDashboard(user, role) {
               '<div class="manager-status"><span class="status-light" id="package-status-light"></span><span id="package-status-text">Loading package settings…</span></div>',
               '<label class="field-label" for="packages-intro">Section introduction</label><textarea id="packages-intro" rows="2" placeholder="A short introduction shown above your Umrah packages"></textarea>',
               '<div class="hotel-manager-grid"><div class="hotel-editor-panel"><div class="panel-heading"><span class="panel-step">01</span><div><h4 id="package-form-heading">Add an Umrah package</h4><p>Enter the package details visitors should see.</p></div></div><form id="package-form" class="hotel-form">',
+                '<label>Website card position<select name="packageSlot"><option value="special">Special / Event package (reserved slot)</option><option value="week1">Upcoming week 1</option><option value="week2">Upcoming week 2</option><option value="week3">Upcoming week 3</option></select><small>Use the special slot for seasonal offers, e.g. Bahrain National Day on 16 December. Update the other three slots weekly.</small></label>',
                 '<label>Package name<input name="packageName" required maxlength="100" placeholder="Example: Bahrain by Air"></label>',
                 '<label>Travel type<select name="packageType"><option value="AIR">By Air</option><option value="BUS">By Bus</option><option value="OTHER">Other</option></select></label>',
                 '<label>Traveller category<input name="audience" maxlength="100" placeholder="Example: Bahraini travellers"></label>',
@@ -221,6 +222,7 @@ function showDashboard(user, role) {
   loadHotelSettings();
   loadPackageSettings();
   document.querySelector("#packages-active").addEventListener("change", updatePackageStatus);
+  document.querySelector("#package-form").elements.packageSlot.value = "special";
   document.querySelector("#package-form").addEventListener("submit", handlePackageForm);
   document.querySelector("#package-cancel-edit").addEventListener("click", clearPackageForm);
   document.querySelector("#package-list").addEventListener("click", handlePackageListClick);
@@ -450,7 +452,7 @@ function renderPackageList() {
     return;
   }
   list.innerHTML = managedPackages.map((item,index) =>
-    '<article class="managed-package"><div><strong>' + escapeHtml(item.name) + '</strong><span>' + escapeHtml(item.type || "OTHER") + ' · ' + escapeHtml(item.audience || "All travellers") + '</span><small>' + escapeHtml(item.price || "Price on request") + '</small></div><div class="managed-hotel-actions"><button type="button" data-edit-package="' + index + '">Edit</button><button type="button" class="remove-hotel" data-remove-package="' + index + '">Remove</button></div></article>'
+    '<article class="managed-package"><div><strong>' + escapeHtml(item.name) + '</strong><span>' + escapeHtml(({special:"SPECIAL / EVENT",week1:"UPCOMING WEEK 1",week2:"UPCOMING WEEK 2",week3:"UPCOMING WEEK 3"})[item.slot] || "UNASSIGNED SLOT") + ' · ' + escapeHtml(item.type || "OTHER") + ' · ' + escapeHtml(item.audience || "All travellers") + '</span><small>' + escapeHtml(item.price || "Price on request") + '</small></div><div class="managed-hotel-actions"><button type="button" data-edit-package="' + index + '">Edit</button><button type="button" class="remove-hotel" data-remove-package="' + index + '">Remove</button></div></article>'
   ).join("");
 }
 
@@ -458,6 +460,7 @@ function clearPackageForm() {
   const form = document.querySelector("#package-form");
   if (!form) return;
   form.reset();
+  form.elements.packageSlot.value = "special";
   editingPackageIndex = -1;
   document.querySelector("#package-add-button").textContent = "＋ Add package";
   document.querySelector("#package-form-heading").textContent = "Add an Umrah package";
@@ -468,6 +471,7 @@ function loadPackageIntoForm(index) {
   const item = managedPackages[index];
   if (!item) return;
   const form = document.querySelector("#package-form");
+  form.elements.packageSlot.value = item.slot || "week1";
   form.elements.packageName.value = item.name || "";
   form.elements.packageType.value = item.type || "AIR";
   form.elements.audience.value = item.audience || "";
@@ -488,7 +492,7 @@ async function loadPackageSettings() {
   try {
     const snapshot = await getDoc(doc(db,"siteModules","umrahPackages"));
     const data = snapshot.exists() ? snapshot.data() : {};
-    managedPackages = Array.isArray(data.packages) ? data.packages : [
+    managedPackages = Array.isArray(data.packages) ? data.packages.map((item,index)=>({...item,slot:item.slot || (/national day|special|event/i.test(item.name||"")?"special":("week"+Math.min(index+1,3)))})).slice(0,4) : [
       {name:"Bahraini by Air",type:"AIR",audience:"Bahraini travellers",price:"350 BHD",priceNote:"Indicative price · per person",description:"Air travel Umrah package for guests who prefer to fly.",highlights:["Flight-based travel option","Convenient journey planning","Team assistance for enquiries"],buttonText:"Enquire about this package"},
       {name:"Bahraini by Bus",type:"BUS",audience:"Bahraini travellers",price:"70 BHD",priceNote:"Indicative price · per person",description:"A road travel option for guests travelling by coach from Bahrain.",highlights:["Bus journey option","Package for Bahraini travellers","Assistance with travel enquiries"],buttonText:"Enquire about this package"},
       {name:"Non-Bahraini by Bus",type:"BUS",audience:"Non-Bahraini travellers",price:"120 BHD",priceNote:"Indicative price · per person",description:"A bus travel option for eligible non-Bahraini travellers.",highlights:["Land travel Umrah package","For eligible non-Bahraini travellers","Team assistance for enquiries"],buttonText:"Enquire about this package"}
@@ -528,6 +532,7 @@ function handlePackageForm(event) {
     return;
   }
   const item={
+    slot:String(values.get("packageSlot")||"week1"),
     name:String(values.get("packageName")||"").trim(),
     type:String(values.get("packageType")||"OTHER"),
     audience:String(values.get("audience")||"").trim(),
@@ -539,8 +544,13 @@ function handlePackageForm(event) {
     buttonText:String(values.get("buttonText")||"Enquire now").trim() || "Enquire now"
   };
   if(!item.name) return;
+  const occupied=managedPackages.findIndex((entry,index)=>entry.slot===item.slot && index!==editingPackageIndex);
+  if(occupied>=0) { setPackageFeedback("This website card is already occupied. Edit that package or choose another slot.",true); return; }
   if(editingPackageIndex>=0) managedPackages[editingPackageIndex]=item;
-  else managedPackages.push(item);
+  else {
+    if(managedPackages.length>=4) { setPackageFeedback("All four package cards are occupied. Edit or remove an existing package first.",true); return; }
+    managedPackages.push(item);
+  }
   renderPackageList();
   clearPackageForm();
   setPackageFeedback("Package added to the draft list. Select Save & publish packages to update the website.");
